@@ -13,10 +13,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flowerfly',
-      home: IntroScreen(),
+      theme: ThemeData(
+        scaffoldBackgroundColor: GlobalVariables.defaultColor,
+        colorScheme: const ColorScheme.light(
+          primary: GlobalVariables.green,
+        ),
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: GlobalVariables.darkGreen,
+          ),
+        ),
+      ),
+      home: const IntroScreen(),
     );
   }
 }
