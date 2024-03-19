@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:frontend/features/auth/screens/intro_screen.dart';
+import 'package:frontend/common/widgets/bottom_bar.dart';
 
 void main() {
   runApp(
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const IntroScreen(),
+      home: const BottomBar(),
     );
   }
 }
