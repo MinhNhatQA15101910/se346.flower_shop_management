@@ -49,7 +49,7 @@ class _BottomBarState extends State<BottomBar> {
               icon: SizedBox(
                 width: _bottomBarWidth,
                 child: SvgPicture.asset(
-                  'android/assets/images/vector_home.svg',
+                  'assets/images/vector_home.svg',
                   width: 24,
                   height: 24,
                   color: _page == 0 ? GlobalVariables.skinColor : Colors.white,
@@ -63,7 +63,7 @@ class _BottomBarState extends State<BottomBar> {
               icon: SizedBox(
                 width: _bottomBarWidth,
                 child: SvgPicture.asset(
-                  'android/assets/images/vector_category.svg',
+                  'assets/images/vector_category.svg',
                   width: 24,
                   height: 24,
                   color: _page == 1 ? GlobalVariables.skinColor : Colors.white,
@@ -77,7 +77,7 @@ class _BottomBarState extends State<BottomBar> {
               icon: SizedBox(
                 width: _bottomBarWidth,
                 child: SvgPicture.asset(
-                  'android/assets/images/vector_search.svg',
+                  'assets/images/vector_search.svg',
                   width: 24,
                   height: 24,
                   color: _page == 2 ? GlobalVariables.skinColor : Colors.white,
@@ -91,7 +91,7 @@ class _BottomBarState extends State<BottomBar> {
               icon: SizedBox(
                 width: _bottomBarWidth,
                 child: SvgPicture.asset(
-                  'android/assets/images/vector_account.svg',
+                  'assets/images/vector_account.svg',
                   width: 24,
                   height: 24,
                   color: _page == 3 ? GlobalVariables.skinColor : Colors.white,

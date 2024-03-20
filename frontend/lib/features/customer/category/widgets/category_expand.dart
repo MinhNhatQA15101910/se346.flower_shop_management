@@ -8,7 +8,7 @@ class CategoryExpand extends StatefulWidget {
   const CategoryExpand({super.key, required this.titleText});
 
   @override
-  _CategoryExpandState createState() => _CategoryExpandState();
+  State<CategoryExpand> createState() => _CategoryExpandState();
 }
 
 class _CategoryExpandState extends State<CategoryExpand> {
