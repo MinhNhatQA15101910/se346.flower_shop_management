@@ -30,8 +30,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      onGenerateRoute: (settings) => generateRoute(settings),
-      home: BottomBar(),
+      home: const HomeScreen(),
     );
   }
 }
