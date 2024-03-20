@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SingleProductCard extends StatelessWidget {
@@ -18,7 +18,19 @@ class SingleProductCard extends StatelessWidget {
           ),
         ),
         _buildText('Product Name'),
-        _buildText('Rating'),
+        RatingBar.builder(
+          direction: Axis.horizontal,
+          allowHalfRating: true,
+          itemCount: 5,
+          itemSize: 20,
+          itemBuilder: (context, _) => const Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          onRatingUpdate: (rating) {
+            print(rating);
+          },
+        ),
         _buildText('Price'),
       ],
     );
