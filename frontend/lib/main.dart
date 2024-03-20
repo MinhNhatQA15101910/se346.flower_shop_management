@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/screens/welcome_screen.dart';
 import 'package:go_router/go_router.dart';
-import 'package:frontend/features/auth/screens/intro_screen.dart';
+import 'package:frontend/features/auth/screens/intro_screen.dart'
 
 void main() {
   runApp(
@@ -38,9 +38,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Flowerfly',
-      theme:
-          ThemeData(), // Let the theme default like this my friend, we touch it later
-      routerConfig: _router,
+      theme: ThemeData(
+        scaffoldBackgroundColor: GlobalVariables.defaultColor,
+        colorScheme: const ColorScheme.light(
+          primary: GlobalVariables.green,
+        ),
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: GlobalVariables.darkGreen,
+          ),
+        ),
+      ),
+      home: const BottomBar(),
     );
   }
 }
