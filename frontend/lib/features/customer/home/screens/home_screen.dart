@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frontend/common/widgets/single_product_card.dart';
 import 'package:frontend/constants/global_variables.dart';
@@ -60,11 +58,15 @@ class HomeScreen extends StatelessWidget {
               ),
               items: [
                 Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
-                        color: GlobalVariables.darkBlue,
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Image.asset('assets/banner1.png', fit: BoxFit.fill)),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: const BoxDecoration(
+                      color: GlobalVariables.darkBlue,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: Image.asset(
+                    'assets/images/banner1.png',
+                    fit: BoxFit.fill,
+                  ),
+                ),
               ],
             ),
             const SizedBox(
@@ -87,32 +89,30 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'View more >',
-                          style: GoogleFonts.inter(
-                            textStyle: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: GlobalVariables.darkGreen,
-                            ),
+                      Text(
+                        'View more >',
+                        style: GoogleFonts.inter(
+                          textStyle: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: GlobalVariables.darkGreen,
                           ),
                         ),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 300,
+                    height: 200,
                     child: GridView.builder(
                       padding: const EdgeInsets.all(0),
                       itemCount: 10,
                       scrollDirection: Axis.horizontal,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 1,
-                              mainAxisSpacing: 20,
-                              childAspectRatio: 5 / 3),
+                        crossAxisCount: 1,
+                        mainAxisSpacing: 20,
+                        childAspectRatio: 5 / 3,
+                      ),
                       itemBuilder: (context, index) {
                         return const SingleProductCard();
                       },
@@ -125,22 +125,17 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-              height: 300,
-              child: GridView.builder(
-                itemCount: 10,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 3 / 5,
+            for (int i = 0; i < 10; i += 2)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SingleProductCard(),
+                    SingleProductCard(),
+                  ],
                 ),
-                itemBuilder: (context, index) {
-                  return const SingleProductCard();
-                },
-                physics: const BouncingScrollPhysics(),
               ),
-            ),
           ],
         ),
       ),

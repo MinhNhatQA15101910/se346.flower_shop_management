@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/widgets/bottom_bar.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/home/screens/home_screen.dart';
 import 'package:frontend/router.dart';
 
 void main() {
@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
+      onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
       home: const HomeScreen(),
     );
   }
