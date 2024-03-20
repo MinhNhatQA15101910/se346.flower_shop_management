@@ -13,7 +13,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Screen1'),
+        title: const Text('Category'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: Icon(Icons.shopping_cart_outlined),
+          ),
+        ],
       ),
       body: const SingleChildScrollView(
         child: Column(

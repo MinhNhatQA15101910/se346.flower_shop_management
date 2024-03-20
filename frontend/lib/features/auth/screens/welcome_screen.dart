@@ -6,6 +6,7 @@ import 'package:frontend/features/auth/widgets/carousel_item.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class WelcomeScreen extends StatefulWidget {
+  static const String routeName = '/welcome';
   const WelcomeScreen({super.key});
 
   @override
@@ -25,6 +26,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     "Next",
     "Ready",
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,8 +90,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   autoPlayInterval: Duration(seconds: 3),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   scrollDirection: Axis.horizontal,
-                  onPageChanged: (index, reason) =>
-                      {setState(() => activeIndex = index)},
+                  onPageChanged: (index, reason) => {
+                    setState(() => activeIndex = index),
+                  },
                 ),
               ),
               SizedBox(height: 20.0),
@@ -142,10 +145,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         count: urlImages.length,
         onDotClicked: animateToSlide,
         effect: JumpingDotEffect(
-            dotWidth: 20,
-            dotHeight: 5,
-            dotColor: GlobalVariables.darkGrey,
-            activeDotColor: GlobalVariables.darkGreen),
+          dotWidth: 20,
+          dotHeight: 5,
+          dotColor: GlobalVariables.darkGrey,
+          activeDotColor: GlobalVariables.darkGreen,
+        ),
       );
 
   void next() {

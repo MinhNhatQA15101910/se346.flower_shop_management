@@ -15,14 +15,14 @@ class SingleCategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 76,
+      width: 64,
       margin: const EdgeInsets.only(top: 8, left: 8, right: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 60,
-            height: 60,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
