@@ -8,6 +8,7 @@ class SingleProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+
       width: 160,
       height: 160,
       child: Column(
@@ -23,11 +24,13 @@ class SingleProductCard extends StatelessWidget {
           RatingBar.builder(
             direction: Axis.horizontal,
             allowHalfRating: true,
+            ignoreGestures: true,
             itemCount: 5,
             itemSize: 20,
+            unratedColor: GlobalVariables.lightGreen,
             itemBuilder: (context, _) => const Icon(
               Icons.star,
-              color: Colors.amber,
+              color: GlobalVariables.green,
             ),
             onRatingUpdate: (rating) {
               print(rating);
@@ -46,6 +49,7 @@ class SingleProductCard extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       style: GoogleFonts.inter(
         textStyle: const TextStyle(
+          overflow: TextOverflow.ellipsis,
           fontSize: 15,
           color: Colors.black,
         ),

@@ -3,10 +3,17 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frontend/common/widgets/single_product_card.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int activeIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,41 +47,56 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            CarouselSlider(
-              carouselController: CarouselController(),
-              options: CarouselOptions(
-                viewportFraction: 0.8,
-                aspectRatio: 3 / 1.2,
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 6),
-                autoPlayAnimationDuration: const Duration(milliseconds: 1000),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                pauseAutoPlayOnTouch: true,
-                enlargeCenterPage: true,
-                scrollDirection: Axis.horizontal,
-                enableInfiniteScroll: true,
-              ),
-              items: [
-                Container(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              CarouselSlider.builder(
+                itemCount: 5,
+                carouselController: CarouselController(),
+                options: CarouselOptions(
+                  viewportFraction: 0.8,
+                  aspectRatio: 3 / 1.2,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(seconds: 6),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  pauseAutoPlayOnTouch: true,
+                  enlargeCenterPage: true,
+                  scrollDirection: Axis.horizontal,
+                  enableInfiniteScroll: true,
+                  onPageChanged: (index, reason) =>
+                      setState(() => activeIndex = index),
+                ),
+                itemBuilder: (context, index, realIndex) => Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: const BoxDecoration(
                       color: GlobalVariables.darkBlue,
                       borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: Image.asset(
-                    'assets/images/banner1.png',
-                    fit: BoxFit.fill,
-                  ),
+                  child: Image.asset('assets/banner1.png', fit: BoxFit.fill),
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              AnimatedSmoothIndicator(
+                activeIndex: activeIndex,
+                count: 5,
+                duration: const Duration(milliseconds: 600),
+                effect: const ExpandingDotsEffect(
+                  spacing: 8.0,
+                  radius: 4.0,
+                  dotWidth: 12.0,
+                  dotHeight: 8.0,
+                  strokeWidth: 1.5,
+                  dotColor: GlobalVariables.lightGreen,
+                  activeDotColor: GlobalVariables.darkGreen,
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,10 +131,9 @@ class HomeScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        mainAxisSpacing: 20,
-                        childAspectRatio: 5 / 3,
-                      ),
+                              crossAxisCount: 1,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 4 / 3),
                       itemBuilder: (context, index) {
                         return const SingleProductCard();
                       },
@@ -121,22 +142,53 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            for (int i = 0; i < 10; i += 2)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SingleProductCard(),
-                    SingleProductCard(),
-                  ],
-                ),
+              const SizedBox(
+                height: 30,
               ),
-          ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Recommended for you',
+                    style: GoogleFonts.inter(
+                      textStyle: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'View more >',
+                    style: GoogleFonts.inter(
+                      textStyle: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: GlobalVariables.darkGreen,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              GridView.builder(
+                itemCount: 10,
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 3 / 4,
+                ),
+                itemBuilder: (context, index) {
+                  return const SingleProductCard();
+                },
+                physics: const NeverScrollableScrollPhysics(),
+              ),
+            ],
+          ),
         ),
       ),
     );
