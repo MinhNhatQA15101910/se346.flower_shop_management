@@ -10,7 +10,7 @@ class LargeCategoryItem extends StatefulWidget {
       {super.key, required this.titleText, required this.imagePath});
 
   @override
-  _LargeCategoryItemState createState() => _LargeCategoryItemState();
+  State<LargeCategoryItem> createState() => _LargeCategoryItemState();
 }
 
 class _LargeCategoryItemState extends State<LargeCategoryItem> {

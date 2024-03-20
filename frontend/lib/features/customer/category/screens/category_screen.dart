@@ -20,17 +20,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
           children: [
             LargeCategoryItem(
               titleText: 'Combo',
-              imagePath: 'android/assets/images/img_combo.png',
+              imagePath: 'assets/images/img_combo.png',
             ),
             SizedBox(height: 10),
             LargeCategoryItem(
               titleText: 'Cake',
-              imagePath: 'android/assets/images/img_cake.png',
+              imagePath: 'assets/images/img_cake.png',
             ),
             SizedBox(height: 10),
             LargeCategoryItem(
               titleText: 'Flower',
-              imagePath: 'android/assets/images/img_flower.png',
+              imagePath: 'assets/images/img_flower.png',
             ),
             SizedBox(height: 10),
           ],

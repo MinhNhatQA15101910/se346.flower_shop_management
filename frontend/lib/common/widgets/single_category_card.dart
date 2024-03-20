@@ -1,9 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/constants/global_variables.dart';
 
 class SingleCategoryCard extends StatelessWidget {
-  const SingleCategoryCard({super.key});
+  final String titleText;
+  final String imagePath;
+  const SingleCategoryCard({
+    super.key,
+    required this.titleText,
+    required this.imagePath,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,18 +25,18 @@ class SingleCategoryCard extends StatelessWidget {
             height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              image: const DecorationImage(
-                image: NetworkImage("https://via.placeholder.com/60x60"),
+              image: DecorationImage(
+                image: AssetImage(imagePath),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           const SizedBox(height: 8),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
-              'Category 1',
-              style: TextStyle(
+              titleText,
+              style: const TextStyle(
                 color: GlobalVariables.darkGreen,
                 fontSize: 16,
                 fontFamily: 'Inter',
