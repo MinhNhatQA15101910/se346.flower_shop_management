@@ -8,31 +8,37 @@ class SingleProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          child: Image.asset(
-            'assets/product1.png',
-            fit: BoxFit.fill,
+    return SizedBox(
+      width: 150,
+      height: 150,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Image.asset(
+              'assets/product1.png',
+              fit: BoxFit.fill,
+            ),
           ),
-        ),
-        _buildText('Product Name'),
-        RatingBar.builder(
-          direction: Axis.horizontal,
-          allowHalfRating: true,
-          itemCount: 5,
-          itemSize: 20,
-          itemBuilder: (context, _) => const Icon(
-            Icons.star,
-            color: Colors.amber,
+          _buildText('Product Name'),
+          RatingBar.builder(
+            direction: Axis.horizontal,
+            allowHalfRating: true,
+            ignoreGestures: true,
+            itemCount: 5,
+            itemSize: 20,
+            unratedColor: GlobalVariables.lightGreen,
+            itemBuilder: (context, _) => const Icon(
+              Icons.star,
+              color: GlobalVariables.green,
+            ),
+            onRatingUpdate: (rating) {
+              print(rating);
+            },
           ),
-          onRatingUpdate: (rating) {
-            print(rating);
-          },
-        ),
-        _buildText('Price'),
-      ],
+          _buildText('Price'),
+        ],
+      ),
     );
   }
 
@@ -41,6 +47,7 @@ class SingleProductCard extends StatelessWidget {
       text,
       style: GoogleFonts.inter(
         textStyle: const TextStyle(
+          overflow: TextOverflow.ellipsis,
           fontSize: 15,
           color: Colors.black,
         ),
