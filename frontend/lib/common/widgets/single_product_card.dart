@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/constants/global_variables.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,14 +8,15 @@ class SingleProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 150,
-      height: 150,
+
+      width: 160,
+      height: 160,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: Image.asset(
-              'assets/product1.png',
+              'assets/images/product1.png',
               fit: BoxFit.fill,
             ),
           ),
@@ -45,6 +45,8 @@ class SingleProductCard extends StatelessWidget {
   Widget _buildText(String text) {
     return Text(
       text,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
       style: GoogleFonts.inter(
         textStyle: const TextStyle(
           overflow: TextOverflow.ellipsis,
