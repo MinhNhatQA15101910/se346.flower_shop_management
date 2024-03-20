@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/customer/category/widgets/large_category_item.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
@@ -10,6 +11,31 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Screen1'),
+      ),
+      body: const SingleChildScrollView(
+        child: Column(
+          children: [
+            LargeCategoryItem(
+              titleText: 'Combo',
+              imagePath: 'android/assets/images/img_combo.png',
+            ),
+            SizedBox(height: 10),
+            LargeCategoryItem(
+              titleText: 'Cake',
+              imagePath: 'android/assets/images/img_cake.png',
+            ),
+            SizedBox(height: 10),
+            LargeCategoryItem(
+              titleText: 'Flower',
+              imagePath: 'android/assets/images/img_flower.png',
+            ),
+            SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
   }
 }
