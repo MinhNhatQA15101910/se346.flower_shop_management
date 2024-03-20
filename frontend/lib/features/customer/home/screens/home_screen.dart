@@ -125,18 +125,21 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            GridView.builder(
-              itemCount: 10,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 3 / 5,
+            SizedBox(
+              height: 300,
+              child: GridView.builder(
+                itemCount: 10,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 3 / 5,
+                ),
+                itemBuilder: (context, index) {
+                  return const SingleProductCard();
+                },
+                physics: const BouncingScrollPhysics(),
               ),
-              itemBuilder: (context, index) {
-                return const SingleProductCard();
-              },
-              physics: const BouncingScrollPhysics(),
             ),
           ],
         ),
