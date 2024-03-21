@@ -20,6 +20,7 @@ class DealsOfDayScreen extends StatelessWidget {
               Text(
                 'Deals of the day',
                 style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w700,
                   fontSize: 18,
                   decoration: TextDecoration.none,
                   color: GlobalVariables.darkGreen,

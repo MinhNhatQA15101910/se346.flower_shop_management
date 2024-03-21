@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/account/screens/account_screen.dart';
 import 'package:frontend/features/customer/category/screens/category_screen.dart';
 import 'package:frontend/features/customer/home/screens/home_screen.dart';
+import 'package:frontend/features/customer/search/screens/search_screen.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
@@ -18,12 +20,8 @@ class _BottomBarState extends State<BottomBar> {
   final _pages = [
     const HomeScreen(),
     const CategoryScreen(),
-    const Center(
-      child: Text('Search Screen'),
-    ),
-    const Center(
-      child: Text('Account Screen'),
-    ),
+    const SearchScreen(),
+    const AccountScreen(),
   ];
 
   void _updatePage(int page) {
