@@ -23,11 +23,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
               Text(
                 'Category',
                 style: GoogleFonts.pacifico(
-                  textStyle: const TextStyle(
-                    fontSize: 30,
-                    decoration: TextDecoration.none,
-                    color: GlobalVariables.darkGreen,
-                  ),
+                  fontSize: 30,
+                  decoration: TextDecoration.none,
+                  color: GlobalVariables.darkGreen,
                 ),
               ),
               IconButton(

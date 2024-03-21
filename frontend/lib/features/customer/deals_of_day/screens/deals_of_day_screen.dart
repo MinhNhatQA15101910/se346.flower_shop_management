@@ -3,8 +3,9 @@ import 'package:frontend/common/widgets/single_product_card.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProductListScreen extends StatelessWidget {
-  const ProductListScreen({super.key});
+class DealsOfDayScreen extends StatelessWidget {
+  static const String routeName = "/deals-of-day";
+  const DealsOfDayScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +18,11 @@ class ProductListScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'FlowerFly',
-                style: GoogleFonts.pacifico(
-                  textStyle: const TextStyle(
-                    fontSize: 30,
-                    decoration: TextDecoration.none,
-                    color: GlobalVariables.darkGreen,
-                  ),
+                'Deals of the day',
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  decoration: TextDecoration.none,
+                  color: GlobalVariables.darkGreen,
                 ),
               ),
               IconButton(

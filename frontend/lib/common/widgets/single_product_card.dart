@@ -48,10 +48,10 @@ class SingleProductCard extends StatelessWidget {
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
       style: GoogleFonts.inter(
+        fontSize: 15,
+        color: Colors.black,
         textStyle: const TextStyle(
           overflow: TextOverflow.ellipsis,
-          fontSize: 15,
-          color: Colors.black,
         ),
       ),
     );

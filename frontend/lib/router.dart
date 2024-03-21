@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/auth/screens/welcome_screen.dart';
+import 'package:frontend/features/customer/deals_of_day/screens/deals_of_day_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
@@ -7,6 +8,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => const WelcomeScreen(),
+      );
+    case DealsOfDayScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const DealsOfDayScreen(),
       );
     default:
       return MaterialPageRoute(

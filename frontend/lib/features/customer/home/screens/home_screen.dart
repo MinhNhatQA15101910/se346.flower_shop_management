@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frontend/common/widgets/single_product_card.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/deals_of_day/screens/deals_of_day_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -13,7 +14,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int activeIndex = 0;
+  int _activeIndex = 0;
+
+  void _navigateToDealsOfDayScreen() {
+    Navigator.of(context).pushNamed(DealsOfDayScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,11 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 'FlowerFly',
                 style: GoogleFonts.pacifico(
-                  textStyle: const TextStyle(
-                    fontSize: 30,
-                    decoration: TextDecoration.none,
-                    color: GlobalVariables.darkGreen,
-                  ),
+                  fontSize: 30,
+                  decoration: TextDecoration.none,
+                  color: GlobalVariables.darkGreen,
                 ),
               ),
               IconButton(
@@ -65,8 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   enlargeCenterPage: true,
                   scrollDirection: Axis.horizontal,
                   enableInfiniteScroll: true,
-                  onPageChanged: (index, reason) =>
-                      setState(() => activeIndex = index),
+                  onPageChanged: (index, reason) => setState(() {
+                    _activeIndex = index;
+                  }),
                 ),
                 itemBuilder: (context, index, realIndex) => Container(
                   width: MediaQuery.of(context).size.width,
@@ -86,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 20,
               ),
               AnimatedSmoothIndicator(
-                activeIndex: activeIndex,
+                activeIndex: _activeIndex,
                 count: 5,
                 duration: const Duration(milliseconds: 600),
                 effect: const ExpandingDotsEffect(
@@ -110,17 +115,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         'Deals of the Day',
                         style: GoogleFonts.inter(
-                          textStyle: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.black,
-                          ),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
                         ),
                       ),
-                      Text(
-                        'View more >',
-                        style: GoogleFonts.inter(
-                          textStyle: const TextStyle(
+                      GestureDetector(
+                        onTap: _navigateToDealsOfDayScreen,
+                        child: Text(
+                          'View more >',
+                          style: GoogleFonts.inter(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                             color: GlobalVariables.darkGreen,
@@ -157,21 +161,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     'Recommended for you',
                     style: GoogleFonts.inter(
-                      textStyle: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                      ),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
                     ),
                   ),
                   Text(
                     'View more >',
                     style: GoogleFonts.inter(
-                      textStyle: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        color: GlobalVariables.darkGreen,
-                      ),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: GlobalVariables.darkGreen,
                     ),
                   ),
                 ],

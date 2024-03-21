@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     GlobalVariables.init(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flowerfly',
+      title: 'FlowerFly',
       theme: ThemeData(
         scaffoldBackgroundColor: GlobalVariables.defaultColor,
         colorScheme: const ColorScheme.light(
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
-      home: const BottomBar(),
+      home: BottomBar(),
     );
   }
 }

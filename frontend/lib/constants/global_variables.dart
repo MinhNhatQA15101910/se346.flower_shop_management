@@ -29,13 +29,6 @@ class GlobalVariables {
     screenHeight = screenSize.height;
   }
 
-  //Define Font Sizes
-  static const double fontSize_16 = 16;
-  static const double fontSize_24 = 24;
-  static const double fontSize_32 = 32;
-  static const double fontSize_36 = 36;
-  static const double fontSize_48 = 48;
-
   // Images
   static const String welcomeImage_01 = "assets/images/Welcome_01.png";
   static const String welcomeImage_02 = "assets/images/Welcome_02.png";

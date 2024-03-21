@@ -24,7 +24,7 @@ class IntroScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               Text(
-                "FlowerFly",
+                "FlowerFly!",
                 style: GoogleFonts.pacifico(
                   color: GlobalVariables.darkGreen,
                   fontSize: 36,

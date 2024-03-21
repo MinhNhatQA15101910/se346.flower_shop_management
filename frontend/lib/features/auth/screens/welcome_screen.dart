@@ -15,14 +15,14 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  int activeIndex = 0;
-  final controller = CarouselController();
-  final urlImages = [
+  int _activeIndex = 0;
+  final _controller = CarouselController();
+  final _urlImages = [
     GlobalVariables.welcomeImage_01,
     GlobalVariables.welcomeImage_02,
     GlobalVariables.welcomeImage_03,
   ];
-  final buttonContents = [
+  final _buttonContents = [
     "Get Started",
     "Next",
     "Ready",
@@ -43,7 +43,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CarouselSlider(
-                carouselController: controller,
+                carouselController: _controller,
                 items: [
                   CarouselItem(
                       child: Column(
@@ -89,9 +89,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   autoPlayInterval: Duration(seconds: 3),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
                   scrollDirection: Axis.horizontal,
-                  onPageChanged: (index, reason) => {
-                    setState(() => activeIndex = index),
-                  },
+                  onPageChanged: (index, reason) => setState(
+                    () {
+                      _activeIndex = index;
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: 20.0),
@@ -122,7 +124,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                   child: Text(
-                    buttonContents[activeIndex],
+                    _buttonContents[_activeIndex],
                     style: GoogleFonts.inter(
                       color: Colors.white,
                       fontSize: 16,
@@ -139,8 +141,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   Widget buildIndicator() => AnimatedSmoothIndicator(
-        activeIndex: activeIndex,
-        count: urlImages.length,
+        activeIndex: _activeIndex,
+        count: _urlImages.length,
         onDotClicked: animateToSlide,
         effect: JumpingDotEffect(
           dotWidth: 20,
@@ -152,10 +154,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   void next() {
     setState(() {
-      activeIndex = (activeIndex + 1) % buttonContents.length;
+      _activeIndex = (_activeIndex + 1) % _buttonContents.length;
     });
-    controller.nextPage(duration: Duration(milliseconds: 200));
+    _controller.nextPage(duration: Duration(milliseconds: 200));
   }
 
-  void animateToSlide(int index) => controller.animateToPage(index);
+  void animateToSlide(int index) => _controller.animateToPage(index);
 }
