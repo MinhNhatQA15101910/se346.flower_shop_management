@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Flowerly',
+                'FlowerFly',
                 style: GoogleFonts.pacifico(
                   textStyle: const TextStyle(
                     fontSize: 30,
@@ -71,9 +71,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index, realIndex) => Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: const BoxDecoration(
-                      color: GlobalVariables.darkBlue,
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: Image.asset('assets/banner1.png', fit: BoxFit.fill),
+                    color: GlobalVariables.darkBlue,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                  child: Image.asset(
+                    'assets/images/banner1.png',
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
               const SizedBox(

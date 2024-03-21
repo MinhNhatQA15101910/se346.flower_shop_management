@@ -17,7 +17,7 @@ class ProductListScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Flowerly',
+                'FlowerFly',
                 style: GoogleFonts.pacifico(
                   textStyle: const TextStyle(
                     fontSize: 30,
