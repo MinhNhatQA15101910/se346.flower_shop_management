@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/customer/category/widgets/category_expand.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LargeCategoryItem extends StatefulWidget {
   final String titleText;
   final String imagePath;
 
-  const LargeCategoryItem(
-      {super.key, required this.titleText, required this.imagePath});
+  const LargeCategoryItem({
+    super.key,
+    required this.titleText,
+    required this.imagePath,
+  });
 
   @override
   State<LargeCategoryItem> createState() => _LargeCategoryItemState();
@@ -55,10 +59,9 @@ class _LargeCategoryItemState extends State<LargeCategoryItem> {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
                     widget.titleText,
-                    style: const TextStyle(
-                      color: Color(0xFF198155),
+                    style: GoogleFonts.inter(
+                      color: GlobalVariables.darkGreen,
                       fontSize: 20,
-                      fontFamily: 'Inter',
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -68,7 +71,7 @@ class _LargeCategoryItemState extends State<LargeCategoryItem> {
             children: const [
               Column(
                 children: [
-                  CategoryExpand(titleText: 'Type'),
+                  CategoryExpand(titleText: 'Types'),
                   SizedBox(height: 10),
                   CategoryExpand(titleText: 'Occasions'),
                 ],

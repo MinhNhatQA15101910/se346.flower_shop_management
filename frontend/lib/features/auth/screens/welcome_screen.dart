@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/widgets/carousel_item.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -10,7 +11,7 @@ class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
@@ -49,19 +50,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     children: <Widget>[
                       Text(
                         "Welcome to",
-                        style: TextStyle(
+                        style: GoogleFonts.inter(
                           color: GlobalVariables.darkGreen,
-                          fontFamily: 'Inter',
-                          fontSize: GlobalVariables.fontSize_24,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         "FlowerFly",
-                        style: TextStyle(
+                        style: GoogleFonts.pacifico(
                           color: GlobalVariables.darkGreen,
-                          fontFamily: 'Pacifico',
-                          fontSize: GlobalVariables.fontSize_48,
+                          fontSize: 48,
                           fontWeight: FontWeight.bold,
                         ),
                       )
@@ -124,11 +123,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   child: Text(
                     buttonContents[activeIndex],
-                    style: TextStyle(
+                    style: GoogleFonts.inter(
                       color: Colors.white,
-                      fontSize: GlobalVariables.fontSize_16,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Inter',
                     ),
                   ),
                 ),

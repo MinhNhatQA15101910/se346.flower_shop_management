@@ -78,14 +78,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Pacifico
-      fonts:
-        - asset: assets/fonts/Pacifico-Regular.ttf
-    - family: Inter
-      fonts:
-        - asset: assets/fonts/InterTight-VariableFont_wght.ttf
-        - asset: assets/fonts/InterTight-Italic-VariableFont_wght.ttf
-          style: italic
+  # fonts:
+  #   - family: Pacifico
+  #     fonts:
+  #       - asset: assets/fonts/Pacifico-Regular.ttf
+  #   - family: Inter
+  #     fonts:
+  #       - asset: assets/fonts/InterTight-VariableFont_wght.ttf
+  #       - asset: assets/fonts/InterTight-Italic-VariableFont_wght.ttf
+  #         style: italic
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

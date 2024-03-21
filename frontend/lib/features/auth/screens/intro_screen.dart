@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/screens/welcome_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class IntroScreen extends StatelessWidget {
   void _navigateToWelcomeScreen(BuildContext context) {
@@ -24,10 +25,9 @@ class IntroScreen extends StatelessWidget {
               ),
               Text(
                 "FlowerFly",
-                style: TextStyle(
+                style: GoogleFonts.pacifico(
                   color: GlobalVariables.darkGreen,
-                  fontFamily: 'Pacifico',
-                  fontSize: GlobalVariables.fontSize_36,
+                  fontSize: 36,
                 ),
               )
             ],

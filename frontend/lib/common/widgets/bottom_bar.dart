@@ -8,7 +8,7 @@ class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
 
   @override
-  State<StatefulWidget> createState() => _BottomBarState();
+  State<BottomBar> createState() => _BottomBarState();
 }
 
 class _BottomBarState extends State<BottomBar> {
@@ -26,7 +26,7 @@ class _BottomBarState extends State<BottomBar> {
     ),
   ];
 
-  void updatePage(int page) {
+  void _updatePage(int page) {
     setState(() {
       _page = page;
     });
@@ -44,7 +44,7 @@ class _BottomBarState extends State<BottomBar> {
           currentIndex: _page,
           selectedItemColor: GlobalVariables.skinColor,
           unselectedItemColor: Colors.white,
-          onTap: updatePage,
+          onTap: _updatePage,
           items: [
             // Home Item
             BottomNavigationBarItem(
