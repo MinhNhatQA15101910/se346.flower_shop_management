@@ -38,14 +38,12 @@ class SingleCategoryCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 4,
-            ),
+            padding: const EdgeInsets.symmetric(),
             child: Text(
               titleText,
               style: GoogleFonts.inter(
                 color: GlobalVariables.darkGreen,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
