@@ -190,11 +190,13 @@ class ProductCartItem extends StatelessWidget {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Color(0xFF27272A),
+      style: GoogleFonts.inter(
         fontSize: 16,
-        fontFamily: 'Inter',
-        fontWeight: FontWeight.w400,
+        color: Colors.black,
+        textStyle: const TextStyle(
+          overflow: TextOverflow.ellipsis,
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }

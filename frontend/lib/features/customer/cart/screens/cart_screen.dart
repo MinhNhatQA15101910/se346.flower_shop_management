@@ -143,7 +143,7 @@ class _CartScreenState extends State<CartScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _subTotalText('Subtotal price'),
-                _subTotalPriceText('00.000 ₫'),
+                _subTotalPriceText('100.000 ₫'),
               ],
             ),
           ),
@@ -188,11 +188,13 @@ class _CartScreenState extends State<CartScreen> {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Colors.white,
+      style: GoogleFonts.inter(
         fontSize: 16,
-        fontFamily: 'Inter',
-        fontWeight: FontWeight.w400,
+        color: Colors.white,
+        textStyle: const TextStyle(
+          overflow: TextOverflow.ellipsis,
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }
@@ -201,11 +203,13 @@ class _CartScreenState extends State<CartScreen> {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Colors.black,
+      style: GoogleFonts.inter(
         fontSize: 16,
-        fontFamily: 'Inter',
-        fontWeight: FontWeight.w400,
+        color: Colors.black,
+        textStyle: const TextStyle(
+          overflow: TextOverflow.ellipsis,
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }
@@ -214,11 +218,13 @@ class _CartScreenState extends State<CartScreen> {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: TextStyle(
-        color: Colors.black,
+      style: GoogleFonts.inter(
         fontSize: 16,
-        fontFamily: 'Inter',
-        fontWeight: FontWeight.w600,
+        color: Colors.black,
+        textStyle: const TextStyle(
+          overflow: TextOverflow.ellipsis,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
