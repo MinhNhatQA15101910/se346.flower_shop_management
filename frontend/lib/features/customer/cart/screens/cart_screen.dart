@@ -38,14 +38,10 @@ class _CartScreenState extends State<CartScreen> {
           Expanded(
             child: Stack(
               children: [
-                Positioned.fill(
-                  child: Image.asset(
-                    'assets/images/appBG.png',
-                    fit: BoxFit.cover,
+                SizedBox(
+                  child: Container(
+                    color: GlobalVariables.lightGreen,
                   ),
-                ),
-                Container(
-                  color: Colors.white.withOpacity(0.5),
                 ),
                 SingleChildScrollView(
                   child: Container(
@@ -59,75 +55,38 @@ class _CartScreenState extends State<CartScreen> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          top: 12.0, right: 16.0, left: 16.0, bottom: 12.0),
-                      child: Column(
-                        children: [
-                          ProductCartItem(
-                            productName: 'Product name',
-                            price: 100000,
-                            imagePath: 'assets/images/product1.png',
-                            quantity: 1,
-                          ),
-                          ProductCartItem(
-                            productName: 'Product name',
-                            price: 100000,
-                            imagePath: 'assets/images/product1.png',
-                            quantity: 1,
-                          ),
-                          ProductCartItem(
-                            productName: 'Product name',
-                            price: 100000,
-                            imagePath: 'assets/images/product1.png',
-                            quantity: 1,
-                          ),
-                          ProductCartItem(
-                            productName: 'Product name',
-                            price: 100000,
-                            imagePath: 'assets/images/product1.png',
-                            quantity: 1,
-                          ),
-                          ProductCartItem(
-                            productName: 'Product name',
-                            price: 100000,
-                            imagePath: 'assets/images/product1.png',
-                            quantity: 1,
-                          ),
-                          ProductCartItem(
-                            productName: 'Product name',
-                            price: 100000,
-                            imagePath: 'assets/images/product1.png',
-                            quantity: 1,
-                          ),
-                          ProductCartItem(
-                            productName: 'Product name',
-                            price: 100000,
-                            imagePath: 'assets/images/product1.png',
-                            quantity: 1,
-                          ),
-                          ProductCartItem(
-                            productName: 'Product name',
-                            price: 100000,
-                            imagePath: 'assets/images/product1.png',
-                            quantity: 1,
-                          ),
-                          ProductCartItem(
-                            productName: 'Product name',
-                            price: 100000,
-                            imagePath: 'assets/images/product1.png',
-                            quantity: 1,
-                          ),
-                          ProductCartItem(
-                            productName: 'Product name',
-                            price: 100000,
-                            imagePath: 'assets/images/product1.png',
-                            quantity: 1,
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      children: [
+                        ProductCartItem(
+                          productName: 'Product name',
+                          price: 100000,
+                          imagePath: 'assets/images/product1.png',
+                          quantity: 1,
+                        ),
+                        ProductCartItem(
+                          productName: 'Product name',
+                          price: 100000,
+                          imagePath: 'assets/images/product1.png',
+                          quantity: 1,
+                        ),
+                        ProductCartItem(
+                          productName: 'Product name',
+                          price: 100000,
+                          imagePath: 'assets/images/product1.png',
+                          quantity: 1,
+                        ),
+                      ],
                     ),
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: 16,
+                      color: GlobalVariables.lightGreen,
+                    )
+                  ],
                 ),
               ],
               //add cart item here

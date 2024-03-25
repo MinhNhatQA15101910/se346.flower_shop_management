@@ -54,8 +54,12 @@ class ProductCartItem extends StatelessWidget {
             ),
           ),
         ],
-        child: SizedBox(
-          height: 122,
+        child: Container(
+          padding: EdgeInsets.only(top: 12.0, left: 16.0, right: 16.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10), // Bo tròn container cha
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -67,8 +71,8 @@ class ProductCartItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 52,
+                    height: 52,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(imagePath),

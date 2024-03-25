@@ -81,7 +81,7 @@ class AccountScreen extends StatelessWidget {
                             AspectRatio(
                               aspectRatio: 1.0,
                               child: ClipOval(
-                                child: Container(
+                                child: SizedBox(
                                   width: double.infinity,
                                   child: Image.asset(
                                     'assets/images/img_account.png',
@@ -318,7 +318,7 @@ class AccountScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 24,
                     height: 40,
                     child: Align(
@@ -353,7 +353,7 @@ class AccountScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 24,
                     height: 40,
                     child: Align(
@@ -388,7 +388,7 @@ class AccountScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 24,
                     height: 40,
                     child: Align(
@@ -406,7 +406,7 @@ class AccountScreen extends StatelessWidget {
             _customContainer(
               child: Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: 40,
                     height: 40,
                     child: Center(
