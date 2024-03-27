@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/features/customer/account/widgets/item_tag.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
+
+  void navigateToCartScreen(BuildContext context) {
+    Navigator.of(context).pushNamed(CartScreen.routeName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class AccountScreen extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => navigateToCartScreen(context),
                 iconSize: 30,
                 icon: const Icon(
                   Icons.shopping_cart_outlined,
@@ -404,20 +408,6 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget _semiBoldSizeText(String text) {
-    return Text(
-      text,
-      textAlign: TextAlign.start,
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
-      style: GoogleFonts.inter(
-        color: Colors.black,
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
-
   Widget _boldSizeText(String text) {
     return Text(
       text,
@@ -428,20 +418,6 @@ class AccountScreen extends StatelessWidget {
         color: Colors.black,
         fontSize: 14,
         fontWeight: FontWeight.w700,
-      ),
-    );
-  }
-
-  Widget _detailText(String text) {
-    return Text(
-      text,
-      textAlign: TextAlign.start,
-      maxLines: 2,
-      overflow: TextOverflow.ellipsis,
-      style: GoogleFonts.inter(
-        color: GlobalVariables.darkGrey,
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
       ),
     );
   }

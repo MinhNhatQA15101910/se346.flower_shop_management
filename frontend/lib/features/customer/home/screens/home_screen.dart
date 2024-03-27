@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frontend/common/widgets/single_product_card.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:frontend/features/customer/deals_of_day/screens/deals_of_day_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -18,6 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _navigateToDealsOfDayScreen() {
     Navigator.of(context).pushNamed(DealsOfDayScreen.routeName);
+  }
+
+  void _navigateToCartScreen() {
+    Navigator.of(context).pushNamed(CartScreen.routeName);
   }
 
   @override
@@ -39,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: _navigateToCartScreen,
                 iconSize: 30,
                 icon: const Icon(
                   Icons.shopping_cart_outlined,

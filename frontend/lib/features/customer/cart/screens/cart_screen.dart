@@ -4,6 +4,7 @@ import 'package:frontend/features/customer/cart/widgets/product_cart_item.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CartScreen extends StatefulWidget {
+  static const String routeName = '/cart';
   const CartScreen({super.key});
 
   @override
