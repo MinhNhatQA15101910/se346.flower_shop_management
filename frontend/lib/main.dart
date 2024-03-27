@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
-      home: CartScreen(),
+      home: BottomBar(),
     );
   }
 }

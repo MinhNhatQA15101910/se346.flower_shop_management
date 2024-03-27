@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:frontend/features/customer/cart/widgets/product_cart_item.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:frontend/features/customer/account/widgets/item_tag.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -126,9 +127,8 @@ class AccountScreen extends StatelessWidget {
                         children: [
                           Image.asset(
                             'assets/images/img_promotion_code.png',
-                            fit: BoxFit.cover,
-                            height: 40,
                             width: 40,
+                            height: 40,
                           ),
                           SizedBox(width: 8),
                           Flexible(
@@ -299,137 +299,46 @@ class AccountScreen extends StatelessWidget {
               ),
             ),
             _customContainer(
-              child: Row(
-                children: [
-                  Image.asset(
-                    'assets/images/img_favourite.png',
-                    width: 40,
-                    height: 40,
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        _semiBoldSizeText('Favourites list'),
-                        SizedBox(height: 4),
-                        _detailText('View all products you love'),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 24,
-                    height: 40,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.navigate_next,
-                        size: 20,
-                        color: GlobalVariables.darkGrey,
-                      ),
-                    ),
-                  ),
-                ],
+              child: ItemTag(
+                title: 'Favorite',
+                description: 'View products you love',
+                imgPath: 'assets/images/img_favourite.png',
+                onTap: () {},
+                isVisibleArrow: true,
               ),
             ),
             _customContainer(
-              child: Row(
-                children: [
-                  Image.asset(
-                    'assets/images/img_recent.png',
-                    width: 40,
-                    height: 40,
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        _semiBoldSizeText('Recently viewed products'),
-                        SizedBox(height: 4),
-                        _detailText('See Recently viewed products recently'),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 24,
-                    height: 40,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.navigate_next,
-                        size: 20,
-                        color: GlobalVariables.darkGrey,
-                      ),
-                    ),
-                  ),
-                ],
+              child: ItemTag(
+                title: 'Recently',
+                description: 'View recently products',
+                imgPath: 'assets/images/img_recent.png',
+                onTap: () {},
+                isVisibleArrow: true,
               ),
             ),
             _customContainer(
-              child: Row(
-                children: [
-                  Image.asset(
-                    'assets/images/img_support.png',
-                    width: 40,
-                    height: 40,
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        _semiBoldSizeText('Support'),
-                        SizedBox(height: 4),
-                        _detailText('Call or text us for quick support'),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 24,
-                    height: 40,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.navigate_next,
-                        size: 20,
-                        color: GlobalVariables.darkGrey,
-                      ),
-                    ),
-                  ),
-                ],
+              child: ItemTag(
+                title: 'Support',
+                description: 'Call or text us for quick support',
+                imgPath: 'assets/images/img_support.png',
+                onTap: () {},
+                isVisibleArrow: true,
               ),
             ),
             _customContainer(
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: Center(
-                      child: Icon(
-                        Icons.logout,
-                        size: 24,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        _semiBoldSizeText('Logout'),
-                        SizedBox(height: 4),
-                        _detailText('Log out of your account'),
-                      ],
-                    ),
-                  ),
-                ],
+              child: ItemTag(
+                title: 'Change password',
+                description: 'Change your account password',
+                onTap: () {},
+                iconData: Icons.password,
+              ),
+            ),
+            _customContainer(
+              child: ItemTag(
+                title: 'Log out',
+                description: 'Log out of your account',
+                onTap: () {},
+                iconData: Icons.logout,
               ),
             ),
             Container(

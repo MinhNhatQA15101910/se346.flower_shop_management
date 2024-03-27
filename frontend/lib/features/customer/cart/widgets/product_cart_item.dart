@@ -58,7 +58,7 @@ class ProductCartItem extends StatelessWidget {
           padding: EdgeInsets.only(top: 12.0, left: 16.0, right: 16.0),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10), // Bo tròn container cha
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
