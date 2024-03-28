@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/common/widgets/single_product_card.dart';
 import 'package:frontend/constants/global_variables.dart';
@@ -12,6 +13,10 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final _textController = TextEditingController();
+
+  void _navigateToCartScreen() {
+    Navigator.of(context).pushNamed(CartScreen.routeName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: _navigateToCartScreen,
                 iconSize: 30,
                 icon: const Icon(
                   Icons.shopping_cart_outlined,
@@ -140,6 +145,12 @@ class _SearchScreenState extends State<SearchScreen> {
       )),
     );
   }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 }
 
 void _showFilterBottomSheet(BuildContext context) {
@@ -183,7 +194,12 @@ Widget _buildBottomSheetButton({
     borderColor: GlobalVariables.darkGrey,
     selectedBorderColor: GlobalVariables.darkGreen,
     children: [
-      Text(text, style: GoogleFonts.inter(color: GlobalVariables.darkGrey)),
+      Text(
+        text,
+        style: GoogleFonts.inter(
+          color: GlobalVariables.darkGrey,
+        ),
+      ),
     ],
   );
 }
