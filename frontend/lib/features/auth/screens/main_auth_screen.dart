@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/auth/widgets/forgot_password_form.dart';
 import 'package:frontend/features/auth/widgets/login_form.dart';
 import 'package:frontend/features/auth/widgets/otp_verification_form.dart';
+import 'package:frontend/features/auth/widgets/set_new_password_form.dart';
 import 'package:frontend/features/auth/widgets/sign_up_form.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -26,19 +28,20 @@ class MainAuthScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    "Flowerly",
-                    style: GoogleFonts.pacifico(
-                      color: GlobalVariables.darkGreen,
-                      fontSize: GlobalVariables.fontSize_48,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  // TODO: make this text render conditionally based on navigation
+                  // Text(
+                  //   "Flowerly",
+                  //   style: GoogleFonts.pacifico(
+                  //     color: GlobalVariables.darkGreen,
+                  //     fontSize: GlobalVariables.fontSize_48,
+                  //     fontWeight: FontWeight.w500,
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 40,
                   ),
                   // here's where the form transitions come in okay, not integrate navigation yet
-                  OtpVerificationForm(),
+                  SetNewPasswordForm(),
                 ],
               ),
             ),

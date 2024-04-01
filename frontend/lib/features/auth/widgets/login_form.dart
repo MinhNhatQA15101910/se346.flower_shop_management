@@ -23,7 +23,10 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(10.0),
-      padding: EdgeInsets.all(10.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: 10.0,
+        vertical: 20.0,
+      ),
       decoration: BoxDecoration(
         color: GlobalVariables.defaultColor,
         borderRadius: BorderRadius.circular(10.0),
