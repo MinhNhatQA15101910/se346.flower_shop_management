@@ -21,6 +21,7 @@ class GlobalVariables {
   static const Color lightYellow = Color(0xFFFFF5C7);
   static const Color darkBlue = Color(0xFF0D5BB5);
   static const Color lightBlue = Color(0xFFDBEEFF);
+  static const Color pureWhite = Color(0xFFFFFFFF);
 
   //Define Scales
   static void init(BuildContext context) {
@@ -29,8 +30,28 @@ class GlobalVariables {
     screenHeight = screenSize.height;
   }
 
+  static double standardButtonWidth = screenWidth * (4 / 7);
+  static double subStandardButtonWidth = screenWidth * (4 / 7) / 1.5;
+  static double standardButtonHeight = screenHeight * (1 / 15);
+  static double standardIconSize = 32;
+
   // Images
   static const String welcomeImage_01 = "assets/images/Welcome_01.png";
   static const String welcomeImage_02 = "assets/images/Welcome_02.png";
   static const String welcomeImage_03 = "assets/images/Welcome_03.png";
+
+  //Define Font Sizes
+  static const double fontSize_16 = 16;
+  static const double fontSize_18 = 18;
+  static const double fontSize_24 = 24;
+  static const double fontSize_28 = 28;
+  static const double fontSize_32 = 32;
+  static const double fontSize_36 = 36;
+  static const double fontSize_48 = 48;
+
+  /*
+    WHENEVER THE FUCK YOU MERGE DON'T FUCK THIS UP MAN
+    THIS SHIT COST ME AGES TO PREPARE AND USE IN MANY FILES
+    
+   */
 }
