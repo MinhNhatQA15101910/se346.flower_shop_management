@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/auth/screens/main_auth_screen.dart';
 import 'package:frontend/features/auth/widgets/carousel_item.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -154,7 +155,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   void next() {
     setState(() {
-      _activeIndex = (_activeIndex + 1) % _buttonContents.length;
+      if (_activeIndex == 2) {
+        Navigator.of(context).pushNamed(MainAuthScreen.routeName);
+      } else {
+        _activeIndex = (_activeIndex + 1) % _buttonContents.length;
+      }
     });
     _controller.nextPage(duration: Duration(milliseconds: 200));
   }

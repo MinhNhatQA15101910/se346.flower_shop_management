@@ -43,6 +43,7 @@ class GlobalVariables {
   //Define Font Sizes
   static const double fontSize_16 = 16;
   static const double fontSize_18 = 18;
+  static const double fontSize_19 = 19;
   static const double fontSize_24 = 24;
   static const double fontSize_28 = 28;
   static const double fontSize_32 = 32;

@@ -81,7 +81,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
               height: GlobalVariables.standardButtonHeight,
               child: ElevatedButton(
                 onPressed: () {
-                  resetPasword();
+                  resetPassword();
                 },
                 style: ButtonStyle(
                   elevation: MaterialStateProperty.all(0),
@@ -94,8 +94,10 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                 child: Text(
                   'Reset the password',
                   style: TextStyle(
-                      fontSize: GlobalVariables.fontSize_18,
-                      color: GlobalVariables.pureWhite),
+                    fontSize: GlobalVariables.fontSize_16,
+                    color: GlobalVariables.pureWhite,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -105,5 +107,5 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
     );
   }
 
-  void resetPasword() {}
+  void resetPassword() {}
 }

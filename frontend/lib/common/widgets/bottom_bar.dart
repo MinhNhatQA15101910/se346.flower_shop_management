@@ -7,6 +7,7 @@ import 'package:frontend/features/customer/home/screens/home_screen.dart';
 import 'package:frontend/features/customer/search/screens/search_screen.dart';
 
 class BottomBar extends StatefulWidget {
+  static const String routeName = '/bottom-bar';
   const BottomBar({super.key});
 
   @override

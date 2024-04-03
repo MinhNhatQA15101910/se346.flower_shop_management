@@ -1,9 +1,15 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:frontend/common/widgets/bottom_bar.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/auth/widgets/forgot_password_form.dart';
 import 'package:frontend/features/auth/widgets/login_google_facebook.dart';
+import 'package:frontend/features/auth/widgets/sign_up_form.dart';
+import 'package:frontend/providers/auth_form_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/common/widgets/seperator.dart';
+import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -21,6 +27,9 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final authFormProvider =
+        Provider.of<AuthFormProvider>(context, listen: false);
+
     return Container(
       margin: EdgeInsets.all(10.0),
       padding: EdgeInsets.symmetric(
@@ -111,6 +120,12 @@ class _LoginFormState extends State<LoginForm> {
                         decoration: TextDecoration.underline,
                         fontWeight: FontWeight.bold,
                       ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          authFormProvider.setForm(
+                            ForgotPasswordForm(),
+                          );
+                        },
                     ),
                     TextSpan(
                       text: '?',
@@ -145,8 +160,9 @@ class _LoginFormState extends State<LoginForm> {
                       child: Text(
                         'Log In',
                         style: TextStyle(
-                            fontSize: GlobalVariables.fontSize_18,
-                            color: GlobalVariables.pureWhite),
+                          fontSize: GlobalVariables.fontSize_18,
+                          color: GlobalVariables.pureWhite,
+                        ),
                       ),
                     ),
                   ),
@@ -160,10 +176,10 @@ class _LoginFormState extends State<LoginForm> {
             ),
             LoginGoogleFacebook(),
             Separator(
-              text: Text("Or",
+              text: Text("OR",
                   style: GoogleFonts.inter(
                     color: GlobalVariables.darkGreen,
-                    fontSize: GlobalVariables.fontSize_24,
+                    fontSize: GlobalVariables.fontSize_19,
                     fontWeight: FontWeight.w500,
                   )),
             ),
@@ -187,7 +203,7 @@ class _LoginFormState extends State<LoginForm> {
                       child: Text(
                         'Continue as a guest',
                         style: TextStyle(
-                            fontSize: GlobalVariables.fontSize_18,
+                            fontSize: GlobalVariables.fontSize_16,
                             color: GlobalVariables.green),
                       ),
                     ),
@@ -212,6 +228,12 @@ class _LoginFormState extends State<LoginForm> {
                       color: GlobalVariables.green,
                       decoration: TextDecoration.underline,
                     ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        authFormProvider.setForm(
+                          SignupForm(),
+                        );
+                      },
                   ),
                 ],
               ),
@@ -232,11 +254,9 @@ class _LoginFormState extends State<LoginForm> {
       });
       if (_usernameController.text == 'example' &&
           _passwordController.text == 'password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Login Successful!'),
-            backgroundColor: Colors.green,
-          ),
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          BottomBar.routeName,
+          (route) => false,
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

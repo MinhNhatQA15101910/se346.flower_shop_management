@@ -1,9 +1,13 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:frontend/common/widgets/seperator.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/auth/widgets/login_form.dart';
+import 'package:frontend/providers/auth_form_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/features/auth/widgets/login_google_facebook.dart';
+import 'package:provider/provider.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
@@ -31,6 +35,9 @@ class _SignupFormState extends State<SignupForm> {
 
   @override
   Widget build(BuildContext context) {
+    final authFormProvider =
+        Provider.of<AuthFormProvider>(context, listen: false);
+
     return Container(
       margin: EdgeInsets.all(10.0),
       padding: EdgeInsets.symmetric(
@@ -211,8 +218,9 @@ class _SignupFormState extends State<SignupForm> {
                 child: Text(
                   'Continue as a guest',
                   style: TextStyle(
-                      fontSize: GlobalVariables.fontSize_18,
-                      color: GlobalVariables.green),
+                    fontSize: GlobalVariables.fontSize_16,
+                    color: GlobalVariables.green,
+                  ),
                 ),
               ),
             ),
@@ -236,6 +244,12 @@ class _SignupFormState extends State<SignupForm> {
                       color: GlobalVariables.green,
                       decoration: TextDecoration.underline,
                     ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        authFormProvider.setForm(
+                          LoginForm(),
+                        );
+                      },
                   ),
                 ],
               ),

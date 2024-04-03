@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:frontend/features/auth/screens/main_auth_screen.dart';
+import 'package:frontend/features/auth/screens/intro_screen.dart';
+import 'package:frontend/providers/auth_form_provider.dart';
+import 'package:frontend/router.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    const MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AuthFormProvider(),
+        )
+      ],
+      child: const MyApp(),
+    ),
   );
 }
 
@@ -29,7 +39,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: MainAuthScreen(),
+      onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
+      home: IntroScreen(),
     );
   }
 }
