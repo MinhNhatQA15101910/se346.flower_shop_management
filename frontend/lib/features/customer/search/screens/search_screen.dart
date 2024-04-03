@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:frontend/common/widgets/single_product_card.dart';
 import 'package:frontend/constants/global_variables.dart';
+
+//Widget imports
+import 'package:frontend/common/widgets/single_product_card.dart';
+import 'package:frontend/features/customer/search/widgets/filter_btm_sheet.dart';
+import 'package:frontend/features/customer/search/widgets/sort_btm_sheet.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -92,7 +96,15 @@ class _SearchScreenState extends State<SearchScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                  onPressed: () => {_showFilterBottomSheet(context)},
+                  onPressed: () => {
+                    showModalBottomSheet<dynamic>(
+                        context: context,
+                        useRootNavigator: true,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return FilterBtmSheet();
+                        })
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     foregroundColor: GlobalVariables.darkGrey,
@@ -108,7 +120,15 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () => {_showSortBottomSheet(context)},
+                  onPressed: () => {
+                    showModalBottomSheet<dynamic>(
+                        context: context,
+                        useRootNavigator: true,
+                        isScrollControlled: true,
+                        builder: (BuildContext context) {
+                          return const SortBtmSheet();
+                        })
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     foregroundColor: GlobalVariables.darkGreen,
@@ -146,60 +166,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
 }
 
-void _showFilterBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return SizedBox(
-        width: double.infinity,
-        child: Column(
-          children: [
-            _buildBottomSheetButton(
-              context: context,
-              text: 'Filter 1',
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
 
-// Function to show sort bottom sheet
-void _showSortBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return SizedBox(
-        width: double.infinity,
-        child: Text('Sort Bottom Sheet'),
-      );
-    },
-  );
-}
 
-Widget _buildBottomSheetButton({
-  required BuildContext context,
-  required String text,
-}) {
-  return ToggleButtons(
-    isSelected: [false],
-    borderColor: GlobalVariables.darkGrey,
-    selectedBorderColor: GlobalVariables.darkGreen,
-    children: [
-      Text(
-        text,
-        style: GoogleFonts.inter(
-          color: GlobalVariables.darkGrey,
-        ),
-      ),
-    ],
-  );
-}
