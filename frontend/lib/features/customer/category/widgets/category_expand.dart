@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/category/widgets/gridview_category.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CategoryExpand extends StatefulWidget {
-  const CategoryExpand({
-    super.key,
-    required this.titleText,
-  });
-
   final String titleText;
+
+  const CategoryExpand({super.key, required this.titleText});
 
   @override
   State<CategoryExpand> createState() => _CategoryExpandState();
@@ -35,14 +31,13 @@ class _CategoryExpandState extends State<CategoryExpand> {
           ),
           child: ExpansionTile(
             title: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
                 widget.titleText,
-                style: GoogleFonts.inter(
-                  color: GlobalVariables.darkGreen,
+                style: const TextStyle(
+                  color: Color(0xFF198155),
                   fontSize: 20,
+                  fontFamily: 'Inter',
                   fontWeight: FontWeight.w700,
                 ),
               ),
