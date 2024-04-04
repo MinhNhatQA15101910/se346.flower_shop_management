@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -9,6 +7,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frontend/common/widgets/single_product_card.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
+  const ProductDetailsScreen({super.key});
+
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
@@ -17,11 +17,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   int _activeIndex = 0;
@@ -305,7 +300,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
               ),
               SizedBox(height: 10),
-//Product detail Container
+              // Product detail Container
               Container(
                 width: GlobalVariables.screenWidth,
                 padding: EdgeInsets.all(16),

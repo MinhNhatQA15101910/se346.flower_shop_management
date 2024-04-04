@@ -41,10 +41,13 @@ class ProductCartItem extends StatelessWidget {
             child: IconSlideAction(
               color: Colors.transparent,
               iconWidget: SvgPicture.asset(
-                'assets/images/vector_cancel.svg',
+                'assets/vectors/vector_cancel.svg',
                 width: 16,
                 height: 16,
-                color: GlobalVariables.darkRed,
+                colorFilter: ColorFilter.mode(
+                  GlobalVariables.darkRed,
+                  BlendMode.srcIn,
+                ),
               ),
               onTap: () {
                 // Handle tap here
@@ -88,7 +91,7 @@ class ProductCartItem extends StatelessWidget {
                       children: [
                         _productText(productName),
                         SizedBox(height: 8),
-                        _pricetText(price.toString()),
+                        _priceText(price.toString()),
                         SizedBox(height: 8),
                         Row(
                           children: [
@@ -97,10 +100,13 @@ class ProductCartItem extends StatelessWidget {
                                 // Handle tap
                               },
                               child: SvgPicture.asset(
-                                'assets/images/vector_decrement_button.svg',
+                                'assets/vectors/vector_decrement_button.svg',
                                 width: 40,
                                 height: 40,
-                                color: Colors.black,
+                                colorFilter: ColorFilter.mode(
+                                  Colors.black,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                             SizedBox(width: 8),
@@ -131,10 +137,13 @@ class ProductCartItem extends StatelessWidget {
                                 // Handle tap here
                               },
                               child: SvgPicture.asset(
-                                'assets/images/vector_increment_button.svg',
+                                'assets/vectors/vector_increment_button.svg',
                                 width: 40,
                                 height: 40,
-                                color: GlobalVariables.green,
+                                colorFilter: ColorFilter.mode(
+                                  GlobalVariables.green,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                           ],
@@ -172,7 +181,7 @@ class ProductCartItem extends StatelessWidget {
     );
   }
 
-  Widget _pricetText(String text) {
+  Widget _priceText(String text) {
     return Text(
       text,
       maxLines: 2,

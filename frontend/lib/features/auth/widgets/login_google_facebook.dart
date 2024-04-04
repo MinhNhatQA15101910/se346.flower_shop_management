@@ -23,7 +23,7 @@ class _LoginGoogleFacebookState extends State<LoginGoogleFacebook> {
           _loginWithGoogle();
         },
         child: SvgPicture.asset(
-          'assets/images/google.svg',
+          'assets/vectors/vector_google.svg',
           width: GlobalVariables.standardIconSize,
           height: GlobalVariables.standardIconSize,
         ),
@@ -38,7 +38,7 @@ class _LoginGoogleFacebookState extends State<LoginGoogleFacebook> {
           _loginWithFacebook();
         },
         child: SvgPicture.asset(
-          'assets/images/facebook.svg',
+          'assets/vectors/vector_facebook.svg',
           width: GlobalVariables.standardIconSize,
           height: GlobalVariables.standardIconSize,
         ),

@@ -50,7 +50,7 @@ class _BottomBarState extends State<BottomBar> {
               icon: SizedBox(
                 width: _bottomBarWidth,
                 child: SvgPicture.asset(
-                  'assets/images/vector_home.svg',
+                  'assets/vectors/vector_home.svg',
                   width: 24,
                   height: 24,
                   colorFilter: ColorFilter.mode(
@@ -67,7 +67,7 @@ class _BottomBarState extends State<BottomBar> {
               icon: SizedBox(
                 width: _bottomBarWidth,
                 child: SvgPicture.asset(
-                  'assets/images/vector_category.svg',
+                  'assets/vectors/vector_category.svg',
                   width: 24,
                   height: 24,
                   colorFilter: ColorFilter.mode(
@@ -84,7 +84,7 @@ class _BottomBarState extends State<BottomBar> {
               icon: SizedBox(
                 width: _bottomBarWidth,
                 child: SvgPicture.asset(
-                  'assets/images/vector_search.svg',
+                  'assets/vectors/vector_search.svg',
                   width: 24,
                   height: 24,
                   colorFilter: ColorFilter.mode(
@@ -101,7 +101,7 @@ class _BottomBarState extends State<BottomBar> {
               icon: SizedBox(
                 width: _bottomBarWidth,
                 child: SvgPicture.asset(
-                  'assets/images/vector_account.svg',
+                  'assets/vectors/vector_account.svg',
                   width: 24,
                   height: 24,
                   colorFilter: ColorFilter.mode(
