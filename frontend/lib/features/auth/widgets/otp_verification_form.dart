@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/auth/widgets/set_new_password_form.dart';
+import 'package:frontend/providers/auth_form_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 
 class OtpVerificationForm extends StatefulWidget {
   const OtpVerificationForm({Key? key}) : super(key: key);
 
   @override
-  _OtpVerificationFormState createState() => _OtpVerificationFormState();
+  State<OtpVerificationForm> createState() => _OtpVerificationFormState();
 }
 
 class _OtpVerificationFormState extends State<OtpVerificationForm> {
@@ -16,7 +19,9 @@ class _OtpVerificationFormState extends State<OtpVerificationForm> {
     width: 56,
     height: 56,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(20)),
+      borderRadius: BorderRadius.all(
+        Radius.circular(20),
+      ),
     ),
   );
 
@@ -94,16 +99,14 @@ class _OtpVerificationFormState extends State<OtpVerificationForm> {
                 color: GlobalVariables.lightGrey,
               ),
             ),
-            onCompleted: (pin) => print("asdasdsadsa $pin"),
+            onCompleted: (pin) => print("Done entering pin: $pin"),
           ),
           SizedBox(height: 20.0),
           SizedBox(
             width: GlobalVariables.standardButtonWidth,
             height: GlobalVariables.standardButtonHeight,
             child: ElevatedButton(
-              onPressed: () {
-                _verifyCode();
-              },
+              onPressed: _verifyCode,
               style: ButtonStyle(
                 elevation: MaterialStateProperty.all(0),
                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -149,5 +152,9 @@ class _OtpVerificationFormState extends State<OtpVerificationForm> {
     );
   }
 
-  void _verifyCode() {}
+  void _verifyCode() {
+    final authFormProvider =
+        Provider.of<AuthFormProvider>(context, listen: false);
+    authFormProvider.setForm(SetNewPasswordForm());
+  }
 }

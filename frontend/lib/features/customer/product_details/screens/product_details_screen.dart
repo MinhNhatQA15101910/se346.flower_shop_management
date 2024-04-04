@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -7,6 +8,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frontend/common/widgets/single_product_card.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
+  static const String routeName = '/product-details';
   const ProductDetailsScreen({super.key});
 
   @override
@@ -14,29 +16,29 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   int _activeIndex = 0;
   final _tempImageQuantity = 5;
   int rateNumber = 44;
-  bool isReadmore = false;
+  bool isReadMore = false;
   DateTime selectedDate = DateTime.now();
+
+  void _navigateToCartScreen() {
+    Navigator.of(context).pushNamed(CartScreen.routeName);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: GlobalVariables.lightGrey,
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: AppBar(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+            preferredSize: const Size.fromHeight(60),
+            child: AppBar(
+              actions: [
                 IconButton(
-                  onPressed: () {},
+                  padding: const EdgeInsets.only(
+                    right: 15,
+                  ),
+                  onPressed: _navigateToCartScreen,
                   iconSize: 30,
                   icon: const Icon(
                     Icons.shopping_cart_outlined,
@@ -44,9 +46,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                 ),
               ],
-            ),
-          ),
-        ),
+            )),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -326,7 +326,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     // Read more
                     Text(
                       'Product details A Flutter plugin that allows for expanding and collapsing text with the added capability to style and interact with specific patterns in the text like hashtags, URLs, and mentions using the new Annotation feature.',
-                      maxLines: isReadmore ? null : 3,
+                      maxLines: isReadMore ? null : 3,
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -337,10 +337,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Center(
                       child: TextButton(
                         onPressed: () => setState(() {
-                          isReadmore = !isReadmore;
+                          isReadMore = !isReadMore;
                         }),
                         child: Text(
-                          isReadmore ? 'Read less' : 'Read more',
+                          isReadMore ? 'Read less' : 'Read more',
                           style: GoogleFonts.inter(
                               color: GlobalVariables.green, fontSize: 16),
                         ),

@@ -12,7 +12,7 @@ class IntroScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: GlobalVariables.lightGreen,
-      body: InkWell(
+      body: GestureDetector(
         onTap: () => _navigateToWelcomeScreen(context),
         child: Center(
           child: Column(

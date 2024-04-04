@@ -1,18 +1,22 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/auth/widgets/otp_verification_form.dart';
+import 'package:frontend/providers/auth_form_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({Key? key}) : super(key: key);
 
   @override
-  _ForgotPasswordFormState createState() => _ForgotPasswordFormState();
+  State<ForgotPasswordForm> createState() => _ForgotPasswordFormState();
 }
 
 class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
-  final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-  final TextEditingController resetEmailController = TextEditingController();
+  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  final TextEditingController _resetEmailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +32,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: FormBuilder(
-        key: formKey,
+        key: _formKey,
         child: Column(
           children: [
             Align(
@@ -58,7 +62,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
             SizedBox(height: 10.0),
             FormBuilderTextField(
               name: 'email',
-              controller: resetEmailController,
+              controller: _resetEmailController,
               decoration: InputDecoration(
                 hintText: 'Email address',
                 hintStyle: TextStyle(
@@ -74,15 +78,24 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                   ),
                 ),
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your email.';
+                }
+
+                if (!EmailValidator.validate(value)) {
+                  return 'Please enter a valid email.';
+                }
+
+                return null;
+              },
             ),
             SizedBox(height: 20.0),
             SizedBox(
               width: GlobalVariables.standardButtonWidth,
               height: GlobalVariables.standardButtonHeight,
               child: ElevatedButton(
-                onPressed: () {
-                  resetPassword();
-                },
+                onPressed: _resetPassword,
                 style: ButtonStyle(
                   elevation: MaterialStateProperty.all(0),
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -107,5 +120,11 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
     );
   }
 
-  void resetPassword() {}
+  void _resetPassword() {
+    if (_formKey.currentState!.validate()) {
+      final authFormProvider =
+          Provider.of<AuthFormProvider>(context, listen: false);
+      authFormProvider.setForm(OtpVerificationForm());
+    }
+  }
 }

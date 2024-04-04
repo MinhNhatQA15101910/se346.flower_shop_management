@@ -8,14 +8,14 @@ import 'package:frontend/features/auth/widgets/login_google_facebook.dart';
 import 'package:frontend/features/auth/widgets/sign_up_form.dart';
 import 'package:frontend/providers/auth_form_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:frontend/common/widgets/seperator.dart';
+import 'package:frontend/common/widgets/separator.dart';
 import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
 
   @override
-  _LoginFormState createState() => _LoginFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
@@ -270,13 +270,9 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _loginAsGuest() {
-    setState(() {
-      _isLoadingAsGuest = true;
-    });
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        _isLoadingAsGuest = false;
-      });
-    });
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      BottomBar.routeName,
+      (route) => false,
+    );
   }
 }

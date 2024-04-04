@@ -4,6 +4,7 @@ import 'package:frontend/features/auth/screens/main_auth_screen.dart';
 import 'package:frontend/features/auth/screens/welcome_screen.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:frontend/features/customer/deals_of_day/screens/deals_of_day_screen.dart';
+import 'package:frontend/features/customer/product_details/screens/product_details_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
@@ -31,6 +32,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
       return MaterialPageRoute(
         settings: routeSettings,
         builder: (_) => const CartScreen(),
+      );
+    case ProductDetailsScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const ProductDetailsScreen(),
       );
     default:
       return MaterialPageRoute(

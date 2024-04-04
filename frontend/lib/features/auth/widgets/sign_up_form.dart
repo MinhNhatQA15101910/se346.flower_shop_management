@@ -1,7 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:frontend/common/widgets/seperator.dart';
+import 'package:frontend/common/widgets/bottom_bar.dart';
+import 'package:frontend/common/widgets/separator.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/widgets/login_form.dart';
 import 'package:frontend/providers/auth_form_provider.dart';
@@ -13,7 +14,7 @@ class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
 
   @override
-  _SignupFormState createState() => _SignupFormState();
+  State<SignupForm> createState() => _SignupFormState();
 }
 
 class _SignupFormState extends State<SignupForm> {
@@ -206,7 +207,7 @@ class _SignupFormState extends State<SignupForm> {
               width: GlobalVariables.standardButtonWidth,
               height: GlobalVariables.standardButtonHeight,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: _continueAsGuest,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: GlobalVariables.pureWhite,
                   side: BorderSide(
@@ -261,4 +262,11 @@ class _SignupFormState extends State<SignupForm> {
   }
 
   void _signUp() {}
+
+  void _continueAsGuest() {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      BottomBar.routeName,
+      (route) => false,
+    );
+  }
 }

@@ -21,40 +21,22 @@ class ProductCartItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Slidable(
-        actionPane: SlidableDrawerActionPane(),
-        actionExtentRatio: 0.1,
-        secondaryActions: [
-          Container(
-            margin: EdgeInsets.only(top: 8, bottom: 8),
-            decoration: BoxDecoration(
-              color: GlobalVariables.lightRed,
-              border: Border(
-                top: BorderSide(color: GlobalVariables.darkRed, width: 1),
-                bottom: BorderSide(color: GlobalVariables.darkRed, width: 1),
-                left: BorderSide(color: GlobalVariables.darkRed, width: 1),
-              ),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                bottomLeft: Radius.circular(10),
-              ),
-            ),
-            child: IconSlideAction(
-              color: Colors.transparent,
-              iconWidget: SvgPicture.asset(
-                'assets/vectors/vector_cancel.svg',
-                width: 16,
-                height: 16,
-                colorFilter: ColorFilter.mode(
-                  GlobalVariables.darkRed,
-                  BlendMode.srcIn,
-                ),
-              ),
-              onTap: () {
-                // Handle tap here
+        // Specify the Slidable behavior
+        endActionPane: ActionPane(
+          motion: ScrollMotion(),
+          extentRatio: 0.15,
+          children: [
+            SlidableAction(
+              onPressed: (BuildContext context) {
+                // Handle action
               },
+              borderRadius: BorderRadius.circular(12),
+              backgroundColor: Color(0xFFFE4A49),
+              foregroundColor: Colors.white,
+              icon: Icons.delete,
             ),
-          ),
-        ],
+          ],
+        ),
         child: Container(
           padding: EdgeInsets.only(top: 12.0, left: 16.0, right: 16.0),
           decoration: BoxDecoration(

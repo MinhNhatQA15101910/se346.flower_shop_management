@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/auth/widgets/login_form.dart';
+import 'package:frontend/providers/auth_form_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class SetNewPasswordForm extends StatefulWidget {
   const SetNewPasswordForm({Key? key}) : super(key: key);
 
   @override
-  _SetNewPasswordFormState createState() => _SetNewPasswordFormState();
+  State<SetNewPasswordForm> createState() => _SetNewPasswordFormState();
 }
 
 class _SetNewPasswordFormState extends State<SetNewPasswordForm> {
-  final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
+  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
       TextEditingController();
 
   @override
@@ -30,7 +33,7 @@ class _SetNewPasswordFormState extends State<SetNewPasswordForm> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: FormBuilder(
-        key: formKey,
+        key: _formKey,
         child: Column(
           children: [
             Align(
@@ -60,7 +63,7 @@ class _SetNewPasswordFormState extends State<SetNewPasswordForm> {
             SizedBox(height: 10.0),
             FormBuilderTextField(
               name: 'password',
-              controller: passwordController,
+              controller: _passwordController,
               decoration: InputDecoration(
                 hintText: 'Password',
                 hintStyle: TextStyle(
@@ -80,7 +83,7 @@ class _SetNewPasswordFormState extends State<SetNewPasswordForm> {
             SizedBox(height: 10),
             FormBuilderTextField(
               name: 'confirmPassword',
-              controller: confirmPasswordController,
+              controller: _confirmPasswordController,
               decoration: InputDecoration(
                 hintText: 'Confirm password',
                 hintStyle: TextStyle(
@@ -127,5 +130,10 @@ class _SetNewPasswordFormState extends State<SetNewPasswordForm> {
     );
   }
 
-  void updatePassword() {}
+  void updatePassword() {
+    // Call api to update password
+    final authFormProvider =
+        Provider.of<AuthFormProvider>(context, listen: false);
+    authFormProvider.setForm(LoginForm());
+  }
 }
