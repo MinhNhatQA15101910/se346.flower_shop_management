@@ -19,6 +19,12 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
   final TextEditingController _resetEmailController = TextEditingController();
 
   @override
+  void dispose() {
+    _resetEmailController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: GlobalVariables.screenWidth,

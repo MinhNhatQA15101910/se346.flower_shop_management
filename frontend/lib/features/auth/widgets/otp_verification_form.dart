@@ -14,8 +14,8 @@ class OtpVerificationForm extends StatefulWidget {
 }
 
 class _OtpVerificationFormState extends State<OtpVerificationForm> {
-  final String resentEmail = "duyvipinhere@gmail.com";
-  final defaultPinTheme = PinTheme(
+  final String _resentEmail = "duyvipinhere@gmail.com";
+  final _defaultPinTheme = PinTheme(
     width: 56,
     height: 56,
     decoration: BoxDecoration(
@@ -64,7 +64,7 @@ class _OtpVerificationFormState extends State<OtpVerificationForm> {
                   ),
                 ),
                 Text(
-                  resentEmail,
+                  _resentEmail,
                   textAlign: TextAlign.left,
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w600,
@@ -86,16 +86,16 @@ class _OtpVerificationFormState extends State<OtpVerificationForm> {
           SizedBox(height: 10.0),
           Pinput(
             length: 6,
-            defaultPinTheme: defaultPinTheme,
-            focusedPinTheme: defaultPinTheme.copyDecorationWith(
+            defaultPinTheme: _defaultPinTheme,
+            focusedPinTheme: _defaultPinTheme.copyDecorationWith(
               border: Border.all(
                 color: GlobalVariables.darkGreen,
                 width: 1.0,
               ),
               borderRadius: BorderRadius.circular(8),
             ),
-            submittedPinTheme: defaultPinTheme.copyWith(
-              decoration: defaultPinTheme.decoration!.copyWith(
+            submittedPinTheme: _defaultPinTheme.copyWith(
+              decoration: _defaultPinTheme.decoration!.copyWith(
                 color: GlobalVariables.lightGrey,
               ),
             ),

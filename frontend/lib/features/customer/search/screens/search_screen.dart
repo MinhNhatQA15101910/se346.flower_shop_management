@@ -18,6 +18,12 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final _textController = TextEditingController();
 
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
   void _navigateToCartScreen() {
     Navigator.of(context).pushNamed(CartScreen.routeName);
   }
@@ -165,8 +171,4 @@ class _SearchScreenState extends State<SearchScreen> {
       )),
     );
   }
-
 }
-
-
-

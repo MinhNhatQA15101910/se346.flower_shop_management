@@ -26,6 +26,13 @@ class _LoginFormState extends State<LoginForm> {
   bool _isLoadingAsGuest = false;
 
   @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final authFormProvider =
         Provider.of<AuthFormProvider>(context, listen: false);

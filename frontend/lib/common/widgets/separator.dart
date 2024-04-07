@@ -7,12 +7,12 @@ class Separator extends StatelessWidget {
   final Text text;
 
   const Separator({
-    Key? key,
+    super.key,
     this.thickness = 0.3,
     this.color = Colors.black,
     this.margin = const EdgeInsets.symmetric(vertical: 5.0),
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

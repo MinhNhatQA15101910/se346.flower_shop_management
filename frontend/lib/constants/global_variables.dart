@@ -49,10 +49,4 @@ class GlobalVariables {
   static const double fontSize_32 = 32;
   static const double fontSize_36 = 36;
   static const double fontSize_48 = 48;
-
-  /*
-    WHENEVER THE FUCK YOU MERGE DON'T FUCK THIS UP MAN
-    THIS SHIT COST ME AGES TO PREPARE AND USE IN MANY FILES
-    
-   */
 }

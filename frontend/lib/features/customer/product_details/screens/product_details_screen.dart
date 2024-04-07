@@ -18,9 +18,9 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int _activeIndex = 0;
   final _tempImageQuantity = 5;
-  int rateNumber = 44;
-  bool isReadMore = false;
-  DateTime selectedDate = DateTime.now();
+  int _rateNumber = 44;
+  bool _isReadMore = false;
+  DateTime _selectedDate = DateTime.now();
 
   void _navigateToCartScreen() {
     Navigator.of(context).pushNamed(CartScreen.routeName);
@@ -120,7 +120,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           onRatingUpdate: (rating) {},
                         ),
                         Text(
-                          ' ($rateNumber)',
+                          ' ($_rateNumber)',
                           style: GoogleFonts.inter(
                             color: GlobalVariables.darkGrey,
                           ),
@@ -275,7 +275,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${selectedDate.year.toString()}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}',
+                                    '${_selectedDate.year.toString()}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}',
                                     style: GoogleFonts.inter(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
@@ -326,7 +326,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     // Read more
                     Text(
                       'Product details A Flutter plugin that allows for expanding and collapsing text with the added capability to style and interact with specific patterns in the text like hashtags, URLs, and mentions using the new Annotation feature.',
-                      maxLines: isReadMore ? null : 3,
+                      maxLines: _isReadMore ? null : 3,
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
@@ -337,10 +337,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Center(
                       child: TextButton(
                         onPressed: () => setState(() {
-                          isReadMore = !isReadMore;
+                          _isReadMore = !_isReadMore;
                         }),
                         child: Text(
-                          isReadMore ? 'Read less' : 'Read more',
+                          _isReadMore ? 'Read less' : 'Read more',
                           style: GoogleFonts.inter(
                               color: GlobalVariables.green, fontSize: 16),
                         ),
@@ -495,11 +495,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   void _showDatePicker() {
     showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: _selectedDate,
       firstDate: DateTime.now(),
       lastDate: DateTime(2050),
     ).then((value) => setState(() {
-          selectedDate = value!;
+          _selectedDate = value!;
         }));
   }
 }

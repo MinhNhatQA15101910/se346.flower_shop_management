@@ -20,6 +20,13 @@ class _SetNewPasswordFormState extends State<SetNewPasswordForm> {
       TextEditingController();
 
   @override
+  void dispose() {
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: GlobalVariables.screenWidth,
@@ -105,9 +112,7 @@ class _SetNewPasswordFormState extends State<SetNewPasswordForm> {
               width: GlobalVariables.standardButtonWidth,
               height: GlobalVariables.standardButtonHeight,
               child: ElevatedButton(
-                onPressed: () {
-                  updatePassword();
-                },
+                onPressed: _updatePassword,
                 style: ButtonStyle(
                   elevation: MaterialStateProperty.all(0),
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -130,7 +135,7 @@ class _SetNewPasswordFormState extends State<SetNewPasswordForm> {
     );
   }
 
-  void updatePassword() {
+  void _updatePassword() {
     // Call api to update password
     final authFormProvider =
         Provider.of<AuthFormProvider>(context, listen: false);
