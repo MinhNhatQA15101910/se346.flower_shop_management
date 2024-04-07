@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:frontend/common/widgets/bottom_bar.dart';
+import 'package:frontend/common/widgets/customer_bottom_bar.dart';
 import 'package:frontend/common/widgets/separator.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/widgets/login_form.dart';
@@ -265,7 +265,7 @@ class _SignupFormState extends State<SignupForm> {
 
   void _continueAsGuest() {
     Navigator.of(context).pushNamedAndRemoveUntil(
-      BottomBar.routeName,
+      CustomerBottomBar.routeName,
       (route) => false,
     );
   }

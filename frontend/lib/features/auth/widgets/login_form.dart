@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:frontend/common/widgets/bottom_bar.dart';
+import 'package:frontend/common/widgets/customer_bottom_bar.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/widgets/forgot_password_form.dart';
 import 'package:frontend/features/auth/widgets/login_google_facebook.dart';
@@ -262,7 +262,7 @@ class _LoginFormState extends State<LoginForm> {
       if (_usernameController.text == 'example' &&
           _passwordController.text == 'password') {
         Navigator.of(context).pushNamedAndRemoveUntil(
-          BottomBar.routeName,
+          CustomerBottomBar.routeName,
           (route) => false,
         );
       } else {
@@ -278,7 +278,7 @@ class _LoginFormState extends State<LoginForm> {
 
   void _loginAsGuest() {
     Navigator.of(context).pushNamedAndRemoveUntil(
-      BottomBar.routeName,
+      CustomerBottomBar.routeName,
       (route) => false,
     );
   }

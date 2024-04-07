@@ -6,15 +6,15 @@ import 'package:frontend/features/customer/category/screens/category_screen.dart
 import 'package:frontend/features/customer/home/screens/home_screen.dart';
 import 'package:frontend/features/customer/search/screens/search_screen.dart';
 
-class BottomBar extends StatefulWidget {
-  static const String routeName = '/bottom-bar';
-  const BottomBar({super.key});
+class CustomerBottomBar extends StatefulWidget {
+  static const String routeName = '/customer-bottom-bar';
+  const CustomerBottomBar({super.key});
 
   @override
-  State<BottomBar> createState() => _BottomBarState();
+  State<CustomerBottomBar> createState() => _CustomerBottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar> {
+class _CustomerBottomBarState extends State<CustomerBottomBar> {
   var _page = 0;
   final double _bottomBarWidth = 56;
 
