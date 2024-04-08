@@ -49,4 +49,30 @@ class GlobalVariables {
   static const double fontSize_32 = 32;
   static const double fontSize_36 = 36;
   static const double fontSize_48 = 48;
+
+  //Custom container
+  static Widget customContainer({Widget? child}) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 12.0,
+        left: 16.0,
+        right: 16.0,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.white,
+        ),
+        child: Container(
+          margin: const EdgeInsets.only(
+            top: 12.0,
+            left: 16.0,
+            right: 16.0,
+            bottom: 12,
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
 }

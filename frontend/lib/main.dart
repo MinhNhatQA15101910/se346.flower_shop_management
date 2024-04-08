@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/common/widgets/customer_bottom_bar.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/screens/intro_screen.dart';
+import 'package:frontend/features/customer/checkout/screens/checkout_screen.dart';
 import 'package:frontend/providers/auth_form_provider.dart';
 import 'package:frontend/router.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
-      home: IntroScreen(),
+      home: CustomerBottomBar(),
     );
   }
 }

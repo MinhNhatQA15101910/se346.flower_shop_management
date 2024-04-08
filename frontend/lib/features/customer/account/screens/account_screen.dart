@@ -115,7 +115,7 @@ class AccountScreen extends StatelessWidget {
                 ],
               ),
             ),
-            _customContainer(
+            GlobalVariables.customContainer(
               child: Container(
                 margin: const EdgeInsets.only(
                   top: 8.0,
@@ -187,7 +187,7 @@ class AccountScreen extends StatelessWidget {
                 ),
               ),
             ),
-            _customContainer(
+            GlobalVariables.customContainer(
               child: Column(
                 children: [
                   Row(
@@ -302,7 +302,7 @@ class AccountScreen extends StatelessWidget {
                 ],
               ),
             ),
-            _customContainer(
+            GlobalVariables.customContainer(
               child: ItemTag(
                 title: 'Favorite',
                 description: 'View products you love',
@@ -311,7 +311,7 @@ class AccountScreen extends StatelessWidget {
                 isVisibleArrow: true,
               ),
             ),
-            _customContainer(
+            GlobalVariables.customContainer(
               child: ItemTag(
                 title: 'Recently',
                 description: 'View recently products',
@@ -320,7 +320,7 @@ class AccountScreen extends StatelessWidget {
                 isVisibleArrow: true,
               ),
             ),
-            _customContainer(
+            GlobalVariables.customContainer(
               child: ItemTag(
                 title: 'Support',
                 description: 'Call or text us for quick support',
@@ -329,7 +329,7 @@ class AccountScreen extends StatelessWidget {
                 isVisibleArrow: true,
               ),
             ),
-            _customContainer(
+            GlobalVariables.customContainer(
               child: ItemTag(
                 title: 'Change password',
                 description: 'Change your account password',
@@ -337,7 +337,7 @@ class AccountScreen extends StatelessWidget {
                 iconData: Icons.password,
               ),
             ),
-            _customContainer(
+            GlobalVariables.customContainer(
               child: ItemTag(
                 title: 'Log out',
                 description: 'Log out of your account',
@@ -418,31 +418,6 @@ class AccountScreen extends StatelessWidget {
         color: Colors.black,
         fontSize: 14,
         fontWeight: FontWeight.w700,
-      ),
-    );
-  }
-
-  Widget _customContainer({Widget? child}) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 12.0,
-        left: 16.0,
-        right: 16.0,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          color: Colors.white,
-        ),
-        child: Container(
-          margin: const EdgeInsets.only(
-            top: 12.0,
-            left: 16.0,
-            right: 16.0,
-            bottom: 12,
-          ),
-          child: child,
-        ),
       ),
     );
   }
