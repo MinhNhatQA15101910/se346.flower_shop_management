@@ -114,50 +114,14 @@ class _CartScreenState extends State<CartScreen> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Center(
-              child: InkWell(
-                customBorder: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
+            child: GlobalVariables.customButton(
                 onTap: _navigateToCheckoutScreen,
-                child: Ink(
-                  width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: ShapeDecoration(
-                    color: GlobalVariables.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _checkoutText('Process to checkout'),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                buttonText: 'Process to checkout',
+                borderColor: GlobalVariables.green,
+                fillColor: GlobalVariables.green,
+                textColor: Colors.white),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _checkoutText(String text) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: GoogleFonts.inter(
-        fontSize: 16,
-        color: Colors.white,
-        textStyle: const TextStyle(
-          overflow: TextOverflow.ellipsis,
-          fontWeight: FontWeight.w400,
-        ),
       ),
     );
   }

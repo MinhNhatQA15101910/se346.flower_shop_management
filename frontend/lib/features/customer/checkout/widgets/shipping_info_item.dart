@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:frontend/features/customer/checkout/widgets/address_info_btm_sheet.dart';
 
 class ShippingInfoItem extends StatelessWidget {
   final String address;
@@ -49,19 +50,36 @@ class ShippingInfoItem extends StatelessWidget {
             SizedBox(
               width: 8,
             ),
-            Center(
+            InkResponse(
               child: Icon(
                 Icons.edit,
                 color: GlobalVariables.darkGreen,
                 size: 24,
               ),
+              onTap: () => {
+                showModalBottomSheet<dynamic>(
+                    context: context,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                          ),
+                        ),
+                        child: AddressInfoBottomSheet(),
+                      );
+                    })
+              },
             ),
           ],
         ),
       ),
     );
   }
-
 
   Widget _semiBoldSizeText(String text) {
     return Text(

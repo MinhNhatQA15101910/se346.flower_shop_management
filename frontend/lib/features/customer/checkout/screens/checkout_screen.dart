@@ -6,10 +6,16 @@ import 'package:frontend/features/customer/checkout/widgets/shipping_info_item.d
 import 'package:frontend/features/customer/checkout/widgets/total_price.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CheckoutScreen extends StatelessWidget {
+class CheckoutScreen extends StatefulWidget {
   static const String routeName = '/checkout';
-  const CheckoutScreen({super.key});
 
+  const CheckoutScreen({Key? key}) : super(key: key);
+
+  @override
+  _CheckoutScreenState createState() => _CheckoutScreenState();
+}
+
+class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,32 +97,14 @@ class CheckoutScreen extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: ShapeDecoration(
-                    color: GlobalVariables.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: Center(
-                    child: _checkoutText('Checkout 00,000 \$'),
-                  ),
-                ),
-              ],
-            ),
-          )
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: GlobalVariables.customButton(
+                onTap: () {},
+                buttonText: 'Checkout 00,000 \$',
+                borderColor: GlobalVariables.green,
+                fillColor: GlobalVariables.green,
+                textColor: Colors.white),
+          ),
         ],
       ),
     );

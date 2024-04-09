@@ -112,10 +112,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           allowHalfRating: true,
                           itemCount: 5,
                           itemSize: 20,
-                          unratedColor: GlobalVariables.lightGreen,
+                          unratedColor: GlobalVariables.lightYellow,
                           itemBuilder: (context, _) => const Icon(
                             Icons.star,
-                            color: GlobalVariables.green,
+                            color: GlobalVariables.yellow,
                           ),
                           onRatingUpdate: (rating) {},
                         ),
