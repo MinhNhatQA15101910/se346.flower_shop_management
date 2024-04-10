@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
-      home: RatingScreen(),
+      home: CustomerBottomBar(),
     );
   }
 }
