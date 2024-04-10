@@ -70,19 +70,15 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
               name: 'email',
               controller: _resetEmailController,
               decoration: InputDecoration(
-                hintText: 'Email address',
+                hintText: 'example@gmail.com',
                 hintStyle: TextStyle(
                   color: GlobalVariables.darkGrey,
                 ),
                 filled: true,
                 fillColor: GlobalVariables.pureWhite,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                    color: GlobalVariables.lightGrey,
-                    width: 1.0,
-                  ),
-                ),
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
