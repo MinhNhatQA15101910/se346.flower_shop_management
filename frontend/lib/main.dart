@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/screens/intro_screen.dart';
+import 'package:frontend/features/customer/order_management/screens/order_management_screen.dart';
+import 'package:frontend/features/customer/product_details/screens/product_details_screen.dart';
 import 'package:frontend/providers/auth_form_provider.dart';
 import 'package:frontend/router.dart';
 import 'package:provider/provider.dart';
@@ -25,22 +27,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     GlobalVariables.init(context);
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'FlowerFly',
-      theme: ThemeData(
-        scaffoldBackgroundColor: GlobalVariables.defaultColor,
-        colorScheme: const ColorScheme.light(
-          primary: GlobalVariables.green,
-        ),
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          iconTheme: IconThemeData(
-            color: GlobalVariables.darkGreen,
+        debugShowCheckedModeBanner: false,
+        title: 'FlowerFly',
+        theme: ThemeData(
+          scaffoldBackgroundColor: GlobalVariables.defaultColor,
+          colorScheme: const ColorScheme.light(
+            primary: GlobalVariables.green,
+          ),
+          appBarTheme: const AppBarTheme(
+            elevation: 0,
+            iconTheme: IconThemeData(
+              color: GlobalVariables.darkGreen,
+            ),
           ),
         ),
-      ),
-      onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
-      home: IntroScreen(),
-    );
+        onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
+        home: ProductDetailsScreen());
   }
 }
