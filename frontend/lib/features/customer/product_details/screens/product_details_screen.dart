@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:frontend/common/widgets/single_product_card.dart';
 import 'package:frontend/features/customer/product_details/widgets/product_details_widget.dart';
@@ -17,9 +15,6 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  int _activeIndex = 0;
-  final _tempImageQuantity = 5;
-  int _rateNumber = 44;
   bool _isReadMore = false;
   DateTime _selectedDate = DateTime.now();
 
