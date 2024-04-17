@@ -41,6 +41,8 @@ class GlobalVariables {
   static const String welcomeImage_03 = "assets/images/Welcome_03.png";
 
   //Define Font Sizes
+  static const double fontSize_12 = 12;
+  static const double fontSize_14 = 14;
   static const double fontSize_16 = 16;
   static const double fontSize_18 = 18;
   static const double fontSize_19 = 19;

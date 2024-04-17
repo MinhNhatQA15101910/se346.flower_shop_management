@@ -4,14 +4,14 @@ class Separator extends StatelessWidget {
   final double thickness;
   final Color color;
   final EdgeInsetsGeometry margin;
-  final Text text;
+  final Text? text;
 
   const Separator({
     super.key,
     this.thickness = 0.3,
     this.color = Colors.black,
-    this.margin = const EdgeInsets.symmetric(vertical: 5.0),
-    required this.text,
+    this.margin = const EdgeInsets.symmetric(vertical: 4.0),
+    this.text,
   });
 
   @override
@@ -23,7 +23,6 @@ class Separator extends StatelessWidget {
           children: [
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(right: 8.0),
                 height: thickness,
                 decoration: BoxDecoration(
                   border: Border(
@@ -35,10 +34,11 @@ class Separator extends StatelessWidget {
                 ),
               ),
             ),
-            text,
+            if (text != null) SizedBox(width: 8),
+            if (text != null) text!,
+            if (text != null) SizedBox(width: 8),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(left: 8.0),
                 height: thickness,
                 decoration: BoxDecoration(
                   border: Border(
