@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/widgets/customer_bottom_bar.dart';
+import 'package:frontend/features/customer/customer_bottom_bar.dart';
 import 'package:frontend/features/auth/screens/main_auth_screen.dart';
 import 'package:frontend/features/auth/screens/welcome_screen.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';

@@ -2,8 +2,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:frontend/features/auth/widgets/otp_verification_form.dart';
-import 'package:frontend/providers/auth_form_provider.dart';
+import 'package:frontend/features/auth/widgets/pinput_form.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -125,8 +125,8 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
   void _resetPassword() {
     if (_formKey.currentState!.validate()) {
       final authFormProvider =
-          Provider.of<AuthFormProvider>(context, listen: false);
-      authFormProvider.setForm(OtpVerificationForm());
+          Provider.of<AuthProvider>(context, listen: false);
+      authFormProvider.setForm(PinputForm());
     }
   }
 }

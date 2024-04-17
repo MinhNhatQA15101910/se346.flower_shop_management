@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/providers/auth_form_provider.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class MainAuthScreen extends StatelessWidget {
@@ -8,7 +8,7 @@ class MainAuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authForm = context.watch<AuthFormProvider>().authForm;
+    final authForm = context.watch<AuthProvider>().authForm;
 
     return Scaffold(
       body: Stack(

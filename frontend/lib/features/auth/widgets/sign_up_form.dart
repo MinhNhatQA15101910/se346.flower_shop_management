@@ -1,23 +1,23 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:frontend/common/widgets/customer_bottom_bar.dart';
+import 'package:frontend/features/customer/customer_bottom_bar.dart';
 import 'package:frontend/common/widgets/separator.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/widgets/login_form.dart';
-import 'package:frontend/providers/auth_form_provider.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/features/auth/widgets/login_google_facebook.dart';
 import 'package:provider/provider.dart';
 
-class SignupForm extends StatefulWidget {
-  const SignupForm({super.key});
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({super.key});
 
   @override
-  State<SignupForm> createState() => _SignupFormState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _SignupFormState extends State<SignupForm> {
+class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
@@ -37,7 +37,7 @@ class _SignupFormState extends State<SignupForm> {
   @override
   Widget build(BuildContext context) {
     final authFormProvider =
-        Provider.of<AuthFormProvider>(context, listen: false);
+        Provider.of<AuthProvider>(context, listen: false);
 
     return Container(
       margin: EdgeInsets.all(10.0),

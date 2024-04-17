@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/widgets/set_new_password_form.dart';
-import 'package:frontend/providers/auth_form_provider.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
-class OtpVerificationForm extends StatefulWidget {
-  const OtpVerificationForm({Key? key}) : super(key: key);
+class PinputForm extends StatefulWidget {
+  const PinputForm({Key? key}) : super(key: key);
 
   @override
-  State<OtpVerificationForm> createState() => _OtpVerificationFormState();
+  State<PinputForm> createState() => _PinputFormState();
 }
 
-class _OtpVerificationFormState extends State<OtpVerificationForm> {
+class _PinputFormState extends State<PinputForm> {
   final String _resentEmail = "duyvipinhere@gmail.com";
   final focusedBorderColor = GlobalVariables.darkGreen;
   final fillColor = GlobalVariables.lightGreen;
@@ -162,7 +162,7 @@ class _OtpVerificationFormState extends State<OtpVerificationForm> {
 
   void _verifyCode() {
     final authFormProvider =
-        Provider.of<AuthFormProvider>(context, listen: false);
+        Provider.of<AuthProvider>(context, listen: false);
     authFormProvider.setForm(SetNewPasswordForm());
   }
 }
