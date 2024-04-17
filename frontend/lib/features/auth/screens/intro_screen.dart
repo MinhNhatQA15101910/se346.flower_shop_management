@@ -18,7 +18,7 @@ class IntroScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
+            children: [
               Image.asset(
                 "assets/images/FlowerFlyWelcome.png",
                 fit: BoxFit.cover,

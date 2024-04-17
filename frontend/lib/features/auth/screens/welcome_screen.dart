@@ -59,7 +59,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          "Flowerly",
+                          "FlowerFly!",
                           style: GoogleFonts.pacifico(
                             color: GlobalVariables.darkGreen,
                             fontSize: 50,
@@ -77,14 +77,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   CarouselItem(
                     child: Column(
-                      children: <Widget>[
+                      children: [
                         Expanded(
                           child: Image(
                             image: AssetImage('assets/images/Welcome_02.png'),
                           ),
                         ),
                         Text(
-                          "Let's Start Your Journey Flowerly",
+                          "Let's Start Journey",
                           style: GoogleFonts.pacifico(
                             color: GlobalVariables.darkGreen,
                             fontSize: 30,
@@ -93,7 +93,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          "Flowerly provides unique and meaningful gifts",
+                          "With FlowerFly",
+                          style: GoogleFonts.pacifico(
+                            color: GlobalVariables.darkGreen,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "FlowerFly provides unique",
+                          style: GoogleFonts.inter(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "and meaningful gifts",
                           style: GoogleFonts.inter(
                             color: GlobalVariables.green,
                             fontSize: 16,
@@ -113,7 +131,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                         ),
                         Text(
-                          "You Have Many Choices Available",
+                          "You Have Many",
                           style: GoogleFonts.pacifico(
                             color: GlobalVariables.darkGreen,
                             fontSize: 30,
@@ -122,7 +140,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          "Flowerly provides lots of beautiful gifts to your lovers",
+                          "Choices Available",
+                          style: GoogleFonts.pacifico(
+                            color: GlobalVariables.darkGreen,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "FlowerFly provides a lot of",
+                          style: GoogleFonts.inter(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "beautiful gifts to your lover",
                           style: GoogleFonts.inter(
                             color: GlobalVariables.green,
                             fontSize: 16,
@@ -159,7 +195,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               SizedBox(
                 width: GlobalVariables.screenWidth / 2,
                 child: ElevatedButton(
-                  onPressed: () => {next()},
+                  onPressed: next,
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
@@ -168,7 +204,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           return Colors.green.withOpacity(0.5);
                         }
                         // Default color
-                        return GlobalVariables.darkGreen;
+                        return GlobalVariables.green;
                       },
                     ),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
@@ -176,7 +212,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
                   ),
@@ -201,11 +237,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         activeIndex: _activeIndex,
         count: _urlImages.length,
         onDotClicked: animateToSlide,
-        effect: JumpingDotEffect(
-          dotWidth: 20,
+        effect: ExpandingDotsEffect(
+          dotWidth: 28,
           dotHeight: 5,
-          dotColor: GlobalVariables.darkGrey,
-          activeDotColor: GlobalVariables.darkGreen,
+          expansionFactor: 1.5,
+          dotColor: GlobalVariables.green,
+          activeDotColor: GlobalVariables.pureWhite,
         ),
       );
 
