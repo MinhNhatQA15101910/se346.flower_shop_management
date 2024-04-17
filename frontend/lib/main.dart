@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:frontend/features/auth/screens/intro_screen.dart';
 import 'package:frontend/providers/auth_form_provider.dart';
 import 'package:frontend/router.dart';
 import 'package:provider/provider.dart';
+
+import 'package:frontend/features/customer/order_details/screens/order_details_screen.dart';
 
 void main() {
   runApp(
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
-      home: IntroScreen(),
+      home: OrderDetailsScreen(),
     );
   }
 }

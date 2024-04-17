@@ -73,13 +73,9 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 filled: true,
                 fillColor: GlobalVariables.pureWhite,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                    color: GlobalVariables.lightGrey,
-                    width: 1.0,
-                  ),
-                ),
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
               ),
             ),
             SizedBox(height: 20),
@@ -97,13 +93,9 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 filled: true,
                 fillColor: GlobalVariables.pureWhite,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                    color: GlobalVariables.lightGrey,
-                    width: 1.0,
-                  ),
-                ),
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
               ),
               obscureText: true,
               obscuringCharacter: '*',
@@ -155,14 +147,9 @@ class _LoginFormState extends State<LoginForm> {
                       onPressed: () {
                         _login();
                       },
-                      style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(0),
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            return GlobalVariables.green;
-                          },
-                        ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: GlobalVariables.green,
+                        elevation: 0,
                       ),
                       child: Text(
                         'Log In',

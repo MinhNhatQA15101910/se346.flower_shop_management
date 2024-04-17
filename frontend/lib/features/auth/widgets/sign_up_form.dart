@@ -77,14 +77,9 @@ class _SignupFormState extends State<SignupForm> {
                       ),
                       filled: true,
                       fillColor: GlobalVariables.pureWhite,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
-                          color: GlobalVariables.lightGrey,
-                          width: 1.0,
-                        ),
-                      ),
+                      enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
                     ),
                   ),
                 ),
@@ -100,14 +95,9 @@ class _SignupFormState extends State<SignupForm> {
                       ),
                       filled: true,
                       fillColor: GlobalVariables.pureWhite,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
-                          color: GlobalVariables.lightGrey,
-                          width: 1.0,
-                        ),
-                      ),
+                      enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
                     ),
                   ),
                 ),
@@ -124,14 +114,9 @@ class _SignupFormState extends State<SignupForm> {
                 ),
                 filled: true,
                 fillColor: GlobalVariables.pureWhite,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                    color: GlobalVariables.lightGrey,
-                    width: 1.0,
-                  ),
-                ),
+                enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
               ),
             ),
             SizedBox(height: 20),
@@ -145,14 +130,9 @@ class _SignupFormState extends State<SignupForm> {
                 ),
                 filled: true,
                 fillColor: GlobalVariables.pureWhite,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                    color: GlobalVariables.lightGrey,
-                    width: 1.0,
-                  ),
-                ),
+                enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
               ),
               obscureText: true,
               obscuringCharacter: '*',
@@ -169,14 +149,9 @@ class _SignupFormState extends State<SignupForm> {
                       onPressed: () {
                         _signUp();
                       },
-                      style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(0),
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            return GlobalVariables.green;
-                          },
-                        ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: GlobalVariables.green,
+                        elevation: 0,
                       ),
                       child: Text(
                         'Sign Up',

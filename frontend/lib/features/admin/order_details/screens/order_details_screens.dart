@@ -4,7 +4,7 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:frontend/features/customer/order_details/widgets/content_container.dart';
+import 'package:frontend/features/admin/order_details/widgets/content_container.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   const OrderDetailsScreen({Key? key}) : super(key: key);
@@ -97,6 +97,44 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             children: [
                               Text("Order status", style: titleStyle),
                               Text(currentStatus, style: contentStyle)
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Customer Infomation Form
+                  ContentContainer(
+                    title: "Customer information",
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 12.0, horizontal: 16.0),
+                      decoration: BoxDecoration(
+                        color: GlobalVariables.defaultColor,
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Customer ID", style: titleStyle),
+                              Text("0000000000", style: contentStyle),
+                            ],
+                          ),
+                          Separator(color: GlobalVariables.darkGrey),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Name", style: titleStyle),
+                              Text("Mai Hoang Nhat Duy", style: contentStyle),
+                            ],
+                          ),
+                          Separator(color: GlobalVariables.darkGrey),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Phone number", style: titleStyle),
+                              Text("0123456789", style: contentStyle)
                             ],
                           ),
                         ],

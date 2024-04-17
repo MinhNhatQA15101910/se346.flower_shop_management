@@ -15,10 +15,14 @@ class OtpVerificationForm extends StatefulWidget {
 
 class _OtpVerificationFormState extends State<OtpVerificationForm> {
   final String _resentEmail = "duyvipinhere@gmail.com";
+  final focusedBorderColor = GlobalVariables.darkGreen;
+  final fillColor = GlobalVariables.lightGreen;
+  final borderColor = GlobalVariables.green;
   final _defaultPinTheme = PinTheme(
     width: 56,
     height: 56,
     decoration: BoxDecoration(
+      color: GlobalVariables.lightGrey,
       borderRadius: BorderRadius.all(
         Radius.circular(20),
       ),
@@ -87,17 +91,21 @@ class _OtpVerificationFormState extends State<OtpVerificationForm> {
           Pinput(
             length: 6,
             defaultPinTheme: _defaultPinTheme,
-            focusedPinTheme: _defaultPinTheme.copyDecorationWith(
-              border: Border.all(
-                color: GlobalVariables.darkGreen,
-                width: 1.0,
+            focusedPinTheme: _defaultPinTheme.copyWith(
+              decoration: _defaultPinTheme.decoration!.copyWith(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: focusedBorderColor),
               ),
-              borderRadius: BorderRadius.circular(8),
             ),
             submittedPinTheme: _defaultPinTheme.copyWith(
               decoration: _defaultPinTheme.decoration!.copyWith(
-                color: GlobalVariables.lightGrey,
+                color: fillColor,
+                borderRadius: BorderRadius.circular(19),
+                border: Border.all(color: focusedBorderColor),
               ),
+            ),
+            errorPinTheme: _defaultPinTheme.copyBorderWith(
+              border: Border.all(color: Colors.redAccent),
             ),
             onCompleted: (pin) => print("Done entering pin: $pin"),
           ),

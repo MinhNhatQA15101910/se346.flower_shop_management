@@ -78,13 +78,9 @@ class _SetNewPasswordFormState extends State<SetNewPasswordForm> {
                 ),
                 filled: true,
                 fillColor: GlobalVariables.pureWhite,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                    color: GlobalVariables.lightGrey,
-                    width: 1.0,
-                  ),
-                ),
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
               ),
             ),
             SizedBox(height: 10),
@@ -98,13 +94,9 @@ class _SetNewPasswordFormState extends State<SetNewPasswordForm> {
                 ),
                 filled: true,
                 fillColor: GlobalVariables.pureWhite,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide(
-                    color: GlobalVariables.lightGrey,
-                    width: 1.0,
-                  ),
-                ),
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
               ),
             ),
             SizedBox(height: 20.0),

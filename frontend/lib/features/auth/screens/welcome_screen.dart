@@ -47,36 +47,92 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 carouselController: _controller,
                 items: [
                   CarouselItem(
-                      child: Column(
-                    children: <Widget>[
-                      Text(
-                        "Welcome to",
-                        style: GoogleFonts.inter(
-                          color: GlobalVariables.darkGreen,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          "Welcome to",
+                          style: GoogleFonts.inter(
+                            color: GlobalVariables.darkGreen,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                      Text(
-                        "FlowerFly",
-                        style: GoogleFonts.pacifico(
-                          color: GlobalVariables.darkGreen,
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          "Flowerly",
+                          style: GoogleFonts.pacifico(
+                            color: GlobalVariables.darkGreen,
+                            fontSize: 50,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                      )
-                    ],
-                  )),
+                        Expanded(
+                          child: Image(
+                            image: AssetImage('assets/images/Welcome_01.png'),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                   CarouselItem(
                     child: Column(
                       children: <Widget>[
-                        Image.asset(
-                          'assets/images/Welcome_02.png',
+                        Expanded(
+                          child: Image(
+                            image: AssetImage('assets/images/Welcome_02.png'),
+                          ),
+                        ),
+                        Text(
+                          "Let's Start Your Journey Flowerly",
+                          style: GoogleFonts.pacifico(
+                            color: GlobalVariables.darkGreen,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "Flowerly provides unique and meaningful gifts",
+                          style: GoogleFonts.inter(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     ),
                   ),
-                  CarouselItem(child: Column())
+                  CarouselItem(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Image(
+                            image: AssetImage('assets/images/Welcome_03.png'),
+                          ),
+                        ),
+                        Text(
+                          "You Have Many Choices Available",
+                          style: GoogleFonts.pacifico(
+                            color: GlobalVariables.darkGreen,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          "Flowerly provides lots of beautiful gifts to your lovers",
+                          style: GoogleFonts.inter(
+                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
                 options: CarouselOptions(
                   viewportFraction: 1,
