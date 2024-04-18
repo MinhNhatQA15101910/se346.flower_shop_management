@@ -1,8 +1,15 @@
+import env from "dotenv";
 import express from "express";
 
 const app = express();
-const port = 3000;
+env.config();
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}.`);
+app.use(express.json());
+
+app.get("/document", (req, res) => {
+  res.render("index.ejs");
+});
+
+app.listen(process.env.PORT, () => {
+  console.log(`Server running on: http://localhost:${process.env.PORT}.`);
 });
