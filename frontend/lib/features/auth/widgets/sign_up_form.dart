@@ -67,45 +67,45 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   void _moveToPinputForm() {
-    // if (_signUpFormKey.currentState!.validate()) {
-    //   setState(() {
-    //     _isMoveToPinputFormLoading = true;
-    //   });
+    if (_signUpFormKey.currentState!.validate()) {
+      setState(() {
+        _isMoveToPinputFormLoading = true;
+      });
 
-    //   Future.delayed(
-    //     Duration(seconds: 2),
-    //     () {
-    //       final authFormProvider = Provider.of<AuthProvider>(
-    //         context,
-    //         listen: false,
-    //       );
+      Future.delayed(
+        Duration(seconds: 2),
+        () {
+          final authFormProvider = Provider.of<AuthProvider>(
+            context,
+            listen: false,
+          );
 
-    //       authFormProvider.setResentEmail(_emailController.text.trim());
-    //       authFormProvider.setPreviousForm(SignUpForm());
-    //       authFormProvider.setSignUpUser(
-    //         User(
-    //           id: '',
-    //           username: _usernameController.text.trim(),
-    //           email: _emailController.text.trim(),
-    //           password: _passwordController.text.trim(),
-    //           imageUrl: '',
-    //           role: '',
-    //           token: '',
-    //         ),
-    //       );
-    //       authFormProvider.setForm(
-    //         PinputForm(
-    //           // isMoveBack: false,
-    //           // isValidateSignUpEmail: true,
-    //         ),
-    //       );
+          authFormProvider.setResentEmail(_emailController.text.trim());
+          authFormProvider.setPreviousForm(SignUpForm());
+          authFormProvider.setSignUpUser(
+            User(
+              id: '',
+              username: _usernameController.text.trim(),
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
+              imageUrl: '',
+              role: '',
+              token: '',
+            ),
+          );
+          authFormProvider.setForm(
+            PinputForm(
+              isMoveBack: false,
+              isValidateSignUpEmail: true,
+            ),
+          );
 
-    //       setState(() {
-    //         _isMoveToPinputFormLoading = false;
-    //       });
-    //     },
-    //   );
-    // }
+          setState(() {
+            _isMoveToPinputFormLoading = false;
+          });
+        },
+      );
+    }
   }
 
   @override

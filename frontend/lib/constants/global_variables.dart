@@ -24,6 +24,8 @@ class GlobalVariables {
   static const Color darkBlue = Color(0xFF0D5BB5);
   static const Color lightBlue = Color(0xFFDBEEFF);
   static const Color pureWhite = Color(0xFFFFFFFF);
+  static const Color pinputColor = Color(0xFF545454);
+  static const Color black = Color(0xFF000000);
 
   //Define Scales
   static void init(BuildContext context) {

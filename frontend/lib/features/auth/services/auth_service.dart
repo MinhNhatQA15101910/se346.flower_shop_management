@@ -241,9 +241,9 @@ class AuthService {
 
         authProvider.setForm(
           PinputForm(
-              // isMoveBack: false,
-              // isValidateSignUpEmail: false,
-              ),
+            isMoveBack: false,
+            isValidateSignUpEmail: false,
+          ),
         );
       } else {
         IconSnackBar.show(
