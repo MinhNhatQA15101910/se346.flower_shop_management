@@ -89,18 +89,18 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _moveToForgotPasswordForm() {
-    // final authFormProvider = Provider.of<AuthProvider>(
-    //   context,
-    //   listen: false,
-    // );
+    final authFormProvider = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    );
 
-    // authFormProvider.setPreviousForm(
-    //   LoginForm(),
-    // );
+    authFormProvider.setPreviousForm(
+      LoginForm(),
+    );
 
-    // authFormProvider.setForm(
-    //   ForgotPasswordForm(),
-    // );
+    authFormProvider.setForm(
+      ForgotPasswordForm(),
+    );
   }
 
   @override
