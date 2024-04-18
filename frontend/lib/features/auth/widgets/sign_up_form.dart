@@ -1,13 +1,18 @@
+import 'package:dotted_line/dotted_line.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:frontend/features/customer/customer_bottom_bar.dart';
-import 'package:frontend/common/widgets/separator.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:frontend/common/widgets/custom_textfield.dart';
+import 'package:frontend/common/widgets/loader.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/auth/services/auth_service.dart';
 import 'package:frontend/features/auth/widgets/login_form.dart';
+import 'package:frontend/features/auth/widgets/pinput_form.dart';
+import 'package:frontend/models/user.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:frontend/features/auth/widgets/login_google_facebook.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -18,230 +23,397 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  bool _isLoading = false;
+  final _authService = AuthService();
+  var _isLoginWithGoogleLoading = false;
+  var _isMoveToPinputFormLoading = false;
 
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  final _signUpFormKey = GlobalKey<FormState>();
+
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _passwordConfirmedController = TextEditingController();
+
+  void _loginWithGoogle() {
+    // setState(() {
+    //   _isLoginWithGoogleLoading = true;
+    // });
+
+    // Future.delayed(Duration(seconds: 2), () async {
+    //   GoogleSignIn googleSignIn = GoogleSignIn(
+    //     scopes: ['email'],
+    //   );
+    //   GoogleSignInAccount? account = await googleSignIn.signIn();
+    //   if (account != null) {
+    //     await _authService.logInWithGoogle(
+    //       context: context,
+    //       account: account,
+    //     );
+    //   }
+
+    //   setState(() {
+    //     _isLoginWithGoogleLoading = false;
+    //   });
+    // });
+  }
+
+  void _moveToLoginForm() {
+    final authFormProvider = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    );
+
+    authFormProvider.setForm(LoginForm());
+  }
+
+  void _moveToPinputForm() {
+    // if (_signUpFormKey.currentState!.validate()) {
+    //   setState(() {
+    //     _isMoveToPinputFormLoading = true;
+    //   });
+
+    //   Future.delayed(
+    //     Duration(seconds: 2),
+    //     () {
+    //       final authFormProvider = Provider.of<AuthProvider>(
+    //         context,
+    //         listen: false,
+    //       );
+
+    //       authFormProvider.setResentEmail(_emailController.text.trim());
+    //       authFormProvider.setPreviousForm(SignUpForm());
+    //       authFormProvider.setSignUpUser(
+    //         User(
+    //           id: '',
+    //           username: _usernameController.text.trim(),
+    //           email: _emailController.text.trim(),
+    //           password: _passwordController.text.trim(),
+    //           imageUrl: '',
+    //           role: '',
+    //           token: '',
+    //         ),
+    //       );
+    //       authFormProvider.setForm(
+    //         PinputForm(
+    //           // isMoveBack: false,
+    //           // isValidateSignUpEmail: true,
+    //         ),
+    //       );
+
+    //       setState(() {
+    //         _isMoveToPinputFormLoading = false;
+    //       });
+    //     },
+    //   );
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
-    final authFormProvider =
-        Provider.of<AuthProvider>(context, listen: false);
-
     return Container(
-      margin: EdgeInsets.all(10.0),
-      padding: EdgeInsets.symmetric(
-        horizontal: 10.0,
-        vertical: 20.0,
-      ),
       decoration: BoxDecoration(
         color: GlobalVariables.defaultColor,
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: GlobalVariables.lightGreen.withOpacity(0.5),
+        ),
       ),
-      child: FormBuilder(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Text(
-              "Sign Up",
-              style: GoogleFonts.inter(
-                color: GlobalVariables.darkGreen,
-                fontSize: GlobalVariables.fontSize_28,
-                fontWeight: FontWeight.w700,
+      padding: EdgeInsets.symmetric(
+        vertical: 20,
+        horizontal: 14,
+      ),
+      margin: const EdgeInsets.symmetric(horizontal: 12),
+      child: Form(
+        key: _signUpFormKey,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Sign up text
+              Text(
+                'Sign up',
+                style: GoogleFonts.inter(
+                    fontSize: 26,
+                    color: GlobalVariables.darkGreen,
+                    fontWeight: FontWeight.bold),
               ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: FormBuilderTextField(
-                    name: "firstName",
-                    controller: _firstNameController,
-                    decoration: InputDecoration(
-                      hintText: 'First name',
-                      hintStyle: TextStyle(
-                        color: GlobalVariables.darkGrey,
-                      ),
-                      filled: true,
-                      fillColor: GlobalVariables.pureWhite,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 20.0),
-                Expanded(
-                  child: FormBuilderTextField(
-                    name: "lastName",
-                    controller: _lastNameController,
-                    decoration: InputDecoration(
-                      hintText: 'Last name',
-                      hintStyle: TextStyle(
-                        color: GlobalVariables.darkGrey,
-                      ),
-                      filled: true,
-                      fillColor: GlobalVariables.pureWhite,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            FormBuilderTextField(
-              name: 'email',
-              controller: _emailController,
-              decoration: InputDecoration(
+              const SizedBox(height: 36),
+
+              // Username text form field
+              CustomTextfield(
+                controller: _usernameController,
                 hintText: 'Username',
-                hintStyle: TextStyle(
-                  color: GlobalVariables.darkGrey,
-                ),
-                filled: true,
-                fillColor: GlobalVariables.pureWhite,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
+                validator: (username) {
+                  if (username == null || username.isEmpty) {
+                    return 'Please enter your username.';
+                  }
+
+                  if (username.length < 6) {
+                    return 'Username must be at least 6 characters long.';
+                  }
+
+                  return null;
+                },
               ),
-            ),
-            SizedBox(height: 20),
-            FormBuilderTextField(
-              name: 'password',
-              controller: _passwordController,
-              decoration: InputDecoration(
+              const SizedBox(height: 16),
+
+              // Email text form field
+              CustomTextfield(
+                controller: _emailController,
+                hintText: 'Email address',
+                isEmail: true,
+                validator: (email) {
+                  if (email == null || email.isEmpty) {
+                    return 'Please enter your email.';
+                  }
+
+                  if (!EmailValidator.validate(email)) {
+                    return 'Please enter a valid email address.';
+                  }
+
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Password text form field
+              CustomTextfield(
+                controller: _passwordController,
+                isPassword: true,
                 hintText: 'Password',
-                hintStyle: TextStyle(
-                  color: GlobalVariables.darkGrey,
-                ),
-                filled: true,
-                fillColor: GlobalVariables.pureWhite,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
+                validator: (password) {
+                  if (password == null || password.isEmpty) {
+                    return 'Please enter your password.';
+                  }
+
+                  if (password.length < 8) {
+                    return 'Password must be at least 8 characters long.';
+                  }
+
+                  return null;
+                },
               ),
-              obscureText: true,
-              obscuringCharacter: '*',
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            _isLoading
-                ? CircularProgressIndicator()
-                : SizedBox(
-                    width: GlobalVariables.standardButtonWidth,
-                    height: GlobalVariables.standardButtonHeight,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _signUp();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: GlobalVariables.green,
-                        elevation: 0,
-                      ),
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(
-                            fontSize: GlobalVariables.fontSize_18,
-                            color: GlobalVariables.pureWhite),
-                      ),
-                    ),
-                  ),
-            Separator(
-              text: Text("Continue with",
-                  style: GoogleFonts.inter(
-                    color: GlobalVariables.darkGreen,
-                    fontSize: GlobalVariables.fontSize_16,
-                    fontWeight: FontWeight.w300,
-                  )),
-            ),
-            LoginGoogleFacebook(),
-            Separator(
-              text: Text("Or",
-                  style: GoogleFonts.inter(
-                    color: GlobalVariables.darkGreen,
-                    fontSize: GlobalVariables.fontSize_24,
-                    fontWeight: FontWeight.w500,
-                  )),
-            ),
-            SizedBox(
-              width: GlobalVariables.standardButtonWidth,
-              height: GlobalVariables.standardButtonHeight,
-              child: ElevatedButton(
-                onPressed: _continueAsGuest,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: GlobalVariables.pureWhite,
-                  side: BorderSide(
-                    width: 0.7,
-                    color: GlobalVariables.green,
-                  ),
-                  elevation: 0,
-                ),
-                child: Text(
-                  'Continue as a guest',
-                  style: TextStyle(
-                    fontSize: GlobalVariables.fontSize_16,
-                    color: GlobalVariables.green,
-                  ),
+              const SizedBox(height: 16),
+
+              // Password confirm text form field
+              CustomTextfield(
+                controller: _passwordConfirmedController,
+                isPassword: true,
+                hintText: 'Confirm password',
+                validator: (password) {
+                  if (password == null || password.isEmpty) {
+                    return 'Please enter your password.';
+                  }
+
+                  if (password.trim() != _passwordController.text.trim()) {
+                    return 'Password confirm does not match.';
+                  }
+
+                  return null;
+                },
+              ),
+              const SizedBox(height: 36),
+
+              // Sign up button
+              Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 216,
+                  height: 40,
+                  child: _isMoveToPinputFormLoading
+                      ? const Loader()
+                      : ElevatedButton(
+                          onPressed: _moveToPinputForm,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: GlobalVariables.green,
+                            elevation: 0,
+                          ),
+                          child: Text(
+                            'Sign up',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: GlobalVariables.pureWhite,
+                            ),
+                          ),
+                        ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            RichText(
-              text: TextSpan(
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0,
-                ),
+              const SizedBox(height: 16),
+
+              // Continue with separator
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextSpan(
-                    text: "Already have an account ? ",
+                  Container(
+                    width: 78,
+                    height: 1,
+                    color: GlobalVariables.lightGreen,
                   ),
-                  TextSpan(
-                    text: "Log In",
-                    style: TextStyle(
-                      fontSize: GlobalVariables.fontSize_18,
-                      color: GlobalVariables.green,
-                      decoration: TextDecoration.underline,
+                  Text(
+                    'Continue with',
+                    style: GoogleFonts.inter(
+                      color: GlobalVariables.darkGreen,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300,
                     ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        authFormProvider.setForm(
-                          LoginForm(),
-                        );
-                      },
+                  ),
+                  Container(
+                    width: 78,
+                    height: 1,
+                    color: GlobalVariables.lightGreen,
                   ),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+
+              // Sign up with Google button.
+              Align(
+                alignment: Alignment.center,
+                child: _isLoginWithGoogleLoading
+                    ? const Loader()
+                    : SizedBox(
+                        width: 216,
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: _loginWithGoogle,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: GlobalVariables.lightGrey,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(
+                                color: GlobalVariables.green,
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/vectors/vector-google.svg',
+                                width: 24,
+                                height: 24,
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                'Sign up with Google',
+                                style: GoogleFonts.inter(
+                                  fontSize: 13,
+                                  color: GlobalVariables.green,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+              ),
+              const SizedBox(height: 16),
+
+              // OR Separator
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  DottedLine(
+                    lineLength: 120,
+                    lineThickness: 1,
+                    dashLength: 2,
+                    dashGapLength: 2,
+                    dashColor: GlobalVariables.lightGreen,
+                  ),
+                  Text(
+                    'OR',
+                    style: GoogleFonts.inter(
+                      color: GlobalVariables.darkGreen,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 19,
+                    ),
+                  ),
+                  DottedLine(
+                    lineLength: 120,
+                    lineThickness: 1,
+                    dashLength: 2,
+                    dashGapLength: 2,
+                    dashColor: GlobalVariables.lightGreen,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              // Continue as a guess button
+              Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 216,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: GlobalVariables.lightGrey,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: BorderSide(
+                          color: GlobalVariables.green,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      'Continue as a guest',
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: GlobalVariables.green,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Navigate to Sign Up form text
+              Align(
+                alignment: Alignment.center,
+                child: GestureDetector(
+                  onTap: () {},
+                  child: RichText(
+                    textAlign: TextAlign.right,
+                    text: TextSpan(
+                      text: 'Already have an account? ',
+                      style: GoogleFonts.inter(
+                        color: GlobalVariables.darkGreen,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Log in',
+                          style: GoogleFonts.inter(
+                              color: GlobalVariables.darkGreen,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = _moveToLoginForm,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  void _signUp() {}
-
-  void _continueAsGuest() {
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      CustomerBottomBar.routeName,
-      (route) => false,
-    );
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _passwordConfirmedController.dispose();
+    super.dispose();
   }
 }

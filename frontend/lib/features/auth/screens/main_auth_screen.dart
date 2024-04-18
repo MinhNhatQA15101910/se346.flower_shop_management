@@ -1,41 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
-class MainAuthScreen extends StatelessWidget {
+class MainAuthScreen extends StatefulWidget {
   static const String routeName = '/main-auth';
-  const MainAuthScreen({Key? key});
+  const MainAuthScreen({super.key});
 
+  @override
+  State<MainAuthScreen> createState() => _MainAuthScreenState();
+}
+
+class _MainAuthScreenState extends State<MainAuthScreen> {
   @override
   Widget build(BuildContext context) {
     final authForm = context.watch<AuthProvider>().authForm;
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/appBG.png"),
-                fit: BoxFit.cover,
-              ),
+    return Stack(
+      children: [
+        Image.asset(
+          'assets/images/appBG.png',
+          width: GlobalVariables.screenWidth,
+          height: GlobalVariables.screenHeight,
+          fit: BoxFit.cover,
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: SafeArea(
+              child: authForm,
             ),
           ),
-          Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 40,
-                  ),
-                  authForm,
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+        )
+      ],
     );
   }
 }
