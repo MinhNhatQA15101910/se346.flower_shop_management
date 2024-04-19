@@ -16,7 +16,9 @@ class ForgotPasswordForm extends StatefulWidget {
 }
 
 class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
+  AuthProvider? _authProvider;
   final _authService = AuthService();
+
   var _isValidateLoading = false;
 
   final _forgotPasswordFormKey = GlobalKey<FormState>();
@@ -24,32 +26,38 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
   final _emailController = TextEditingController();
 
   void _validateEmailAndNavigate() {
-    // if (_forgotPasswordFormKey.currentState!.validate()) {
-    //   setState(() {
-    //     _isValidateLoading = true;
-    //   });
+    if (_forgotPasswordFormKey.currentState!.validate()) {
+      setState(() {
+        _isValidateLoading = true;
+      });
 
-    //   Future.delayed(Duration(seconds: 2), () async {
-    //     await _authService.validateEmail(
-    //       context: context,
-    //       email: _emailController.text.trim(),
-    //     );
+      Future.delayed(Duration(seconds: 2), () async {
+        await _authService.validateEmail(
+          context: context,
+          email: _emailController.text.trim(),
+        );
 
-    //     setState(() {
-    //       _isValidateLoading = false;
-    //     });
-    //   });
-    // }
+        setState(() {
+          _isValidateLoading = false;
+        });
+      });
+    }
   }
 
   void _moveToPreviousForm() {
-    final authFormProvider = Provider.of<AuthProvider>(
+    _authProvider!.setForm(
+      _authProvider!.previousForm,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Init Auth Provider
+    _authProvider = Provider.of<AuthProvider>(
       context,
       listen: false,
-    );
-
-    authFormProvider.setForm(
-      authFormProvider.previousForm,
     );
   }
 

@@ -182,6 +182,30 @@ authRouter.post(
   }
 );
 
+// Validate email route
+authRouter.post("/email-exists", async (req, res) => {
+  console.log("------ Validate email route ------");
+  console.log(`Body:\n- email: ${req.body.email}`);
+
+  try {
+    const db = getDatabaseInstance();
+
+    const { email } = req.body;
+
+    const existingUser = await db.query(
+      "SELECT * FROM users WHERE email = $1",
+      [email]
+    );
+    if (existingUser.rowCount > 0) {
+      return res.json(true);
+    }
+
+    res.json(false);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Send verify email route
 authRouter.post(
   "/send-email",

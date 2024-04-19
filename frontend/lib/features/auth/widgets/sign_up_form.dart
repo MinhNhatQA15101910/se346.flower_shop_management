@@ -12,6 +12,7 @@ import 'package:frontend/features/auth/widgets/pinput_form.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -34,26 +35,26 @@ class _SignUpFormState extends State<SignUpForm> {
   final _passwordConfirmedController = TextEditingController();
 
   void _loginWithGoogle() {
-    // setState(() {
-    //   _isLoginWithGoogleLoading = true;
-    // });
+    setState(() {
+      _isLoginWithGoogleLoading = true;
+    });
 
-    // Future.delayed(Duration(seconds: 2), () async {
-    //   GoogleSignIn googleSignIn = GoogleSignIn(
-    //     scopes: ['email'],
-    //   );
-    //   GoogleSignInAccount? account = await googleSignIn.signIn();
-    //   if (account != null) {
-    //     await _authService.logInWithGoogle(
-    //       context: context,
-    //       account: account,
-    //     );
-    //   }
+    Future.delayed(Duration(seconds: 2), () async {
+      GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email'],
+      );
+      GoogleSignInAccount? account = await googleSignIn.signIn();
+      if (account != null) {
+        await _authService.logInWithGoogle(
+          context: context,
+          account: account,
+        );
+      }
 
-    //   setState(() {
-    //     _isLoginWithGoogleLoading = false;
-    //   });
-    // });
+      setState(() {
+        _isLoginWithGoogleLoading = false;
+      });
+    });
   }
 
   void _moveToLoginForm() {

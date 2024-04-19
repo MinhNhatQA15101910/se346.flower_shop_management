@@ -210,6 +210,11 @@ class AuthService {
     required BuildContext context,
     required String email,
   }) async {
+    final authProvider = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    );
+
     try {
       http.Response response = await http.post(
         Uri.parse('$uri/email-exists'),
@@ -226,11 +231,6 @@ class AuthService {
       var isExistingEmail = jsonDecode(response.body);
 
       if (isExistingEmail) {
-        final authProvider = Provider.of<AuthProvider>(
-          context,
-          listen: false,
-        );
-
         authProvider.setResentEmail(
           email,
         );
@@ -309,6 +309,15 @@ class AuthService {
     required String email,
     required String newPassword,
   }) async {
+    final authProvider = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    );
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
     try {
       http.Response response = await http.patch(
         Uri.parse('$uri/change-password'),
@@ -327,22 +336,13 @@ class AuthService {
         response: response,
         context: context,
         onSuccess: () {
-          final userProvider = Provider.of<UserProvider>(
-            context,
-            listen: false,
-          );
-          final authFormProvider = Provider.of<AuthProvider>(
-            context,
-            listen: false,
-          );
-
           User user = userProvider.user.copyWith(
             password: jsonDecode(response.body)['password'],
           );
           userProvider.setUserFromModel(user);
 
-          authFormProvider.setForm(LoginForm());
-          authFormProvider.setResentEmail('');
+          authProvider.setForm(LoginForm());
+          authProvider.setResentEmail('');
 
           IconSnackBar.show(
             context,
