@@ -1,6 +1,6 @@
 const passwordValidator = (req, res, next) => {
-  console.log("------ Middleware ------\n");
-  console.log("Body: " + req.body);
+  console.log("------ Password validator middleware ------");
+  console.log("Password: " + req.body.password);
 
   try {
     const password = req.body.password;

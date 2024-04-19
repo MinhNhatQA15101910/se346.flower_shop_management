@@ -1,5 +1,6 @@
 import bcryptjs from "bcryptjs";
 import express from "express";
+import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import pg from "pg";
 
@@ -46,8 +47,10 @@ authRouter.post(
   emailValidator,
   passwordValidator,
   async (req, res) => {
-    console.log("------ Router ------\n");
-    console.log("Body: " + req.body);
+    console.log("------ Send email route ------");
+    console.log(
+      `Body: \n- username: ${req.body.username},\n- email: ${req.body.email},\n- password: ${req.body.password}`
+    );
 
     try {
       const db = getDatabaseInstance();
@@ -87,14 +90,54 @@ authRouter.post(
   }
 );
 
+// Log in route
+authRouter.post(
+  "/login",
+  emailValidator,
+  passwordValidator,
+  async (req, res) => {
+    console.log("------ Log in route ------");
+    console.log(
+      `Body: \n- email: ${req.body.email},\n- password: ${req.body.password}`
+    );
+
+    try {
+      const db = getDatabaseInstance();
+
+      const { email, password } = req.body;
+
+      const user = await db.query("SELECT * FROM users WHERE email = $1", [
+        email,
+      ]);
+      if (user.rowCount === 0) {
+        return res
+          .status(400)
+          .json({ msg: "User with this email does not exist!" });
+      }
+
+      const isMatch = await bcryptjs.compare(password, user.rows[0].password);
+      if (!isMatch) {
+        return res.status(400).json({ msg: "Incorrect password!" });
+      }
+
+      const token = jwt.sign({ id: user.rows[0].id }, process.env.PASSWORD_KEY);
+      res.json({ token, ...user.rows[0] });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
 // Send verify email route
 authRouter.post(
   "/send-email",
   emailValidator,
   pincodeValidator,
   async (req, res) => {
-    console.log("------ Router ------\n");
-    console.log("Body: " + req.body);
+    console.log("------ Send email route ------");
+    console.log(
+      `Body: \n- email: ${req.body.email},\n- pincode: ${req.body.pincode}`
+    );
 
     try {
       const { email, pincode } = req.body;

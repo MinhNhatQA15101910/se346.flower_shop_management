@@ -1,6 +1,6 @@
 const pincodeValidator = (req, res, next) => {
-  console.log("------ Middleware ------\n");
-  console.log("Body: " + req.body);
+  console.log("------ Pincode validator middleware ------");
+  console.log("Pincode: " + req.body.pincode);
 
   try {
     const pincode = req.body.pincode;
