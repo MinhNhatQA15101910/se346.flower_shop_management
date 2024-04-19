@@ -7,8 +7,8 @@ import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:frontend/common/widgets/loader.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/services/auth_service.dart';
-import 'package:frontend/features/auth/widgets/forgot_password_form.dart';
 import 'package:frontend/features/auth/widgets/login_form.dart';
+import 'package:frontend/features/auth/widgets/reset_password_form.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +30,9 @@ class PinputForm extends StatefulWidget {
 }
 
 class _PinputFormState extends State<PinputForm> {
+  AuthProvider? _authProvider;
   final _authService = AuthService();
+
   var _isSignUpLoading = false;
 
   Timer? _timer;
@@ -91,20 +93,15 @@ class _PinputFormState extends State<PinputForm> {
       if (widget.isValidateSignUpEmail) {
         _signUpUser();
       } else {
-        final authFormProvider = Provider.of<AuthProvider>(
-          context,
-          listen: false,
-        );
-
-        authFormProvider.setPreviousForm(
+        _authProvider!.setPreviousForm(
           PinputForm(
             isMoveBack: true,
             isValidateSignUpEmail: false,
           ),
         );
 
-        authFormProvider.setForm(
-          ForgotPasswordForm(),
+        _authProvider!.setForm(
+          ResetPasswordForm(),
         );
       }
 
@@ -115,27 +112,17 @@ class _PinputFormState extends State<PinputForm> {
   }
 
   void _moveToPreviousForm() {
-    final authFormProvider = Provider.of<AuthProvider>(
-      context,
-      listen: false,
+    _authProvider!.setForm(
+      _authProvider!.previousForm,
     );
 
-    authFormProvider.setForm(
-      authFormProvider.previousForm,
-    );
-
-    authFormProvider.setPreviousForm(
+    _authProvider!.setPreviousForm(
       LoginForm(),
     );
   }
 
   void _moveToLoginForm() {
-    final authFormProvider = Provider.of<AuthProvider>(
-      context,
-      listen: false,
-    );
-
-    authFormProvider.setForm(LoginForm());
+    _authProvider!.setForm(LoginForm());
   }
 
   void _sendVerifyEmail() async {
@@ -206,6 +193,10 @@ class _PinputFormState extends State<PinputForm> {
   @override
   void initState() {
     super.initState();
+
+    // Init Auth Provider
+    _authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     if (!widget.isMoveBack) {
       _sendVerifyEmail();
     }
@@ -214,11 +205,6 @@ class _PinputFormState extends State<PinputForm> {
 
   @override
   Widget build(BuildContext context) {
-    final authFormProvider = Provider.of<AuthProvider>(
-      context,
-      listen: false,
-    );
-
     return Container(
       decoration: BoxDecoration(
         color: GlobalVariables.defaultColor,
@@ -259,7 +245,7 @@ class _PinputFormState extends State<PinputForm> {
                 ),
                 children: [
                   TextSpan(
-                    text: authFormProvider.resentEmail,
+                    text: _authProvider!.resentEmail,
                     style: GoogleFonts.inter(
                       color: GlobalVariables.black,
                       fontSize: 16,

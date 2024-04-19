@@ -82,12 +82,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _moveToSignUpForm() {
-    final authFormProvider = Provider.of<AuthProvider>(
-      context,
-      listen: false,
-    );
-
-    authFormProvider.setForm(SignUpForm());
+    _authProvider!.setForm(SignUpForm());
   }
 
   void _moveToForgotPasswordForm() {

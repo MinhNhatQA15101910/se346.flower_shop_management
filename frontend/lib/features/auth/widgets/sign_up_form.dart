@@ -24,6 +24,8 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _authService = AuthService();
+  AuthProvider? _authProvider;
+
   var _isLoginWithGoogleLoading = false;
   var _isMoveToPinputFormLoading = false;
 
@@ -58,12 +60,7 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   void _moveToLoginForm() {
-    final authFormProvider = Provider.of<AuthProvider>(
-      context,
-      listen: false,
-    );
-
-    authFormProvider.setForm(LoginForm());
+    _authProvider!.setForm(LoginForm());
   }
 
   void _moveToPinputForm() {
@@ -72,40 +69,43 @@ class _SignUpFormState extends State<SignUpForm> {
         _isMoveToPinputFormLoading = true;
       });
 
-      Future.delayed(
-        Duration(seconds: 2),
-        () {
-          final authFormProvider = Provider.of<AuthProvider>(
-            context,
-            listen: false,
-          );
+      Future.delayed(Duration(seconds: 2), () {
+        _authProvider!.setResentEmail(_emailController.text.trim());
+        _authProvider!.setPreviousForm(SignUpForm());
+        _authProvider!.setSignUpUser(
+          User(
+            id: 0,
+            username: _usernameController.text.trim(),
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+            imageUrl: '',
+            role: '',
+            token: '',
+          ),
+        );
+        _authProvider!.setForm(
+          PinputForm(
+            isMoveBack: false,
+            isValidateSignUpEmail: true,
+          ),
+        );
 
-          authFormProvider.setResentEmail(_emailController.text.trim());
-          authFormProvider.setPreviousForm(SignUpForm());
-          authFormProvider.setSignUpUser(
-            User(
-              id: 0,
-              username: _usernameController.text.trim(),
-              email: _emailController.text.trim(),
-              password: _passwordController.text.trim(),
-              imageUrl: '',
-              role: '',
-              token: '',
-            ),
-          );
-          authFormProvider.setForm(
-            PinputForm(
-              isMoveBack: false,
-              isValidateSignUpEmail: true,
-            ),
-          );
-
-          setState(() {
-            _isMoveToPinputFormLoading = false;
-          });
-        },
-      );
+        setState(() {
+          _isMoveToPinputFormLoading = false;
+        });
+      });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Init Auth Provider
+    _authProvider = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    );
   }
 
   @override

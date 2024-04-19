@@ -8,6 +8,7 @@ import emailValidator from "../middlewares/email_validator.js";
 import usernameValidator from "../middlewares/username_validator.js";
 import passwordValidator from "../middlewares/password_validator.js";
 import pincodeValidator from "../middlewares/pincode_validator.js";
+import newPasswordValidator from "../middlewares/new_password_validator.js";
 
 const authRouter = express.Router();
 
@@ -65,10 +66,6 @@ authRouter.post(
         return res
           .status(400)
           .json({ msg: "User with the same email already exists!" });
-      }
-
-      if (password.length < 8) {
-        return res.status(400).json({ msg: "Password too short!" });
       }
 
       const hashedPassword = await bcryptjs.hash(
@@ -183,7 +180,7 @@ authRouter.post(
 );
 
 // Validate email route
-authRouter.post("/email-exists", async (req, res) => {
+authRouter.post("/email-exists", emailValidator, async (req, res) => {
   console.log("------ Validate email route ------");
   console.log(`Body:\n- email: ${req.body.email}`);
 
@@ -197,8 +194,12 @@ authRouter.post("/email-exists", async (req, res) => {
       [email]
     );
     if (existingUser.rowCount > 0) {
+      db.end();
+
       return res.json(true);
     }
+
+    db.end();
 
     res.json(false);
   } catch (err) {
@@ -257,6 +258,48 @@ authRouter.post(
           res.json({ msg: "Email sent: " + info.response });
         }
       });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+// Change password route
+authRouter.patch(
+  "/change-password",
+  emailValidator,
+  newPasswordValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const { email, newPassword } = req.body;
+
+      let existingUser = await db.query(
+        "SELECT * FROM users WHERE email = $1",
+        [email]
+      );
+      if (existingUser.rowCount === 0) {
+        db.end();
+
+        return res
+          .status(400)
+          .json({ msg: "User with this email does not exist!" });
+      }
+
+      const hashedPassword = await bcryptjs.hash(
+        newPassword,
+        Number(process.env.SALT_ROUNDS)
+      );
+
+      existingUser = await db.query(
+        "UPDATE users SET password = $1 WHERE email = $2 RETURNING *",
+        [hashedPassword, email]
+      );
+
+      db.end();
+
+      res.json(existingUser.rows[0]);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

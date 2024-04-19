@@ -1,15 +1,15 @@
-const passwordValidator = (req, res, next) => {
-  console.log("Password validator middleware:");
-  console.log("- Password: " + req.body.password);
+const newPasswordValidator = (req, res, next) => {
+  console.log("New password validator middleware:");
+  console.log("- New password: " + req.body.newPassword);
 
   try {
-    const password = req.body.password;
+    const newPassword = req.body.newPassword;
 
-    if (!password) {
+    if (!newPassword) {
       return res.status(400).json({ msg: "Password is required." });
     }
 
-    let isValid = password.length >= 8;
+    let isValid = newPassword.length >= 8;
 
     if (!isValid) {
       return res
@@ -23,4 +23,4 @@ const passwordValidator = (req, res, next) => {
   }
 };
 
-export default passwordValidator;
+export default newPasswordValidator;

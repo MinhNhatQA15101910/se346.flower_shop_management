@@ -1,6 +1,6 @@
 const emailValidator = (req, res, next) => {
-  console.log("------ Email validator middleware ------");
-  console.log("Email: " + req.body.email);
+  console.log("Email validator middleware:");
+  console.log("- Email: " + req.body.email);
 
   try {
     const email = req.body.email;
