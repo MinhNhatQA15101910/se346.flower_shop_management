@@ -1,10 +1,12 @@
 import bcryptjs from "bcryptjs";
 import express from "express";
+import nodemailer from "nodemailer";
 import pg from "pg";
 
 import emailValidator from "../middlewares/email_validator.js";
 import usernameValidator from "../middlewares/username_validator.js";
 import passwordValidator from "../middlewares/password_validator.js";
+import pincodeValidator from "../middlewares/pincode_validator.js";
 
 const authRouter = express.Router();
 
@@ -20,6 +22,23 @@ function getDatabaseInstance() {
   return db;
 }
 
+function hideEmailCharacters(email) {
+  const [username, domain] = email.split("@");
+
+  const usernameLength = username.length;
+
+  const hiddenCharactersCount = Math.max(usernameLength - 2, 0);
+
+  const hiddenUsername =
+    username.substring(0, 1) +
+    "*".repeat(hiddenCharactersCount) +
+    username.substring(usernameLength - 1);
+
+  const hiddenEmail = hiddenUsername + "@" + domain;
+
+  return hiddenEmail;
+}
+
 // Sign up route
 authRouter.post(
   "/signup",
@@ -27,6 +46,9 @@ authRouter.post(
   emailValidator,
   passwordValidator,
   async (req, res) => {
+    console.log("------ Router ------\n");
+    console.log("Body: " + req.body);
+
     try {
       const db = getDatabaseInstance();
 
@@ -59,6 +81,61 @@ authRouter.post(
       await db.end();
 
       res.json(result.rows[0]);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+// Send verify email route
+authRouter.post(
+  "/send-email",
+  emailValidator,
+  pincodeValidator,
+  async (req, res) => {
+    console.log("------ Router ------\n");
+    console.log("Body: " + req.body);
+
+    try {
+      const { email, pincode } = req.body;
+
+      var transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.FLOWERFLY_EMAIL,
+          pass: process.env.FLOWERFLY_PASSWORD,
+        },
+      });
+
+      var mailOptions = {
+        from: process.env.FLOWERFLY_EMAIL,
+        to: email,
+        subject: "FlowerFly account verify code",
+        html: `<h2>FlowerFly account</h2>
+      <h1 style="color:#23C16B;">Verify code</h1>
+      <p>
+        Please use the following verify code for the FlowerFly account:
+        ${hideEmailCharacters(email)}
+      </p>
+      <p>Security code: <b>${pincode}</b></p>
+      <p>
+        If you didn't request this code, you can safely ignore this email. Someone
+        else might have typed your email address by mistake.
+      </p>
+      <br />
+      <p>Thanks,</p>
+      <p>The FlowerFly development team.</p>`,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          res.status(500).json({ error: error.message });
+        } else {
+          res.json({ msg: "Email sent: " + info.response });
+        }
+      });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

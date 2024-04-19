@@ -136,50 +136,50 @@ class _PinputFormState extends State<PinputForm> {
   }
 
   void _sendVerifyEmail() async {
-    // _pincode = _generateRandomNumberString();
-    // var email = Provider.of<AuthProvider>(
-    //   context,
-    //   listen: false,
-    // ).resentEmail;
+    _pincode = _generateRandomNumberString();
+    var email = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    ).resentEmail;
 
-    // await _authService.sendVerifyEmail(
-    //   context: context,
-    //   email: email,
-    //   pincode: _pincode!,
-    // );
+    await _authService.sendVerifyEmail(
+      context: context,
+      email: email,
+      pincode: _pincode!,
+    );
   }
 
   void _startTimer() {
-    // const duration = Duration(seconds: 1);
-    // _timer = Timer.periodic(
-    //   duration,
-    //   (timer) {
-    //     if (_remainingSeconds == 0) {
-    //       showDialog(
-    //         context: context,
-    //         builder: (ctx) => AlertDialog(
-    //           title: const Text('Email verify timeout'),
-    //           content: const Text(
-    //             'You must enter your verify code before the time is over.',
-    //           ),
-    //           actions: [
-    //             TextButton(
-    //               onPressed: () {
-    //                 Navigator.pop(ctx);
-    //               },
-    //               child: const Text('OK'),
-    //             ),
-    //           ],
-    //         ),
-    //       );
-    //       _moveToPreviousForm();
-    //     } else {
-    //       setState(() {
-    //         _remainingSeconds--;
-    //       });
-    //     }
-    //   },
-    // );
+    const duration = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      duration,
+      (timer) {
+        if (_remainingSeconds == 0) {
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text('Email verify timeout'),
+              content: const Text(
+                'You must enter your verify code before the time is over.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+          _moveToPreviousForm();
+        } else {
+          setState(() {
+            _remainingSeconds--;
+          });
+        }
+      },
+    );
   }
 
   void _signUpUser() {

@@ -1,4 +1,5 @@
 const emailValidator = (req, res, next) => {
+  console.log("------ Middleware ------\n");
   console.log("Body: " + req.body);
 
   try {
