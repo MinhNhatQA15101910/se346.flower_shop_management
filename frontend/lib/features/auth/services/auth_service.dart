@@ -39,7 +39,7 @@ class AuthService {
   }) async {
     try {
       User user = User(
-        id: '',
+        id: 0,
         username: username,
         email: email,
         password: password,

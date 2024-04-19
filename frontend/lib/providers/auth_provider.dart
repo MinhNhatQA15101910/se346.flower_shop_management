@@ -7,7 +7,7 @@ class AuthProvider extends ChangeNotifier {
   String _resentEmail = "";
   Widget _previousForm = LoginForm();
   User _signUpUser = User(
-    id: '',
+    id: 0,
     username: '',
     email: '',
     password: '',

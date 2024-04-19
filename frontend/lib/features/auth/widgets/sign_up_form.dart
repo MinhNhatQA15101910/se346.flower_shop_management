@@ -83,7 +83,7 @@ class _SignUpFormState extends State<SignUpForm> {
           authFormProvider.setPreviousForm(SignUpForm());
           authFormProvider.setSignUpUser(
             User(
-              id: '',
+              id: 0,
               username: _usernameController.text.trim(),
               email: _emailController.text.trim(),
               password: _passwordController.text.trim(),

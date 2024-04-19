@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class User {
-  final String id;
+  final int id;
   final String username;
   final String email;
   final String password;
@@ -33,7 +33,7 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['id'] ?? '',
+      id: map['id'] ?? 0,
       username: map['username'] ?? '',
       email: map['email'] ?? '',
       password: map['password'] ?? '',
@@ -48,7 +48,7 @@ class User {
   factory User.fromJson(String source) => User.fromMap(json.decode(source));
 
   User copyWith({
-    String? id,
+    int? id,
     String? username,
     String? email,
     String? password,
