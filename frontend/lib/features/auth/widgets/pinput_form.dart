@@ -3,10 +3,13 @@ import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:frontend/common/widgets/loader.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/services/auth_service.dart';
+import 'package:frontend/features/auth/widgets/forgot_password_form.dart';
 import 'package:frontend/features/auth/widgets/login_form.dart';
+import 'package:frontend/models/user.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
@@ -65,50 +68,50 @@ class _PinputFormState extends State<PinputForm> {
   }
 
   void _verifyPincode(String pin) {
-    // if (pin.isEmpty) {
-    //   return;
-    // }
+    if (pin.isEmpty) {
+      return;
+    }
 
-    // if (pin != _pincode) {
-    //   IconSnackBar.show(
-    //     context,
-    //     label: 'Incorrect pincode.',
-    //     snackBarType: SnackBarType.fail,
-    //   );
-    //   return;
-    // }
+    if (pin != _pincode) {
+      IconSnackBar.show(
+        context,
+        label: 'Incorrect pincode.',
+        snackBarType: SnackBarType.fail,
+      );
+      return;
+    }
 
-    // _timer!.cancel();
+    _timer!.cancel();
 
-    // setState(() {
-    //   _isSignUpLoading = true;
-    // });
+    setState(() {
+      _isSignUpLoading = true;
+    });
 
-    // Future.delayed(Duration(seconds: 2), () async {
-    //   if (widget.isValidateSignUpEmail) {
-    //     _signUpUser();
-    //   } else {
-    //     final authFormProvider = Provider.of<AuthProvider>(
-    //       context,
-    //       listen: false,
-    //     );
+    Future.delayed(Duration(seconds: 2), () async {
+      if (widget.isValidateSignUpEmail) {
+        _signUpUser();
+      } else {
+        final authFormProvider = Provider.of<AuthProvider>(
+          context,
+          listen: false,
+        );
 
-    //     authFormProvider.setPreviousForm(
-    //       PinputForm(
-    //         isMoveBack: true,
-    //         isValidateSignUpEmail: false,
-    //       ),
-    //     );
+        authFormProvider.setPreviousForm(
+          PinputForm(
+            isMoveBack: true,
+            isValidateSignUpEmail: false,
+          ),
+        );
 
-    //     authFormProvider.setForm(
-    //       ResetPasswordForm(),
-    //     );
-    //   }
+        authFormProvider.setForm(
+          ForgotPasswordForm(),
+        );
+      }
 
-    //   setState(() {
-    //     _isSignUpLoading = false;
-    //   });
-    // });
+      setState(() {
+        _isSignUpLoading = false;
+      });
+    });
   }
 
   void _moveToPreviousForm() {
@@ -182,24 +185,22 @@ class _PinputFormState extends State<PinputForm> {
     );
   }
 
-  void _signUpUser() {
-    // Future.delayed(Duration(seconds: 2), () async {
-    //   User signUpUser = Provider.of<AuthProvider>(
-    //     context,
-    //     listen: false,
-    //   ).signUpUser;
+  void _signUpUser() async {
+    User signUpUser = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    ).signUpUser;
 
-    //   bool isSuccessful = await _authService.signUpUser(
-    //     context: context,
-    //     username: signUpUser.username,
-    //     email: signUpUser.email,
-    //     password: signUpUser.password,
-    //   );
+    bool isSuccessful = await _authService.signUpUser(
+      context: context,
+      username: signUpUser.username,
+      email: signUpUser.email,
+      password: signUpUser.password,
+    );
 
-    //   if (isSuccessful) {
-    //     _moveToLoginForm();
-    //   }
-    // });
+    if (isSuccessful) {
+      _moveToLoginForm();
+    }
   }
 
   @override

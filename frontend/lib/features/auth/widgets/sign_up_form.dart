@@ -12,7 +12,6 @@ import 'package:frontend/features/auth/widgets/pinput_form.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class SignUpForm extends StatefulWidget {
