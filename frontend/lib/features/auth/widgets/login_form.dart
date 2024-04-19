@@ -11,6 +11,7 @@ import 'package:frontend/features/auth/widgets/forgot_password_form.dart';
 import 'package:frontend/features/auth/widgets/sign_up_form.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class LoginForm extends StatefulWidget {
@@ -22,6 +23,8 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _authService = AuthService();
+  AuthProvider? _authProvider;
+
   var _isLoading = false;
   var _isLoginWithGoogleLoading = false;
 
@@ -56,26 +59,26 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _loginWithGoogle() {
-    // setState(() {
-    //   _isLoginWithGoogleLoading = true;
-    // });
+    setState(() {
+      _isLoginWithGoogleLoading = true;
+    });
 
-    // Future.delayed(Duration(seconds: 2), () async {
-    //   GoogleSignIn googleSignIn = GoogleSignIn(
-    //     scopes: ['email'],
-    //   );
-    //   GoogleSignInAccount? account = await googleSignIn.signIn();
-    //   if (account != null) {
-    //     await _authService.logInWithGoogle(
-    //       context: context,
-    //       account: account,
-    //     );
-    //   }
+    Future.delayed(Duration(seconds: 2), () async {
+      GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email'],
+      );
+      GoogleSignInAccount? account = await googleSignIn.signIn();
+      if (account != null) {
+        await _authService.logInWithGoogle(
+          context: context,
+          account: account,
+        );
+      }
 
-    //   setState(() {
-    //     _isLoginWithGoogleLoading = false;
-    //   });
-    // });
+      setState(() {
+        _isLoginWithGoogleLoading = false;
+      });
+    });
   }
 
   void _moveToSignUpForm() {
@@ -88,18 +91,21 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _moveToForgotPasswordForm() {
-    final authFormProvider = Provider.of<AuthProvider>(
-      context,
-      listen: false,
-    );
-
-    authFormProvider.setPreviousForm(
+    _authProvider!.setPreviousForm(
       LoginForm(),
     );
 
-    authFormProvider.setForm(
+    _authProvider!.setForm(
       ForgotPasswordForm(),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Init Auth Provider
+    _authProvider = Provider.of<AuthProvider>(context, listen: false);
   }
 
   @override

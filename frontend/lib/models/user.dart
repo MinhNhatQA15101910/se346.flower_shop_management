@@ -25,7 +25,7 @@ class User {
       'username': username,
       'email': email,
       'password': password,
-      'imageUrl': imageUrl,
+      'image_url': imageUrl,
       'role': role,
       'token': token,
     };
@@ -37,7 +37,7 @@ class User {
       username: map['username'] ?? '',
       email: map['email'] ?? '',
       password: map['password'] ?? '',
-      imageUrl: map['imageUrl'] ?? '',
+      imageUrl: map['image_url'] ?? '',
       role: map['role'] ?? '',
       token: map['token'] ?? '',
     );

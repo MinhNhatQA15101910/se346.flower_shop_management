@@ -120,8 +120,62 @@ authRouter.post(
         return res.status(400).json({ msg: "Incorrect password!" });
       }
 
+      await db.end();
+
       const token = jwt.sign({ id: user.rows[0].id }, process.env.PASSWORD_KEY);
       res.json({ token, ...user.rows[0] });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
+
+// Log in with Google route
+authRouter.post(
+  "/login/google",
+  emailValidator,
+  passwordValidator,
+  usernameValidator,
+  async (req, res) => {
+    console.log("------ Log in with Google route ------");
+    console.log(
+      `Body: \n- email: ${req.body.email},\n- password: ${req.body.password},\n- username: ${req.body.username},\n- imageUrl: ${req.body.imageUrl}`
+    );
+
+    try {
+      const db = getDatabaseInstance();
+
+      const { email, password, username, imageUrl } = req.body;
+
+      const existingUser = await db.query(
+        "SELECT * FROM users WHERE email = $1",
+        [email]
+      );
+      if (existingUser.rowCount > 0) {
+        const token = jwt.sign(
+          { id: existingUser.rows[0].id },
+          process.env.PASSWORD_KEY
+        );
+        return res.json({ token, ...existingUser.rows[0] });
+      }
+
+      const hashedPassword = await bcryptjs.hash(
+        password,
+        Number(process.env.SALT_ROUNDS)
+      );
+
+      const result = await db.query(
+        "INSERT INTO users (username, email, password, image_url, role) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+        [username, email, hashedPassword, imageUrl, "user"]
+      );
+
+      await db.end();
+
+      const token = jwt.sign(
+        { id: result.rows[0].id },
+        process.env.PASSWORD_KEY
+      );
+      res.json({ token, ...result.rows[0] });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "226547978711",
+    "project_id": "flowerfly-628cf",
+    "storage_bucket": "flowerfly-628cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226547978711:android:f0d598f5a2a0aaf135bb92",
+        "android_client_info": {
+          "package_name": "com.flutterdev.flowerfly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226547978711-1rt1gjv5h2v9aiqjrcioaqrhdciq3rcj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flutterdev.flowerfly",
+            "certificate_hash": "198207e9736695720c58aebf46d24b34ce137b67"
+          }
+        },
+        {
+          "client_id": "226547978711-d8511rr8ek4r4ohs6gfgl0ko1j7j452g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd9Gox76KjQvPJKaWPwSTtssUETWTJvh8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226547978711-d8511rr8ek4r4ohs6gfgl0ko1j7j452g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
