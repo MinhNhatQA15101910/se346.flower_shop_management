@@ -4,8 +4,6 @@ import 'package:frontend/features/customer/order_management/widgets/order_detail
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 
-//Widget imports
-
 class OrderManagementScreen extends StatefulWidget {
   const OrderManagementScreen({super.key});
 
