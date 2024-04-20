@@ -81,7 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index, realIndex) => Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: const BoxDecoration(
-                    color: GlobalVariables.darkBlue,
                     borderRadius: BorderRadius.all(
                       Radius.circular(10),
                     ),
