@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 String uri = 'http://192.168.1.5:3000';
 
@@ -55,4 +56,78 @@ class GlobalVariables {
   static const double fontSize_32 = 32;
   static const double fontSize_36 = 36;
   static const double fontSize_48 = 48;
+
+  //Custom container
+  static Widget customContainer({Widget? child}) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 12.0,
+        left: 16.0,
+        right: 16.0,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.white,
+        ),
+        child: Container(
+          margin: const EdgeInsets.only(
+            top: 12.0,
+            left: 16.0,
+            right: 16.0,
+            bottom: 12,
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  //Custom button
+  static Widget customButton({
+    VoidCallback? onTap,
+    required String buttonText,
+    required Color borderColor,
+    required Color fillColor,
+    required Color textColor,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: fillColor,
+        border: Border.all(
+          width: 1,
+          color: borderColor,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(30),
+          onTap: onTap,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
+            child: Container(
+              width: double.infinity,
+              child: Text(
+                buttonText,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  color: textColor,
+                  textStyle: const TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
