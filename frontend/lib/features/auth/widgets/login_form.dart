@@ -9,6 +9,7 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/services/auth_service.dart';
 import 'package:frontend/features/auth/widgets/forgot_password_form.dart';
 import 'package:frontend/features/auth/widgets/sign_up_form.dart';
+import 'package:frontend/features/customer/customer_bottom_bar.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -27,6 +28,7 @@ class _LoginFormState extends State<LoginForm> {
 
   var _isLoading = false;
   var _isLoginWithGoogleLoading = false;
+  var _isContinueAsAGuest = false;
 
   final _loginFormKey = GlobalKey<FormState>();
 
@@ -93,6 +95,23 @@ class _LoginFormState extends State<LoginForm> {
     _authProvider!.setForm(
       ForgotPasswordForm(),
     );
+  }
+
+  void _continueAsAGuest() {
+    setState(() {
+      _isContinueAsAGuest = true;
+    });
+
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        CustomerBottomBar.routeName,
+        (route) => false,
+      );
+
+      setState(() {
+        _isContinueAsAGuest = true;
+      });
+    });
   }
 
   @override
@@ -188,14 +207,15 @@ class _LoginFormState extends State<LoginForm> {
                           fontWeight: FontWeight.w300),
                       children: [
                         TextSpan(
-                            text: 'Password?',
-                            style: GoogleFonts.inter(
-                                color: GlobalVariables.darkGreen,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = _moveToForgotPasswordForm)
+                          text: 'Password?',
+                          style: GoogleFonts.inter(
+                              color: GlobalVariables.darkGreen,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = _moveToForgotPasswordForm,
+                        )
                       ],
                     ),
                   ),
@@ -335,27 +355,29 @@ class _LoginFormState extends State<LoginForm> {
                 child: SizedBox(
                   width: 216,
                   height: 40,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: GlobalVariables.lightGrey,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(
-                          color: GlobalVariables.green,
+                  child: _isContinueAsAGuest
+                      ? const Loader()
+                      : ElevatedButton(
+                          onPressed: _continueAsAGuest,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: GlobalVariables.lightGrey,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(
+                                color: GlobalVariables.green,
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            'Continue as a guest',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: GlobalVariables.green,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    child: Text(
-                      'Continue as a guest',
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: GlobalVariables.green,
-                      ),
-                    ),
-                  ),
                 ),
               ),
               const SizedBox(height: 16),

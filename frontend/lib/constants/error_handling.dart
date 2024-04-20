@@ -23,7 +23,7 @@ void httpErrorHandler({
     case 500:
       IconSnackBar.show(
         context,
-        label: jsonDecode(response.body)['msg'],
+        label: jsonDecode(response.body)['error'],
         snackBarType: SnackBarType.fail,
       );
       break;

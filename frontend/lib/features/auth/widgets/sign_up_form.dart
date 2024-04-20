@@ -9,6 +9,7 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/auth/services/auth_service.dart';
 import 'package:frontend/features/auth/widgets/login_form.dart';
 import 'package:frontend/features/auth/widgets/pinput_form.dart';
+import 'package:frontend/features/customer/customer_bottom_bar.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,6 +29,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   var _isLoginWithGoogleLoading = false;
   var _isMoveToPinputFormLoading = false;
+  var _isContinueAsAGuest = false;
 
   final _signUpFormKey = GlobalKey<FormState>();
 
@@ -95,6 +97,23 @@ class _SignUpFormState extends State<SignUpForm> {
         });
       });
     }
+  }
+
+  void _continueAsAGuest() {
+    setState(() {
+      _isContinueAsAGuest = true;
+    });
+
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        CustomerBottomBar.routeName,
+        (route) => false,
+      );
+
+      setState(() {
+        _isContinueAsAGuest = true;
+      });
+    });
   }
 
   @override
@@ -346,27 +365,29 @@ class _SignUpFormState extends State<SignUpForm> {
                 child: SizedBox(
                   width: 216,
                   height: 40,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: GlobalVariables.lightGrey,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(
-                          color: GlobalVariables.green,
+                  child: _isContinueAsAGuest
+                      ? const Loader()
+                      : ElevatedButton(
+                          onPressed: _continueAsAGuest,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: GlobalVariables.lightGrey,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(
+                                color: GlobalVariables.green,
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            'Continue as a guest',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: GlobalVariables.green,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    child: Text(
-                      'Continue as a guest',
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: GlobalVariables.green,
-                      ),
-                    ),
-                  ),
                 ),
               ),
               const SizedBox(height: 16),
