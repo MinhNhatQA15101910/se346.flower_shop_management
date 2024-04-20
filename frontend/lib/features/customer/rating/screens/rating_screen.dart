@@ -39,7 +39,7 @@ class _RatingScreenState extends State<RatingScreen> {
             SizedBox(
               height: 12,
             ),
-            RatingIten(),
+            RatingItem(),
           ],
         ),
       ),

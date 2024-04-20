@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
-class RatingIten extends StatefulWidget {
-  const RatingIten({
+class RatingItem extends StatefulWidget {
+  const RatingItem({
     Key? key,
   }) : super(key: key);
 
   @override
-  _RatingItenState createState() => _RatingItenState();
+  State<RatingItem> createState() => _RatingItemState();
 }
 
-class _RatingItenState extends State<RatingIten> {
+class _RatingItemState extends State<RatingItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
