@@ -21,7 +21,7 @@ class ProductCartItem extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ProductCartItemState createState() => _ProductCartItemState(
+  State<ProductCartItem> createState() => _ProductCartItemState(
         quantity,
         limitQuantity,
       );

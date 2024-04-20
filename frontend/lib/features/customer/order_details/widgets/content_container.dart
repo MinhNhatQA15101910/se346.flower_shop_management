@@ -13,7 +13,7 @@ class ContentContainer extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ContentContainerState createState() => _ContentContainerState();
+  State<ContentContainer> createState() => _ContentContainerState();
 }
 
 class _ContentContainerState extends State<ContentContainer> {

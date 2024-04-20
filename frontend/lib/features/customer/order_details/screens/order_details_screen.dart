@@ -10,7 +10,7 @@ class OrderDetailsScreen extends StatefulWidget {
   const OrderDetailsScreen({Key? key}) : super(key: key);
 
   @override
-  _OrderDetailsScreenState createState() => _OrderDetailsScreenState();
+  State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
 }
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {

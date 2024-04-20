@@ -11,7 +11,7 @@ class EstimatedTime extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _EstimatedTimeState createState() => _EstimatedTimeState();
+  State<EstimatedTime> createState() => _EstimatedTimeState();
 }
 
 class _EstimatedTimeState extends State<EstimatedTime> {
