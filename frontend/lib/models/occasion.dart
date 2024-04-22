@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-class Type {
+class Occasion {
   final int id;
   final String name;
   final String imageUrl;
 
-  const Type({
+  const Occasion({
     required this.id,
     required this.name,
     required this.imageUrl,
@@ -19,8 +19,8 @@ class Type {
     };
   }
 
-  factory Type.fromMap(Map<String, dynamic> map) {
-    return Type(
+  factory Occasion.fromMap(Map<String, dynamic> map) {
+    return Occasion(
       id: map['id'] ?? 0,
       name: map['name'] ?? '',
       imageUrl: map['image_url'] ?? '',
@@ -29,5 +29,6 @@ class Type {
 
   String toJson() => json.encode(toMap());
 
-  factory Type.fromJson(String source) => Type.fromMap(json.decode(source));
+  factory Occasion.fromJson(String source) =>
+      Occasion.fromMap(json.decode(source));
 }
