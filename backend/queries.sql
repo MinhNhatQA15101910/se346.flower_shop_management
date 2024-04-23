@@ -561,6 +561,15 @@ INSERT INTO product_occasion (product_id, occasion_id) VALUES
 (29, 18),
 (30, 12);
 
+CREATE TABLE carts (
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    CONSTRAINT pk_carts PRIMARY KEY (user_id, product_id),
+    CONSTRAINT fk_carts_1 FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT fk_carts_2 FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
@@ -582,8 +591,7 @@ CREATE TABLE orders (
 CREATE TABLE order_details (
     order_id INT NOT NULL,
     product_id INT NOT NULL,
-    amount INT NOT NULL,
-    price DECIMAL NOT NULL,
+    quantity INT NOT NULL,
     CONSTRAINT pk_order_details PRIMARY KEY (order_id, product_id),
     CONSTRAINT fk_order_details_1 FOREIGN KEY (order_id) REFERENCES orders(id),
     CONSTRAINT fk_order_details_2 FOREIGN KEY (product_id) REFERENCES products(id)
@@ -592,7 +600,7 @@ CREATE TABLE order_details (
 CREATE TABLE import_product_records (
     id SERIAL PRIMARY KEY,
     product_id INT NOT NULL,
-    amount INT NOT NULL,
+    quantity INT NOT NULL,
     import_date TIMESTAMP,
     CONSTRAINT fk_import_product_records FOREIGN KEY (product_id) REFERENCES products(id)
 );
@@ -600,7 +608,7 @@ CREATE TABLE import_product_records (
 CREATE TABLE export_product_records (
     id SERIAL PRIMARY KEY,
     product_id INT NOT NULL,
-    amount INT NOT NULL,
+    quantity INT NOT NULL,
     export_date TIMESTAMP,
     CONSTRAINT fk_export_product_records FOREIGN KEY (product_id) REFERENCES products(id)
 );

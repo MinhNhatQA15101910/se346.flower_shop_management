@@ -14,6 +14,8 @@ class AuthProvider extends ChangeNotifier {
     imageUrl: '',
     role: '',
     token: '',
+    products: [],
+    quantities: [],
   );
 
   Widget get authForm => _authForm;

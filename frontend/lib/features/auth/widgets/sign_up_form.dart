@@ -83,6 +83,8 @@ class _SignUpFormState extends State<SignUpForm> {
             imageUrl: '',
             role: '',
             token: '',
+            products: [],
+            quantities: [],
           ),
         );
         _authProvider!.setForm(

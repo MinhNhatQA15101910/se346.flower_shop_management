@@ -46,6 +46,8 @@ class AuthService {
         imageUrl: '',
         role: '',
         token: '',
+        products: [],
+        quantities: [],
       );
 
       http.Response response = await http.post(

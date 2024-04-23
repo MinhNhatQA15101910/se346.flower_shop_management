@@ -31,16 +31,4 @@ class Category {
 
   factory Category.fromJson(String source) =>
       Category.fromMap(json.decode(source));
-
-  Category copyWith({
-    int? id,
-    String? name,
-    String? imageUrl,
-  }) {
-    return Category(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      imageUrl: imageUrl ?? this.imageUrl,
-    );
-  }
 }
