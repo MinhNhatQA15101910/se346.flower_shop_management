@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/cart/widgets/product_cart_item.dart';
+import 'package:frontend/features/customer/checkout/screens/checkout_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CartScreen extends StatefulWidget {
@@ -12,6 +13,10 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  void _navigateToCheckoutScreen() {
+    Navigator.of(context).pushNamed(CheckoutScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,18 +68,21 @@ class _CartScreenState extends State<CartScreen> {
                           price: 100000,
                           imagePath: 'assets/images/product1.png',
                           quantity: 1,
+                          limitQuantity: 5,
                         ),
                         ProductCartItem(
                           productName: 'Product name',
                           price: 100000,
                           imagePath: 'assets/images/product1.png',
                           quantity: 1,
+                          limitQuantity: 5,
                         ),
                         ProductCartItem(
                           productName: 'Product name',
                           price: 100000,
                           imagePath: 'assets/images/product1.png',
                           quantity: 1,
+                          limitQuantity: 5,
                         ),
                       ],
                     ),
@@ -95,7 +103,7 @@ class _CartScreenState extends State<CartScreen> {
           ),
           Container(
             height: 40,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(color: Colors.white),
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -108,53 +116,15 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: ShapeDecoration(
-                    color: GlobalVariables.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _checkoutText('Process to checkout'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: GlobalVariables.customButton(
+                onTap: _navigateToCheckoutScreen,
+                buttonText: 'Process to checkout',
+                borderColor: GlobalVariables.green,
+                fillColor: GlobalVariables.green,
+                textColor: Colors.white),
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _checkoutText(String text) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: GoogleFonts.inter(
-        fontSize: 16,
-        color: Colors.white,
-        textStyle: const TextStyle(
-          overflow: TextOverflow.ellipsis,
-          fontWeight: FontWeight.w400,
-        ),
       ),
     );
   }

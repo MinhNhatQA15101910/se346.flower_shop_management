@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:frontend/models/product.dart';
+
 class User {
   final int id;
   final String username;
@@ -8,6 +10,8 @@ class User {
   final String imageUrl;
   final String role;
   final String token;
+  final List<Product> products;
+  final List<int> quantities;
 
   const User({
     required this.id,
@@ -17,6 +21,8 @@ class User {
     required this.imageUrl,
     required this.role,
     required this.token,
+    required this.products,
+    required this.quantities,
   });
 
   Map<String, dynamic> toMap() {
@@ -28,6 +34,8 @@ class User {
       'image_url': imageUrl,
       'role': role,
       'token': token,
+      'products': products.map((p) => p.toMap()).toList(),
+      'quantities': quantities,
     };
   }
 
@@ -40,6 +48,18 @@ class User {
       imageUrl: map['image_url'] ?? '',
       role: map['role'] ?? '',
       token: map['token'] ?? '',
+      products: List<Product>.from(
+        map['products']?.map(
+          (x) => Product.fromMap(
+            x['product'],
+          ),
+        ),
+      ),
+      quantities: List<int>.from(
+        map['products']?.map(
+          (x) => x['quantity'],
+        ),
+      ),
     );
   }
 
@@ -55,6 +75,8 @@ class User {
     String? imageUrl,
     String? role,
     String? token,
+    List<Product>? products,
+    List<int>? quantities,
   }) {
     return User(
       id: id ?? this.id,
@@ -64,6 +86,8 @@ class User {
       imageUrl: imageUrl ?? this.imageUrl,
       role: role ?? this.role,
       token: token ?? this.token,
+      products: products ?? this.products,
+      quantities: quantities ?? this.quantities,
     );
   }
 }
