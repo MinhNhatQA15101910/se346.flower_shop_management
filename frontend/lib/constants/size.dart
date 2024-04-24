@@ -1,4 +1,4 @@
-enum Weight {
+enum Size {
   small(value: 'Small'),
   medium(value: 'Medium'),
   standard(value: 'Standard'),
@@ -6,7 +6,7 @@ enum Weight {
   extra_large(value: 'Extra Large'),
   jumbo(value: 'Jumbo');
 
-  const Weight({required this.value});
+  const Size({required this.value});
 
   final String value;
 }

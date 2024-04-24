@@ -56,9 +56,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                     _paddingText('Estimated time of delivery'),
                     EstimatedTime(
-                      datetime: DateTime.now(),
+                      dateTime: DateTime.now(),
                     ),
-                    _paddingText('Products infomation'),
+                    _paddingText('Products information'),
                     GlobalVariables.customContainer(
                       child: Column(
                         children: [
@@ -106,21 +106,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 textColor: Colors.white),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _checkoutText(String text) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: GoogleFonts.inter(
-        fontSize: 16,
-        color: Colors.white,
-        textStyle: const TextStyle(
-          overflow: TextOverflow.ellipsis,
-          fontWeight: FontWeight.w400,
-        ),
       ),
     );
   }

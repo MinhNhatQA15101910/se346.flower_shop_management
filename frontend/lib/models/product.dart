@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:frontend/constants/weight.dart';
+import 'package:frontend/constants/size.dart';
 
 class Product {
   final int id;
@@ -9,8 +9,8 @@ class Product {
   final double salePrice;
   final double salePercentage;
   final String detailDescription;
-  final String size;
-  final Weight weight;
+  final Size size;
+  final double weight;
   final String color;
   final String material;
   final int stock;
@@ -45,8 +45,8 @@ class Product {
       'sale_price': salePrice,
       'sale_percentage': salePercentage,
       'detail_description': detailDescription,
-      'size': size,
-      'weight': weight.value,
+      'size': size.value,
+      'weight': weight,
       'color': color,
       'material': material,
       'stock': stock,
@@ -65,11 +65,13 @@ class Product {
       salePrice: map['sale_price'] ?? 0,
       salePercentage: map['sale_percentage'] ?? 0,
       detailDescription: map['detail_description'] ?? '',
-      size: map['size'] ?? '',
-      weight: Weight.values
-              .where((weight) => weight.value == map['weight'])
+      size: Size.values
+              .where(
+                (size) => size.value == map['size'],
+              )
               .firstOrNull ??
-          Weight.standard,
+          Size.standard,
+      weight: map['weight'] ?? 0,
       color: map['color'] ?? '',
       material: map['material'] ?? '',
       stock: map['stock'] ?? 0,

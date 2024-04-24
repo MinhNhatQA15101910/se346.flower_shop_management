@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class EstimatedTime extends StatefulWidget {
-  final DateTime datetime;
+  final DateTime dateTime;
   const EstimatedTime({
-    required this.datetime,
+    required this.dateTime,
     Key? key,
   }) : super(key: key);
 
@@ -20,7 +20,7 @@ class _EstimatedTimeState extends State<EstimatedTime> {
   @override
   void initState() {
     super.initState();
-    _selectedDateTime = widget.datetime;
+    _selectedDateTime = widget.dateTime;
   }
 
   @override
@@ -98,19 +98,5 @@ class _EstimatedTimeState extends State<EstimatedTime> {
         _selectedDateTime = picked;
       });
     }
-  }
-
-  Widget _BoldSizeText(String text) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: GoogleFonts.inter(
-        color: Colors.black,
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-      ),
-    );
   }
 }

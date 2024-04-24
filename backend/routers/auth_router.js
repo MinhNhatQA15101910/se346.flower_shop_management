@@ -153,7 +153,12 @@ authRouter.post(
           { id: existingUser.rows[0].id },
           process.env.PASSWORD_KEY
         );
-        return res.json({ token, ...existingUser.rows[0] });
+        return res.json({
+          token,
+          ...existingUser.rows[0],
+          products: [],
+          quantities: [],
+        });
       }
 
       const hashedPassword = await bcryptjs.hash(
@@ -172,7 +177,12 @@ authRouter.post(
         { id: result.rows[0].id },
         process.env.PASSWORD_KEY
       );
-      res.json({ token, ...result.rows[0] });
+      res.json({
+        token,
+        ...existingUser.rows[0],
+        products: [],
+        quantities: [],
+      });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
