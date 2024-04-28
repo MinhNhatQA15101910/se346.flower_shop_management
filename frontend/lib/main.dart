@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/admin/category_management/screens/category_management_screen.dart';
 import 'package:frontend/features/auth/screens/intro_screen.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
-      home: IntroScreen(),
+      home: CategoryManagementScreen(),
     );
   }
 }

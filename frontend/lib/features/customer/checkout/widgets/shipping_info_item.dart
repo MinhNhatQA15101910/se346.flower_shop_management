@@ -58,21 +58,22 @@ class ShippingInfoItem extends StatelessWidget {
               ),
               onTap: () => {
                 showModalBottomSheet<dynamic>(
-                    context: context,
-                    useRootNavigator: true,
-                    isScrollControlled: true,
-                    builder: (BuildContext context) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            topRight: Radius.circular(8),
-                          ),
+                  context: context,
+                  useRootNavigator: true,
+                  isScrollControlled: true,
+                  builder: (BuildContext context) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8),
                         ),
-                        child: AddressInfoBottomSheet(),
-                      );
-                    })
+                      ),
+                      child: AddressInfoBottomSheet(),
+                    );
+                  },
+                ),
               },
             ),
           ],
