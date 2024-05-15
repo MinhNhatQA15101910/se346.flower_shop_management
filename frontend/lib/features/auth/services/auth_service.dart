@@ -114,8 +114,10 @@ class AuthService {
           await prefs.setString(
               'x-auth-token', jsonDecode(response.body)['token']);
 
-          Provider.of<UserProvider>(context, listen: false)
-              .setUser(response.body);
+          Provider.of<UserProvider>(
+            context,
+            listen: false,
+          ).setUser(response.body);
 
           Navigator.of(context).pushNamedAndRemoveUntil(
             CustomerBottomBar.routeName,
@@ -271,6 +273,7 @@ class AuthService {
     }
   }
 
+  // Send verify email
   Future<bool> sendVerifyEmail({
     required BuildContext context,
     required String email,
@@ -306,6 +309,7 @@ class AuthService {
     }
   }
 
+  // Change password
   Future<bool> changePassword({
     required BuildContext context,
     required String email,
@@ -367,6 +371,46 @@ class AuthService {
       );
 
       return false;
+    }
+  }
+
+  // Get user data
+  void getUserData(BuildContext context) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('x-auth-token');
+
+      if (token == null) {
+        await prefs.setString('x-auth-token', '');
+      }
+
+      var tokenRes = await http.post(
+        Uri.parse('$uri/tokenIsValid'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token!,
+        },
+      );
+
+      var isValidToken = jsonDecode(tokenRes.body);
+
+      if (isValidToken) {
+        http.Response userRes = await http.get(
+          Uri.parse('$uri/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': token,
+          },
+        );
+
+        Provider.of<UserProvider>(context, listen: false).setUser(userRes.body);
+      }
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
     }
   }
 }

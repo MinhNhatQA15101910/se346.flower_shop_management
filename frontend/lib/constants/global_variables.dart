@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String uri = 'http://192.168.111.177:3000';
+String uri = 'http://192.168.137.251:3000';
 
 class GlobalVariables {
   // Base Variables
@@ -29,7 +29,8 @@ class GlobalVariables {
   static const Color black = Color(0xFF000000);
 
   // Define Scales
-  static void init(BuildContext context) {
+  static void init(BuildContext context) async {
+    // Sizes
     Size screenSize = MediaQuery.of(context).size;
     screenWidth = screenSize.width;
     screenHeight = screenSize.height;
