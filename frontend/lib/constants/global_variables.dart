@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String uri = 'http://192.168.222.130:3000';
+String uri = 'http://192.168.111.177:3000';
 
 class GlobalVariables {
   // Base Variables
@@ -28,7 +28,7 @@ class GlobalVariables {
   static const Color pinputColor = Color(0xFF545454);
   static const Color black = Color(0xFF000000);
 
-  //Define Scales
+  // Define Scales
   static void init(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     screenWidth = screenSize.width;
@@ -83,7 +83,7 @@ class GlobalVariables {
     );
   }
 
-  //Custom button
+  // Custom button
   static Widget customButton({
     VoidCallback? onTap,
     required String buttonText,

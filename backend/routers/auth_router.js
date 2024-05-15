@@ -63,6 +63,8 @@ authRouter.post(
         [email]
       );
       if (existingUser.rowCount > 0) {
+        await db.end();
+
         return res
           .status(400)
           .json({ msg: "User with the same email already exists!" });
@@ -107,6 +109,8 @@ authRouter.post(
         email,
       ]);
       if (user.rowCount === 0) {
+        await db.end();
+
         return res
           .status(400)
           .json({ msg: "User with this email does not exist!" });
@@ -114,6 +118,8 @@ authRouter.post(
 
       const isMatch = await bcryptjs.compare(password, user.rows[0].password);
       if (!isMatch) {
+        await db.end();
+
         return res.status(400).json({ msg: "Incorrect password!" });
       }
 
@@ -153,6 +159,9 @@ authRouter.post(
           { id: existingUser.rows[0].id },
           process.env.PASSWORD_KEY
         );
+
+        await db.end();
+        
         return res.json({
           token,
           ...existingUser.rows[0],
