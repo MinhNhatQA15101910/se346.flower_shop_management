@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/features/customer/account/widgets/item_tag.dart';
+import 'package:provider/provider.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -13,6 +15,8 @@ class AccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.watch<UserProvider>();
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -88,10 +92,15 @@ class AccountScreen extends StatelessWidget {
                               child: ClipOval(
                                 child: SizedBox(
                                   width: double.infinity,
-                                  child: Image.asset(
-                                    'assets/images/img_account.png',
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: userProvider.user.imageUrl == ''
+                                      ? Image.asset(
+                                          'assets/images/img_account.png',
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.network(
+                                          userProvider.user.imageUrl,
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                               ),
                             ),
@@ -105,7 +114,7 @@ class AccountScreen extends StatelessWidget {
                           margin: EdgeInsets.symmetric(horizontal: 16),
                           child: Center(
                             child: _usernameText(
-                              'Mai Hoàng Nhật Duy Siêu Cấp Đẹp Trai Nhất Vũ Trụ',
+                              userProvider.user.username,
                             ),
                           ),
                         ),
