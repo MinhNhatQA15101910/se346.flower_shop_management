@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/account/services/account_service.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,9 +14,42 @@ class AccountScreen extends StatelessWidget {
     Navigator.of(context).pushNamed(CartScreen.routeName);
   }
 
+  void logOut(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Text('Log out confirm'),
+          content: const Text('Are you sure to log out the app?'),
+          actions: [
+            // The "Yes" button
+            TextButton(
+              onPressed: () {
+                final accountService = AccountService();
+                accountService.logOut(context);
+
+                Navigator.of(context).pop();
+
+                
+              },
+              child: const Text('Yes'),
+            ),
+            // The "No" button
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('No'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userProvider = context.watch<UserProvider>();
+    final _userProvider = context.watch<UserProvider>();
 
     return Scaffold(
       appBar: PreferredSize(
@@ -92,13 +126,13 @@ class AccountScreen extends StatelessWidget {
                               child: ClipOval(
                                 child: SizedBox(
                                   width: double.infinity,
-                                  child: userProvider.user.imageUrl == ''
+                                  child: _userProvider.user.imageUrl == ''
                                       ? Image.asset(
                                           'assets/images/img_account.png',
                                           fit: BoxFit.cover,
                                         )
                                       : Image.network(
-                                          userProvider.user.imageUrl,
+                                          _userProvider.user.imageUrl,
                                           fit: BoxFit.cover,
                                         ),
                                 ),
@@ -114,7 +148,7 @@ class AccountScreen extends StatelessWidget {
                           margin: EdgeInsets.symmetric(horizontal: 16),
                           child: Center(
                             child: _usernameText(
-                              userProvider.user.username,
+                              _userProvider.user.username,
                             ),
                           ),
                         ),
@@ -350,7 +384,7 @@ class AccountScreen extends StatelessWidget {
               child: ItemTag(
                 title: 'Log out',
                 description: 'Log out of your account',
-                onTap: () {},
+                onTap: () => logOut(context),
                 iconData: Icons.logout,
               ),
             ),

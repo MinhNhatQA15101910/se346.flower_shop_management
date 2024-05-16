@@ -3,6 +3,7 @@ import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:frontend/features/auth/screens/main_auth_screen.dart';
 import 'package:frontend/features/auth/widgets/login_form.dart';
 import 'package:frontend/providers/auth_provider.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,12 +18,23 @@ class AccountService {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('x-auth-token', '');
 
+      GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email'],
+      );
+      await googleSignIn.signOut();
+
       authProvider.setForm(new LoginForm());
 
       Navigator.pushNamedAndRemoveUntil(
         context,
         MainAuthScreen.routeName,
         (route) => false,
+      );
+
+      IconSnackBar.show(
+        context,
+        label: 'Log out successfully!',
+        snackBarType: SnackBarType.success,
       );
     } catch (error) {
       IconSnackBar.show(
