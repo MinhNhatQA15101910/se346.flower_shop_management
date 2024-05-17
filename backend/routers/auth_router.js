@@ -212,7 +212,7 @@ authRouter.post(
       );
       res.json({
         token,
-        ...existingUser.rows[0],
+        ...result.rows[0],
         products: [],
         quantities: [],
       });

@@ -16,6 +16,8 @@ import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 class PinputForm extends StatefulWidget {
+  static bool isUserChangePassword = false;
+
   const PinputForm({
     super.key,
     required this.isMoveBack,
@@ -112,8 +114,13 @@ class _PinputFormState extends State<PinputForm> {
   }
 
   void _moveToPreviousForm() {
+    if (_authProvider!.previousForm == null) {
+      Navigator.of(context).pop();
+      return;
+    }
+
     _authProvider!.setForm(
-      _authProvider!.previousForm,
+      _authProvider!.previousForm!,
     );
 
     _authProvider!.setPreviousForm(
@@ -392,6 +399,7 @@ class _PinputFormState extends State<PinputForm> {
   @override
   void dispose() {
     _pinController.dispose();
+    _timer!.cancel();
     super.dispose();
   }
 }

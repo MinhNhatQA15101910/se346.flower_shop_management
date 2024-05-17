@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/auth/screens/main_auth_screen.dart';
+import 'package:frontend/features/auth/widgets/pinput_form.dart';
 import 'package:frontend/features/customer/account/services/account_service.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
+import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/features/customer/account/widgets/item_tag.dart';
@@ -12,6 +15,27 @@ class AccountScreen extends StatelessWidget {
 
   void navigateToCartScreen(BuildContext context) {
     Navigator.of(context).pushNamed(CartScreen.routeName);
+  }
+
+  void navigateToPinputForm(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    );
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    PinputForm.isUserChangePassword = true;
+    authProvider.setForm(new PinputForm(
+      isMoveBack: false,
+      isValidateSignUpEmail: false,
+    ));
+    authProvider.setPreviousForm(null);
+    authProvider.setResentEmail(userProvider.user.email);
+
+    Navigator.of(context).pushNamed(MainAuthScreen.routeName);
   }
 
   void logOut(BuildContext context) {
@@ -29,8 +53,6 @@ class AccountScreen extends StatelessWidget {
                 accountService.logOut(context);
 
                 Navigator.of(context).pop();
-
-                
               },
               child: const Text('Yes'),
             ),
@@ -376,7 +398,7 @@ class AccountScreen extends StatelessWidget {
               child: ItemTag(
                 title: 'Change password',
                 description: 'Change your account password',
-                onTap: () {},
+                onTap: () => navigateToPinputForm(context),
                 iconData: Icons.password,
               ),
             ),

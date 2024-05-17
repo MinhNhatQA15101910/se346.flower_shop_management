@@ -46,7 +46,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
   void _moveToPreviousForm() {
     _authProvider!.setForm(
-      _authProvider!.previousForm,
+      _authProvider!.previousForm!,
     );
   }
 

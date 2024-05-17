@@ -5,7 +5,7 @@ import 'package:frontend/models/user.dart';
 class AuthProvider extends ChangeNotifier {
   Widget _authForm = LoginForm();
   String _resentEmail = "";
-  Widget _previousForm = LoginForm();
+  Widget? _previousForm = LoginForm();
   User _signUpUser = User(
     id: 0,
     username: '',
@@ -20,7 +20,7 @@ class AuthProvider extends ChangeNotifier {
 
   Widget get authForm => _authForm;
   String get resentEmail => _resentEmail;
-  Widget get previousForm => _previousForm;
+  Widget? get previousForm => _previousForm;
   User get signUpUser => _signUpUser;
 
   void setForm(Widget authForm) {
@@ -33,7 +33,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setPreviousForm(Widget previousForm) {
+  void setPreviousForm(Widget? previousForm) {
     _previousForm = previousForm;
     notifyListeners();
   }
