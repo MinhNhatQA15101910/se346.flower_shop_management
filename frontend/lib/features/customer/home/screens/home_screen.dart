@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   child: Image.asset(
-                    'assets/images/banner1.png',
+                    'assets/images/img-carousel-${index + 1}.png',
                     fit: BoxFit.fill,
                   ),
                 ),

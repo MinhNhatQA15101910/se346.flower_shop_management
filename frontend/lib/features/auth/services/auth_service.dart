@@ -410,7 +410,12 @@ class AuthService {
           },
         );
 
-        Provider.of<UserProvider>(context, listen: false).setUser(userRes.body);
+        Provider.of<UserProvider>(
+          context,
+          listen: false,
+        ).setUser(userRes.body);
+
+        print('Token: $token');
       }
     } catch (error) {
       IconSnackBar.show(
