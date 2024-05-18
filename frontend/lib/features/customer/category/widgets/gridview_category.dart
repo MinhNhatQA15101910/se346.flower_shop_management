@@ -21,10 +21,11 @@ class GridViewCategory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(
                 endIndex < 8 ? 4 : 8 - startIndex,
-                (innerIndex) => const SingleCategoryCard(
-                  titleText: 'Category 1',
-                  imagePath: 'assets/images/img_category_demo.png',
-                ),
+                (innerIndex) => Container(),
+                // (innerIndex) => const SingleCategoryCard(
+                //   titleText: 'Category 1',
+                //   imagePath: 'assets/images/img_category_demo.png',
+                // ),
               ),
             );
           },

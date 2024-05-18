@@ -54,7 +54,8 @@ class DealsOfDayScreen extends StatelessWidget {
             childAspectRatio: 3 / 5,
           ),
           itemBuilder: (context, index) {
-            return const SingleProductCard();
+            // return const SingleProductCard();
+            return Container();
           },
           physics: const BouncingScrollPhysics(),
         ),

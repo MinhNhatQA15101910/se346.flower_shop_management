@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String uri = 'http://192.168.1.10:3000';
+String uri = 'http://172.20.48.67:3000';
 
 class GlobalVariables {
   // Base Variables
@@ -27,6 +27,7 @@ class GlobalVariables {
   static const Color pureWhite = Color(0xFFFFFFFF);
   static const Color pinputColor = Color(0xFF545454);
   static const Color black = Color(0xFF000000);
+  static const Color blackTextColor = Color(0xFF27272A);
 
   // Define Scales
   static void init(BuildContext context) async {

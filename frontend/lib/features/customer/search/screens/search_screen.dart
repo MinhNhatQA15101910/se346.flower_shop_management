@@ -163,7 +163,8 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               itemCount: 10,
               itemBuilder: (context, index) {
-                return SingleProductCard();
+                // return SingleProductCard();
+                return Container();
               },
             ),
           ],

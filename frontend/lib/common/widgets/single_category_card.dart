@@ -1,20 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/models/category.dart';
+import 'package:frontend/models/occasion.dart';
+import 'package:frontend/models/type.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SingleCategoryCard extends StatelessWidget {
-  final String titleText;
-  final String imagePath;
-
   const SingleCategoryCard({
     super.key,
-    required this.titleText,
-    required this.imagePath,
+    this.category,
+    this.type,
+    this.occasion,
   });
+
+  final Category? category;
+  final Type? type;
+  final Occasion? occasion;
+
+  String capitalize(String s) {
+    return "${s[0].toUpperCase()}${s.substring(1).toLowerCase()}";
+  }
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = category != null
+        ? category!.imageUrl
+        : type != null
+            ? category!.imageUrl
+            : occasion != null
+                ? occasion!.imageUrl
+                : '';
+    final name = category != null
+        ? category!.name
+        : type != null
+            ? category!.name
+            : occasion != null
+                ? occasion!.name
+                : '';
+
     return Container(
       width: 64,
       margin: const EdgeInsets.only(
@@ -31,7 +55,7 @@ class SingleCategoryCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
-                image: AssetImage(imagePath),
+                image: NetworkImage(imageUrl),
                 fit: BoxFit.cover,
               ),
             ),
@@ -40,11 +64,10 @@ class SingleCategoryCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(),
             child: Text(
-              titleText,
+              capitalize(name),
               style: GoogleFonts.inter(
                 color: GlobalVariables.darkGreen,
                 fontSize: 14,
-                fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.center,
               maxLines: 2,

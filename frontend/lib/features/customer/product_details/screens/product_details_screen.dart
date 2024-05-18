@@ -263,7 +263,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       itemCount: 10,
                       itemBuilder: (context, index) {
-                        return SingleProductCard();
+                        // return SingleProductCard();
+                        return Container();
                       },
                     ),
                   ],
