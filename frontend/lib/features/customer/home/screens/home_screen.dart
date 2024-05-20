@@ -7,6 +7,7 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:frontend/features/customer/deals_of_day/screens/deals_of_day_screen.dart';
 import 'package:frontend/features/customer/home/services/home_service.dart';
+import 'package:frontend/features/customer/recommended_products/screens/recommended_products_screen.dart';
 import 'package:frontend/models/category.dart';
 import 'package:frontend/models/product.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,6 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void _navigateToDealsOfDayScreen() {
     Navigator.of(context).pushNamed(
       DealsOfDayScreen.routeName,
+    );
+  }
+
+  void _navigateToRecommendedProductsScreen() {
+    Navigator.of(context).pushNamed(
+      RecommendedProductsScreen.routeName,
     );
   }
 
@@ -272,12 +279,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: GlobalVariables.blackTextColor,
                     ),
                   ),
-                  Text(
-                    'View more >',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: GlobalVariables.green,
+                  GestureDetector(
+                    onTap: _navigateToRecommendedProductsScreen,
+                    child: Text(
+                      'View more >',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: GlobalVariables.green,
+                      ),
                     ),
                   ),
                 ],
