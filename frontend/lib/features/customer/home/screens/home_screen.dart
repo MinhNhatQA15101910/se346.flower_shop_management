@@ -14,7 +14,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    super.key,
+    required this.changeToCategoryScreen,
+  });
+
+  final VoidCallback changeToCategoryScreen;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -235,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: _navigateToDealsOfDayScreen,
+                        onTap: widget.changeToCategoryScreen,
                         child: Text(
                           'View more >',
                           style: GoogleFonts.inter(

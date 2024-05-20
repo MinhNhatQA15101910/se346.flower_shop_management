@@ -18,11 +18,26 @@ class _CustomerBottomBarState extends State<CustomerBottomBar> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const HomeScreen(),
     const CategoryScreen(),
     const SearchScreen(),
     const AccountScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pages.insert(
+      0,
+      HomeScreen(
+        changeToCategoryScreen: () {
+          setState(() {
+            _selectedIndex = 1;
+          });
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +52,10 @@ class _CustomerBottomBarState extends State<CustomerBottomBar> {
             color: Colors.white,
             activeColor: GlobalVariables.darkGreen,
             tabBackgroundColor: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 10.0,
+            ),
             selectedIndex: _selectedIndex,
             onTabChange: (index) {
               setState(() {
