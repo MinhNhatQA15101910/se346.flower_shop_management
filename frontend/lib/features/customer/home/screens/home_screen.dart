@@ -22,8 +22,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _homeService = HomeService();
 
+  final _recommendProductsScrollController = ScrollController();
+
   List<Product>? _dealsOfDayProducts;
   List<Category>? _categories;
+  List<Product>? _recommendedProducts;
 
   int _activeIndex = 0;
 
@@ -37,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _fetchDealOfDayProductsInFirstPage() async {
     _dealsOfDayProducts =
-        await _homeService.fetchDealOfDayProductsInFirstPage(context);
+        await _homeService.fetchAllDealOfDayProducts(context, 1);
     setState(() {});
   }
 
@@ -46,11 +49,24 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
+  void _fetchRecommendedProductsInFirstPage() async {
+    List<Product> newProducts = await _homeService.fetchAllRecommendedProducts(
+      context,
+      1,
+    );
+
+    setState(() {
+      _recommendedProducts = newProducts;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+
     _fetchDealOfDayProductsInFirstPage();
     _fetchAllCategories();
+    _fetchRecommendedProductsInFirstPage();
   }
 
   @override
@@ -265,10 +281,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               const SizedBox(height: 12),
-              _dealsOfDayProducts == null
+              _recommendedProducts == null
                   ? const Loader()
                   : GridView.builder(
-                      itemCount: _dealsOfDayProducts!.length,
+                      controller: _recommendProductsScrollController,
+                      itemCount: _recommendedProducts!.length,
                       shrinkWrap: true,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -279,7 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       itemBuilder: (context, index) {
                         return SingleProductCard(
-                          product: _dealsOfDayProducts![index],
+                          product: _recommendedProducts![index],
                         );
                       },
                       physics: const NeverScrollableScrollPhysics(),
@@ -289,5 +306,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _recommendProductsScrollController.dispose();
+    super.dispose();
   }
 }

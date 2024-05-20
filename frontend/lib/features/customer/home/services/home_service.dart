@@ -12,8 +12,9 @@ import 'package:http/http.dart' as http;
 
 class HomeService {
   // Fetch all deal of day products in the first page
-  Future<List<Product>> fetchDealOfDayProductsInFirstPage(
+  Future<List<Product>> fetchAllDealOfDayProducts(
     BuildContext context,
+    int page
   ) async {
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -22,7 +23,7 @@ class HomeService {
     List<Product> productList = [];
     try {
       http.Response res = await http.get(
-        Uri.parse('$uri/customer/deals-of-day'),
+        Uri.parse('$uri/customer/deals-of-day?page=$page'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,
@@ -93,5 +94,48 @@ class HomeService {
     }
 
     return categoryList;
+  }
+
+  // Fetch all recommended products in the first page
+  Future<List<Product>> fetchAllRecommendedProducts(
+    BuildContext context,
+    int page,
+  ) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    List<Product> productList = [];
+    try {
+      http.Response res = await http.get(
+        Uri.parse('$uri/customer/recommended-products?page=$page'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: res,
+        context: context,
+        onSuccess: () {
+          for (var object in jsonDecode(res.body)['results']) {
+            productList.add(
+              Product.fromJson(
+                jsonEncode(object),
+              ),
+            );
+          }
+        },
+      );
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+
+    return productList;
   }
 }
