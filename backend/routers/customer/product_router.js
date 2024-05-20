@@ -31,39 +31,11 @@ productRouter.get("/customer/deals-of-day", authValidator, async (req, res) => {
     const totalResults = products.rowCount;
 
     if (page) {
-      if (page !== 1) {
-        if (page <= 0 || page > totalPages) {
-          await db.end();
-          return res.status(400).json({
-            msg: `Invalid page: Pages start at 1 and max at ${totalPages}. They are expected to be an integer.`,
-          });
-        } else {
-          if (page === totalPages) {
-            const results = products.rows.splice((page - 1) * 10);
-            for (let i = 0; i < results.length; i++) {
-              let imageUrlList = await db.query(
-                "SELECT image_url FROM product_images WHERE product_id = $1",
-                [results[i].id]
-              );
-
-              let imageUrls = [];
-              for (let j = 0; j < imageUrlList.rowCount; j++) {
-                imageUrls.push(imageUrlList.rows[j].image_url);
-              }
-
-              results[i].image_urls = imageUrls;
-            }
-
-            await db.end();
-
-            return res.json({
-              page,
-              results,
-              total_pages: totalPages,
-              total_results: totalResults,
-            });
-          }
-        }
+      if (!Number(page) || page <= 0) {
+        await db.end();
+        return res.status(400).json({
+          msg: `Invalid page: Pages start at 1 and max at ${totalPages}. They are expected to be an integer.`,
+        });
       }
     } else {
       page = 1;
@@ -115,39 +87,11 @@ productRouter.get(
       const totalResults = products.rowCount;
 
       if (page) {
-        if (page !== 1) {
-          if (page <= 0 || page > totalPages) {
-            await db.end();
-            return res.status(400).json({
-              msg: `Invalid page: Pages start at 1 and max at ${totalPages}. They are expected to be an integer.`,
-            });
-          } else {
-            if (page === totalPages) {
-              const results = products.rows.splice((page - 1) * 10);
-              for (let i = 0; i < results.length; i++) {
-                let imageUrlList = await db.query(
-                  "SELECT image_url FROM product_images WHERE product_id = $1",
-                  [results[i].id]
-                );
-
-                let imageUrls = [];
-                for (let j = 0; j < imageUrlList.rowCount; j++) {
-                  imageUrls.push(imageUrlList.rows[j].image_url);
-                }
-
-                results[i].image_urls = imageUrls;
-              }
-
-              await db.end();
-
-              return res.json({
-                page,
-                results,
-                total_pages: totalPages,
-                total_results: totalResults,
-              });
-            }
-          }
+        if (!Number(page) || page <= 0) {
+          await db.end();
+          return res.status(400).json({
+            msg: `Invalid page: Pages start at 1 and max at ${totalPages}. They are expected to be an integer.`,
+          });
         }
       } else {
         page = 1;

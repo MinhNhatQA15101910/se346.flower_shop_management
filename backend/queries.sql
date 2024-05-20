@@ -216,17 +216,17 @@ INSERT INTO products (name, price, sale_price, sale_percentage, detail_descripti
 ('Springtime Surprise', 49.99, 39.99, 20, 'A delightful combination of spring flowers and chocolates, perfect for bringing cheer to any occasion.', 'Small', 1, 'Assorted', 'Flowers, Chocolate', 35, 0, 0, 0, TRUE),
 ('Charming Greetings Bouquet', 59.99, 49.99, 17, 'A beautiful bouquet of assorted flowers paired with a heartfelt greeting card, perfect for expressing warm wishes.', 'Medium', 2, 'Assorted', 'Flowers, Paper', 30, 0, 0, 0, TRUE);
 
-INSERT INTO products (name, price, sale_price, sale_percentage, detail_description, size, color, material, stock, sold, rating_avg, total_rating, is_available) VALUES 
-('Red Roses Bouquet', 30, 25, 17, 'A classic bouquet of fresh red roses, symbolizing love and passion.', 'Standard', 'Red', 'Fresh Roses', 50, 0, 0, 0, TRUE),
-('White Orchid Arrangement', 40, 35, 12.5, 'Elegant arrangement of white orchids, perfect for sophisticated occasions.', 'Medium', 'White', 'Fresh Orchids', 30, 0, 0, 0, TRUE),
-('Rainbow Gerbera Bouquet', 25, 20, 20, 'Vibrant bouquet featuring a mix of colorful gerbera daisies.', 'Standard', 'Multi-color', 'Fresh Gerbera Daisies', 40, 0, 0, 0, TRUE),
-('Pink Lily Vase', 35, 30, 14.3, 'Graceful arrangement of pink lilies in a glass vase.', 'Large', 'Pink', 'Fresh Lilies', 20, 0, 0, 0, TRUE),
-('Mixed Flower Basket', 50, 45, 10, 'Charming basket filled with an assortment of seasonal flowers.', 'Medium', 'Mixed', 'Fresh Mixed Flowers', 25, 0, 0, 0, TRUE),
-('Elegant Carnation Bouquet', 30, 25, 17, 'Classic bouquet of carnations in elegant hues.', 'Standard', 'Various', 'Fresh Carnations', 35, 0, 0, 0, TRUE),
-('Chocolate Bouquet', 45, 40, 11.1, 'Bouquet crafted from premium chocolates, a delightful treat for any occasion.', 'Large', 'Brown', 'Assorted Chocolates', 15, 0, 0, 0, TRUE),
-('Sunshine Yellow Roses Bouquet', 35, 30, 14.3, 'Bright and cheerful bouquet featuring yellow roses to spread happiness.', 'Standard', 'Yellow', 'Fresh Roses', 45, 0, 0, 0, TRUE),
-('Purple Orchid Lei', 25, 20, 20, 'Exotic lei made of purple orchids, perfect for Hawaiian-themed parties.', 'Standard', 'Purple', 'Fresh Orchids', 20, 0, 0, 0, TRUE),
-('Pink Gerbera Daisy Bunch', 20, 18, 10, 'Delicate bunch of pink gerbera daisies, perfect for expressing affection.', 'Small', 'Pink', 'Fresh Gerbera Daisies', 30, 0, 0, 0, TRUE);
+INSERT INTO products (name, price, sale_price, sale_percentage, detail_description, size, weight, color, material, stock, sold, rating_avg, total_rating, is_available) VALUES 
+('Red Roses Bouquet', 30, 25, 17, 'A classic bouquet of fresh red roses, symbolizing love and passion.', 'Standard', 0, 'Red', 'Fresh Roses', 50, 0, 0, 0, TRUE),
+('White Orchid Arrangement', 40, 35, 12.5, 'Elegant arrangement of white orchids, perfect for sophisticated occasions.', 'Medium', 0, 'White', 'Fresh Orchids', 30, 0, 0, 0, TRUE),
+('Rainbow Gerbera Bouquet', 25, 20, 20, 'Vibrant bouquet featuring a mix of colorful gerbera daisies.', 'Standard', 0, 'Multi-color', 'Fresh Gerbera Daisies', 40, 0, 0, 0, TRUE),
+('Pink Lily Vase', 35, 30, 14.3, 'Graceful arrangement of pink lilies in a glass vase.', 'Large', 0, 'Pink', 'Fresh Lilies', 20, 0, 0, 0, TRUE),
+('Mixed Flower Basket', 50, 45, 10, 'Charming basket filled with an assortment of seasonal flowers.', 'Medium', 0, 'Mixed', 'Fresh Mixed Flowers', 25, 0, 0, 0, TRUE),
+('Elegant Carnation Bouquet', 30, 25, 17, 'Classic bouquet of carnations in elegant hues.', 'Standard', 0, 'Various', 'Fresh Carnations', 35, 0, 0, 0, TRUE),
+('Chocolate Bouquet', 45, 40, 11.1, 'Bouquet crafted from premium chocolates, a delightful treat for any occasion.', 'Large', 0, 'Brown', 'Assorted Chocolates', 15, 0, 0, 0, TRUE),
+('Sunshine Yellow Roses Bouquet', 35, 30, 14.3, 'Bright and cheerful bouquet featuring yellow roses to spread happiness.', 'Standard', 0, 'Yellow', 'Fresh Roses', 45, 0, 0, 0, TRUE),
+('Purple Orchid Lei', 25, 20, 20, 'Exotic lei made of purple orchids, perfect for Hawaiian-themed parties.', 'Standard', 0, 'Purple', 'Fresh Orchids', 20, 0, 0, 0, TRUE),
+('Pink Gerbera Daisy Bunch', 20, 18, 10, 'Delicate bunch of pink gerbera daisies, perfect for expressing affection.', 'Small', 0, 'Pink', 'Fresh Gerbera Daisies', 30, 0, 0, 0, TRUE);
 
 INSERT INTO products (name, price, sale_price, sale_percentage, detail_description, size, weight, color, material, stock, sold, rating_avg, total_rating, is_available) VALUES 
 ('Happy Birthday Bash Cake', 39.99, 34.99, 12.5, 'A colorful and fun birthday cake decorated with balloons and confetti.', 'Medium', 2, 'Assorted', 'Fondant', 30, 0, 0, 0, TRUE),

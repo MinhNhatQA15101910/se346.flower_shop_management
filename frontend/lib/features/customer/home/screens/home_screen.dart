@@ -31,7 +31,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _activeIndex = 0;
 
   void _navigateToDealsOfDayScreen() {
-    Navigator.of(context).pushNamed(DealsOfDayScreen.routeName);
+    Navigator.of(context).pushNamed(
+      DealsOfDayScreen.routeName,
+    );
   }
 
   void _navigateToCartScreen() {

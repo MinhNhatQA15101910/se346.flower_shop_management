@@ -27,7 +27,7 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case DealsOfDayScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) => const DealsOfDayScreen(),
+        builder: (_) => DealsOfDayScreen(),
       );
     case CartScreen.routeName:
       return MaterialPageRoute(
