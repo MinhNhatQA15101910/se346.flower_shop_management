@@ -393,12 +393,14 @@ INSERT INTO product_images (product_id, image_url) VALUES
 
 INSERT INTO product_type (product_id, type_id) VALUES
 (1, 1),
+(1, 2),
 (1, 3),
 
 (2, 1),
 (2, 4),
 
 (3, 1),
+(3, 2),
 (3, 6),
 
 (4, 1),
@@ -414,6 +416,7 @@ INSERT INTO product_type (product_id, type_id) VALUES
 (7, 5),
 
 (8, 1),
+(8, 2),
 (8, 6),
 
 (9, 1),
@@ -532,9 +535,11 @@ INSERT INTO product_occasion (product_id, occasion_id) VALUES
 (20, 7),
 (20, 9),
 (20, 10),
+(21, 11),
 (21, 12),
 (22, 13),
 (23, 16),
+(24, 11),
 (24, 12),
 (24, 13),
 (24, 14),
@@ -543,6 +548,7 @@ INSERT INTO product_occasion (product_id, occasion_id) VALUES
 (24, 17),
 (24, 18),
 (25, 12),
+(26, 11),
 (26, 13),
 (27, 12),
 (27, 13),

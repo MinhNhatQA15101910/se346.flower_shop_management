@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:frontend/common/widgets/loader.dart';
-import 'package:frontend/common/widgets/single_category_card.dart';
 import 'package:frontend/common/widgets/single_product_card.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
+import 'package:frontend/features/customer/category/services/category_service.dart';
+import 'package:frontend/features/customer/category/widgets/gridview_category.dart';
 import 'package:frontend/features/customer/deals_of_day/screens/deals_of_day_screen.dart';
 import 'package:frontend/features/customer/home/services/home_service.dart';
 import 'package:frontend/features/customer/recommended_products/screens/recommended_products_screen.dart';
-import 'package:frontend/models/category.dart';
 import 'package:frontend/models/product.dart';
+import 'package:frontend/models/type.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -27,11 +28,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _homeService = HomeService();
+  final _categoryService = CategoryService();
 
   final _recommendProductsScrollController = ScrollController();
 
   List<Product>? _dealsOfDayProducts;
-  List<Category>? _categories;
+  List<Type>? _comboTypes;
   List<Product>? _recommendedProducts;
 
   int _activeIndex = 0;
@@ -55,11 +57,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void _fetchDealOfDayProductsInFirstPage() async {
     _dealsOfDayProducts =
         await _homeService.fetchAllDealOfDayProducts(context, 1);
+
+    if (!mounted) return;
+
     setState(() {});
   }
 
-  void _fetchAllCategories() async {
-    _categories = await _homeService.fetchAllCategories(context);
+  void _fetchAllComboTypes() async {
+    _comboTypes = await _categoryService.fetchAllTypes(context, 1);
     setState(() {});
   }
 
@@ -79,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     _fetchDealOfDayProductsInFirstPage();
-    _fetchAllCategories();
+    _fetchAllComboTypes();
     _fetchRecommendedProductsInFirstPage();
   }
 
@@ -253,22 +258,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  _categories == null
+                  _comboTypes == null
                       ? const Loader()
-                      : SizedBox(
-                          height: 100,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(0),
-                            itemCount: _categories!.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return SingleCategoryCard(
-                                category: _categories![index],
-                              );
-                            },
-                            physics: const BouncingScrollPhysics(),
-                          ),
+                      : GridViewCategory(
+                          types: _comboTypes,
                         ),
                 ],
               ),

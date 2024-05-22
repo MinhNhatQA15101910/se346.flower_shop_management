@@ -27,7 +27,8 @@ class ProductGridView extends StatelessWidget {
             onRefresh: onRefresh,
             child: GridView.builder(
               controller: controller,
-              itemCount: productList.length + 2,
+              itemCount:
+                  hasProduct ? productList.length + 1 : productList.length,
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
