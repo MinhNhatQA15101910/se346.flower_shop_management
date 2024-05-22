@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:frontend/common/widgets/product_grid_view.dart';
 import 'package:frontend/constants/global_variables.dart';
-
-//Widget imports
-import 'package:frontend/common/widgets/single_product_card.dart';
+import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
+import 'package:frontend/features/customer/home/services/home_service.dart';
 import 'package:frontend/features/customer/search/widgets/filter_btm_sheet.dart';
 import 'package:frontend/features/customer/search/widgets/sort_btm_sheet.dart';
+import 'package:frontend/models/product.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -16,16 +16,68 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final _homeService = HomeService();
+
+  final _controller = ScrollController();
   final _textController = TextEditingController();
 
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
+  List<Product> _productList = [];
+
+  var _currentPage = 1;
+  var _hasProduct = true;
+  var _isLoading = false;
 
   void _navigateToCartScreen() {
     Navigator.of(context).pushNamed(CartScreen.routeName);
+  }
+
+  void _fetchAllRecommendedProducts() async {
+    if (_isLoading) return;
+    _isLoading = true;
+
+    const limit = 10;
+
+    final newProducts = await _homeService.fetchAllRecommendedProducts(
+      context,
+      _currentPage++,
+    );
+
+    setState(() {
+      _isLoading = false;
+
+      if (newProducts.isEmpty) {
+        _hasProduct = false;
+      } else {
+        _productList.addAll(newProducts);
+        if (newProducts.length < limit) {
+          _hasProduct = false;
+        }
+      }
+    });
+  }
+
+  Future<void> _onRefresh() async {
+    setState(() {
+      _isLoading = false;
+      _hasProduct = true;
+      _currentPage = 1;
+      _productList.clear();
+    });
+
+    _fetchAllRecommendedProducts();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchAllRecommendedProducts();
+
+    _controller.addListener(() {
+      if (_controller.position.maxScrollExtent == _controller.offset) {
+        _fetchAllRecommendedProducts();
+      }
+    });
   }
 
   @override
@@ -35,31 +87,27 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Search',
-                style: GoogleFonts.pacifico(
-                  fontSize: 30,
-                  decoration: TextDecoration.none,
-                  color: GlobalVariables.darkGreen,
-                ),
-              ),
-              IconButton(
-                onPressed: _navigateToCartScreen,
-                iconSize: 30,
-                icon: const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: GlobalVariables.darkGreen,
-                ),
-              ),
-            ],
+          title: Text(
+            'Search',
+            style: GoogleFonts.pacifico(
+              fontSize: 30,
+              decoration: TextDecoration.none,
+              color: GlobalVariables.darkGreen,
+            ),
           ),
+          actions: [
+            IconButton(
+              onPressed: _navigateToCartScreen,
+              iconSize: 30,
+              icon: const Icon(
+                Icons.shopping_cart_outlined,
+                color: GlobalVariables.darkGreen,
+              ),
+            ),
+          ],
         ),
       ),
-      body: SingleChildScrollView(
-          child: Padding(
+      body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
@@ -104,12 +152,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 ElevatedButton(
                   onPressed: () => {
                     showModalBottomSheet<dynamic>(
-                        context: context,
-                        useRootNavigator: true,
-                        isScrollControlled: true,
-                        builder: (BuildContext context) {
-                          return FilterBtmSheet();
-                        })
+                      context: context,
+                      useRootNavigator: true,
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return FilterBtmSheet();
+                      },
+                    )
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
@@ -139,7 +188,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     backgroundColor: Colors.transparent,
                     foregroundColor: GlobalVariables.darkGreen,
                     shadowColor: Colors.transparent,
-                    side: const BorderSide(color: GlobalVariables.darkGreen),
+                    side: const BorderSide(
+                      color: GlobalVariables.darkGreen,
+                    ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -152,24 +203,24 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.7,
+            Expanded(
+              child: ProductGridView(
+                productList: _productList,
+                controller: _controller,
+                hasProduct: _hasProduct,
+                onRefresh: _onRefresh,
               ),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                // return SingleProductCard();
-                return Container();
-              },
-            ),
+            )
           ],
         ),
-      )),
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 }

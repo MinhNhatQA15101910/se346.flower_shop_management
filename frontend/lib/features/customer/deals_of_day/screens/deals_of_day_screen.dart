@@ -33,6 +33,8 @@ class _DealsOfDayScreenState extends State<DealsOfDayScreen> {
     if (_isLoading) return;
     _isLoading = true;
 
+    const limit = 10;
+
     final newProducts = await _homeService.fetchAllDealOfDayProducts(
       context,
       _currentPage++,
@@ -45,6 +47,9 @@ class _DealsOfDayScreenState extends State<DealsOfDayScreen> {
         _hasProduct = false;
       } else {
         _productList.addAll(newProducts);
+        if (newProducts.length < limit) {
+          _hasProduct = false;
+        }
       }
     });
   }

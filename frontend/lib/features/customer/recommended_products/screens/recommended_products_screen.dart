@@ -34,6 +34,8 @@ class _RecommendedProductsScreenState extends State<RecommendedProductsScreen> {
     if (_isLoading) return;
     _isLoading = true;
 
+    const limit = 10;
+
     final newProducts = await _homeService.fetchAllRecommendedProducts(
       context,
       _currentPage++,
@@ -46,6 +48,9 @@ class _RecommendedProductsScreenState extends State<RecommendedProductsScreen> {
         _hasProduct = false;
       } else {
         _productList.addAll(newProducts);
+        if (newProducts.length < limit) {
+          _hasProduct = false;
+        }
       }
     });
   }
