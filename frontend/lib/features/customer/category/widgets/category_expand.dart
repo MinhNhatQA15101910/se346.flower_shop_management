@@ -1,17 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/category/services/category_service.dart';
 import 'package:frontend/features/customer/category/widgets/gridview_category.dart';
+import 'package:frontend/models/occasion.dart';
+import 'package:frontend/models/type.dart';
 
 class CategoryExpand extends StatefulWidget {
-  final String titleText;
+  const CategoryExpand({
+    super.key,
+    required this.titleText,
+    required this.categoryId,
+  });
 
-  const CategoryExpand({super.key, required this.titleText});
+  final String titleText;
+  final int categoryId;
 
   @override
   State<CategoryExpand> createState() => _CategoryExpandState();
 }
 
 class _CategoryExpandState extends State<CategoryExpand> {
+  final _categoryService = CategoryService();
+
+  List<Object>? _objectList;
+
+  void _fetchObjectList() async {
+    if (widget.titleText == 'Types') {
+      _objectList = await _categoryService.fetchAllTypes(
+        context,
+        widget.categoryId,
+      );
+    } else {
+      _objectList = await _categoryService.fetchAllOccasions(
+        context,
+        widget.categoryId,
+      );
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchObjectList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -42,8 +77,15 @@ class _CategoryExpandState extends State<CategoryExpand> {
                 ),
               ),
             ),
-            children: const [
-              GridViewCategory(),
+            children: [
+              if (widget.titleText == 'Types')
+                GridViewCategory(
+                  types: _objectList as List<Type>?,
+                ),
+              if (widget.titleText == 'Occasions')
+                GridViewCategory(
+                  occasions: _objectList as List<Occasion>?,
+                ),
             ],
           ),
         ),

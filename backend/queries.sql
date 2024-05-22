@@ -34,22 +34,22 @@ CREATE TABLE types (
 );
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'All Combos', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624804/types/All%20Combos/types-all-combos_lhsww9.jpg');
+VALUES (1, 'All Combos', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624804/types/All%20Combos/types-all-combos_lhsww9.jpg');
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'Cakes & Flower', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624494/types/Cakes%20and%20Flower/types-cakes-and-flower_gk5kqy.jpg');
+VALUES (1, 'Cakes & Flower', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624494/types/Cakes%20and%20Flower/types-cakes-and-flower_gk5kqy.jpg');
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'Flower & Chocolate', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624559/types/Flower%20and%20Chocolate/types-flower-and-chocolate_dtj1o9.jpg');
+VALUES (1, 'Flower & Chocolate', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624559/types/Flower%20and%20Chocolate/types-flower-and-chocolate_dtj1o9.jpg');
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'Flowers & Teddy', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624611/types/Flowers%20and%20Teddy/types-flowers-and-teddy_zsiaqj.jpg');
+VALUES (1, 'Flowers & Teddy', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624611/types/Flowers%20and%20Teddy/types-flowers-and-teddy_zsiaqj.jpg');
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'Jumbo Combo', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624695/types/Jumbo%20Combo/types-jumbo-combo_qjbw6l.jpg');
+VALUES (1, 'Jumbo Combo', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624695/types/Jumbo%20Combo/types-jumbo-combo_qjbw6l.jpg');
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'Greeting Card Combo', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624775/types/Greeting%20Card%20Combo/types-greeting-card-combo_smy5yn.jpg');
+VALUES (1, 'Greeting Card Combo', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624775/types/Greeting%20Card%20Combo/types-greeting-card-combo_smy5yn.jpg');
 
 INSERT INTO types (category_id, name, image_url)
 VALUES (2, 'All Flowers', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713592337/types/All%20Flowers/types-all-flowers_g8qn1f.jpg');

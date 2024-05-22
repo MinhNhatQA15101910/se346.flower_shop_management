@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/customer/category/widgets/category_expand.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/models/category.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LargeCategoryItem extends StatefulWidget {
-  final String titleText;
-  final String imagePath;
-
   const LargeCategoryItem({
     super.key,
-    required this.titleText,
-    required this.imagePath,
+    required this.category,
   });
+
+  final Category category;
 
   @override
   State<LargeCategoryItem> createState() => _LargeCategoryItemState();
 }
 
 class _LargeCategoryItemState extends State<LargeCategoryItem> {
+  String _capitalize(String s) {
+    return "${s[0].toUpperCase()}${s.substring(1).toLowerCase()}";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -46,8 +49,8 @@ class _LargeCategoryItemState extends State<LargeCategoryItem> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(
-                      widget.imagePath,
+                    child: Image.network(
+                      widget.category.imageUrl,
                       width: 80,
                       height: 80,
                       fit: BoxFit.cover,
@@ -58,7 +61,7 @@ class _LargeCategoryItemState extends State<LargeCategoryItem> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
-                    widget.titleText,
+                    _capitalize(widget.category.name),
                     style: GoogleFonts.inter(
                       color: GlobalVariables.darkGreen,
                       fontSize: 20,
@@ -68,12 +71,18 @@ class _LargeCategoryItemState extends State<LargeCategoryItem> {
                 ),
               ],
             ),
-            children: const [
+            children: [
               Column(
                 children: [
-                  CategoryExpand(titleText: 'Types'),
+                  CategoryExpand(
+                    titleText: 'Types',
+                    categoryId: widget.category.id,
+                  ),
                   SizedBox(height: 10),
-                  CategoryExpand(titleText: 'Occasions'),
+                  CategoryExpand(
+                    titleText: 'Occasions',
+                    categoryId: widget.category.id,
+                  ),
                 ],
               ),
             ],

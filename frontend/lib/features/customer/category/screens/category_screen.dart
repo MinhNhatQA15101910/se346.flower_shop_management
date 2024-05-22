@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/common/widgets/loader.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:frontend/features/customer/category/widgets/large_category_item.dart';
+import 'package:frontend/features/customer/home/services/home_service.dart';
+import 'package:frontend/models/category.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -12,8 +15,24 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+  final _homeService = HomeService();
+
+  List<Category>? _categories;
+
   void _navigateToCartScreen() {
     Navigator.of(context).pushNamed(CartScreen.routeName);
+  }
+
+  void _fetchAllCategories() async {
+    _categories = await _homeService.fetchAllCategories(context);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchAllCategories();
   }
 
   @override
@@ -45,27 +64,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
           ),
         ),
       ),
-      body: const SingleChildScrollView(
-        child: Column(
-          children: [
-            LargeCategoryItem(
-              titleText: 'Combo',
-              imagePath: 'assets/images/img_combo.png',
+      body: _categories == null
+          ? const Loader()
+          : ListView.builder(
+              itemCount: _categories!.length,
+              itemBuilder: (context, index) => LargeCategoryItem(
+                category: _categories![index],
+              ),
             ),
-            SizedBox(height: 10),
-            LargeCategoryItem(
-              titleText: 'Cake',
-              imagePath: 'assets/images/img_cake.png',
-            ),
-            SizedBox(height: 10),
-            LargeCategoryItem(
-              titleText: 'Flower',
-              imagePath: 'assets/images/img_flower.png',
-            ),
-            SizedBox(height: 10),
-          ],
-        ),
-      ),
     );
   }
 }

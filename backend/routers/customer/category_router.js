@@ -32,4 +32,60 @@ categoryRouter.get("/customer/categories", authValidator, async (req, res) => {
   }
 });
 
+// Fetch all types
+categoryRouter.get("/customer/types", authValidator, async (req, res) => {
+  try {
+    const db = getDatabaseInstance();
+
+    const { category_id } = req.query;
+
+    if (category_id) {
+      const categories = await db.query(
+        "SELECT * FROM types WHERE category_id = $1",
+        [category_id]
+      );
+
+      await db.end();
+
+      return res.json(categories.rows);
+    }
+
+    const categories = await db.query("SELECT * FROM types");
+
+    await db.end();
+
+    res.json(categories.rows);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Fetch all occasions
+categoryRouter.get("/customer/occasions", authValidator, async (req, res) => {
+  try {
+    const db = getDatabaseInstance();
+
+    const { category_id } = req.query;
+
+    if (category_id) {
+      const categories = await db.query(
+        "SELECT * FROM occasions WHERE category_id = $1",
+        [category_id]
+      );
+
+      await db.end();
+
+      return res.json(categories.rows);
+    }
+
+    const categories = await db.query("SELECT * FROM occasions");
+
+    await db.end();
+
+    res.json(categories.rows);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 export default categoryRouter;

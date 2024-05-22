@@ -27,20 +27,19 @@ class SingleCategoryCard extends StatelessWidget {
     final imageUrl = category != null
         ? category!.imageUrl
         : type != null
-            ? category!.imageUrl
+            ? type!.imageUrl
             : occasion != null
                 ? occasion!.imageUrl
                 : '';
     final name = category != null
         ? category!.name
         : type != null
-            ? category!.name
+            ? type!.name
             : occasion != null
                 ? occasion!.name
                 : '';
 
     return Container(
-      width: 64,
       margin: const EdgeInsets.only(
         top: 8,
         left: 8,
@@ -61,18 +60,15 @@ class SingleCategoryCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(),
-            child: Text(
-              capitalize(name),
-              style: GoogleFonts.inter(
-                color: GlobalVariables.darkGreen,
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+          Text(
+            capitalize(name),
+            style: GoogleFonts.inter(
+              color: GlobalVariables.darkGreen,
+              fontSize: 14,
             ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 8),
         ],
