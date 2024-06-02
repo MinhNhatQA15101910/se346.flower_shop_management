@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
@@ -16,18 +15,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-String generateRandomNumberString() {
-  Random random = Random();
-
-  String randomNumberString = '';
-  for (int i = 0; i < 6; i++) {
-    int randomNumber = random.nextInt(10);
-    randomNumberString += randomNumber.toString();
-  }
-
-  return randomNumberString;
-}
 
 class AuthService {
   // Sign up user

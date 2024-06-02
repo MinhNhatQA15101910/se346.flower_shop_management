@@ -8,6 +8,7 @@ import 'package:frontend/features/customer/deals_of_day/screens/deals_of_day_scr
 import 'package:frontend/features/customer/product_details/screens/product_details_screen.dart';
 import 'package:frontend/features/customer/checkout/screens/checkout_screen.dart';
 import 'package:frontend/features/customer/recommended_products/screens/recommended_products_screen.dart';
+import 'package:frontend/features/customer/search/screens/search_screen.dart';
 import 'package:frontend/models/occasion.dart';
 import 'package:frontend/models/type.dart';
 
@@ -55,6 +56,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
           ),
         );
       }
+    case SearchScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const SearchScreen(),
+      );
     case CartScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,

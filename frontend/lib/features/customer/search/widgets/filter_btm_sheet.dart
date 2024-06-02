@@ -10,6 +10,7 @@ const List<Widget> priceRangeList = [
 ];
 
 const List<Widget> productTypeList = [
+  Text('Old'),
   Text('New'),
   Text('On sale'),
 ];
