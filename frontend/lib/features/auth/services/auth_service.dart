@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
@@ -16,18 +15,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-String generateRandomNumberString() {
-  Random random = Random();
-
-  String randomNumberString = '';
-  for (int i = 0; i < 6; i++) {
-    int randomNumber = random.nextInt(10);
-    randomNumberString += randomNumber.toString();
-  }
-
-  return randomNumberString;
-}
 
 class AuthService {
   // Sign up user
@@ -114,8 +101,10 @@ class AuthService {
           await prefs.setString(
               'x-auth-token', jsonDecode(response.body)['token']);
 
-          Provider.of<UserProvider>(context, listen: false)
-              .setUser(response.body);
+          Provider.of<UserProvider>(
+            context,
+            listen: false,
+          ).setUser(response.body);
 
           Navigator.of(context).pushNamedAndRemoveUntil(
             CustomerBottomBar.routeName,
@@ -271,6 +260,7 @@ class AuthService {
     }
   }
 
+  // Send verify email
   Future<bool> sendVerifyEmail({
     required BuildContext context,
     required String email,
@@ -306,6 +296,7 @@ class AuthService {
     }
   }
 
+  // Change password
   Future<bool> changePassword({
     required BuildContext context,
     required String email,
@@ -343,14 +334,20 @@ class AuthService {
           );
           userProvider.setUserFromModel(user);
 
-          authProvider.setForm(LoginForm());
-          authProvider.setResentEmail('');
-
           IconSnackBar.show(
             context,
             label: 'Change password successfully!',
             snackBarType: SnackBarType.success,
           );
+
+          if (PinputForm.isUserChangePassword) {
+            PinputForm.isUserChangePassword = false;
+            Navigator.of(context).pop();
+            return;
+          }
+
+          authProvider.setForm(LoginForm());
+          authProvider.setResentEmail('');
         },
       );
 
@@ -367,6 +364,52 @@ class AuthService {
       );
 
       return false;
+    }
+  }
+
+  // Get user data
+  void getUserData(BuildContext context) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('x-auth-token');
+
+      if (token == null) {
+        await prefs.setString('x-auth-token', '');
+        return;
+      }
+
+      var tokenRes = await http.post(
+        Uri.parse('$uri/tokenIsValid'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      var isValidToken = jsonDecode(tokenRes.body);
+
+      if (isValidToken) {
+        http.Response userRes = await http.get(
+          Uri.parse('$uri/user'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': token,
+          },
+        );
+
+        Provider.of<UserProvider>(
+          context,
+          listen: false,
+        ).setUser(userRes.body);
+
+        print('Token: $token');
+      }
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
     }
   }
 }

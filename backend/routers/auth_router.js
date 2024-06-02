@@ -9,6 +9,7 @@ import usernameValidator from "../middlewares/username_validator.js";
 import passwordValidator from "../middlewares/password_validator.js";
 import pincodeValidator from "../middlewares/pincode_validator.js";
 import newPasswordValidator from "../middlewares/new_password_validator.js";
+import authValidator from "../middlewares/auth_validator.js";
 
 const authRouter = express.Router();
 
@@ -63,6 +64,8 @@ authRouter.post(
         [email]
       );
       if (existingUser.rowCount > 0) {
+        await db.end();
+
         return res
           .status(400)
           .json({ msg: "User with the same email already exists!" });
@@ -107,6 +110,8 @@ authRouter.post(
         email,
       ]);
       if (user.rowCount === 0) {
+        await db.end();
+
         return res
           .status(400)
           .json({ msg: "User with this email does not exist!" });
@@ -114,13 +119,29 @@ authRouter.post(
 
       const isMatch = await bcryptjs.compare(password, user.rows[0].password);
       if (!isMatch) {
+        await db.end();
+
         return res.status(400).json({ msg: "Incorrect password!" });
       }
+
+      const products = await db.query(
+        "SELECT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1",
+        [user.rows[0].id]
+      );
+      const quantities = await db.query(
+        "SELECT quantity FROM carts WHERE user_id = $1",
+        [user.rows[0].id]
+      );
 
       await db.end();
 
       const token = jwt.sign({ id: user.rows[0].id }, process.env.PASSWORD_KEY);
-      res.json({ token, ...user.rows[0] });
+      res.json({
+        token,
+        ...user.rows[0],
+        products: products.rows,
+        quantities: quantities.rows,
+      });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -153,11 +174,23 @@ authRouter.post(
           { id: existingUser.rows[0].id },
           process.env.PASSWORD_KEY
         );
+
+        const products = await db.query(
+          "SELECT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1",
+          [existingUser.rows[0].id]
+        );
+        const quantities = await db.query(
+          "SELECT quantity FROM carts WHERE user_id = $1",
+          [existingUser.rows[0].id]
+        );
+
+        await db.end();
+
         return res.json({
           token,
           ...existingUser.rows[0],
-          products: [],
-          quantities: [],
+          products: products.rows,
+          quantities: quantities.rows,
         });
       }
 
@@ -179,7 +212,7 @@ authRouter.post(
       );
       res.json({
         token,
-        ...existingUser.rows[0],
+        ...result.rows[0],
         products: [],
         quantities: [],
       });
@@ -315,5 +348,56 @@ authRouter.patch(
     }
   }
 );
+
+// Validate token
+authRouter.post("/tokenIsValid", async (req, res) => {
+  try {
+    const token = req.header("x-auth-token");
+
+    if (!token) {
+      return res.json(false);
+    }
+
+    const verified = jwt.verify(token, process.env.PASSWORD_KEY);
+    if (!verified) {
+      return res.json(false);
+    }
+
+    const db = getDatabaseInstance();
+    const user = await db.query("SELECT * FROM users WHERE id = $1", [
+      verified.id,
+    ]);
+    if (user.rowCount === 0) {
+      return res.json(false);
+    }
+
+    return res.json(true);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get user data
+authRouter.get("/user", authValidator, async (req, res) => {
+  const db = getDatabaseInstance();
+
+  const user = await db.query("SELECT * FROM users WHERE id = $1", [req.user]);
+  const products = await db.query(
+    "SELECT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1",
+    [user.rows[0].id]
+  );
+  const quantities = await db.query(
+    "SELECT quantity FROM carts WHERE user_id = $1",
+    [user.rows[0].id]
+  );
+
+  await db.end();
+  res.json({
+    token: req.token,
+    ...user.rows[0],
+    products: products.rows,
+    quantities: quantities.rows,
+  });
+});
 
 export default authRouter;

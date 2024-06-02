@@ -34,22 +34,22 @@ CREATE TABLE types (
 );
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'All Combos', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624804/types/All%20Combos/types-all-combos_lhsww9.jpg');
+VALUES (1, 'All Combos', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624804/types/All%20Combos/types-all-combos_lhsww9.jpg');
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'Cakes & Flower', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624494/types/Cakes%20and%20Flower/types-cakes-and-flower_gk5kqy.jpg');
+VALUES (1, 'Cakes & Flower', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624494/types/Cakes%20and%20Flower/types-cakes-and-flower_gk5kqy.jpg');
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'Flower & Chocolate', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624559/types/Flower%20and%20Chocolate/types-flower-and-chocolate_dtj1o9.jpg');
+VALUES (1, 'Flower & Chocolate', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624559/types/Flower%20and%20Chocolate/types-flower-and-chocolate_dtj1o9.jpg');
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'Flowers & Teddy', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624611/types/Flowers%20and%20Teddy/types-flowers-and-teddy_zsiaqj.jpg');
+VALUES (1, 'Flowers & Teddy', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624611/types/Flowers%20and%20Teddy/types-flowers-and-teddy_zsiaqj.jpg');
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'Jumbo Combo', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624695/types/Jumbo%20Combo/types-jumbo-combo_qjbw6l.jpg');
+VALUES (1, 'Jumbo Combo', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624695/types/Jumbo%20Combo/types-jumbo-combo_qjbw6l.jpg');
 
 INSERT INTO types (category_id, name, image_url)
-VALUES (2, 'Greeting Card Combo', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624775/types/Greeting%20Card%20Combo/types-greeting-card-combo_smy5yn.jpg');
+VALUES (1, 'Greeting Card Combo', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713624775/types/Greeting%20Card%20Combo/types-greeting-card-combo_smy5yn.jpg');
 
 INSERT INTO types (category_id, name, image_url)
 VALUES (2, 'All Flowers', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713592337/types/All%20Flowers/types-all-flowers_g8qn1f.jpg');
@@ -216,17 +216,17 @@ INSERT INTO products (name, price, sale_price, sale_percentage, detail_descripti
 ('Springtime Surprise', 49.99, 39.99, 20, 'A delightful combination of spring flowers and chocolates, perfect for bringing cheer to any occasion.', 'Small', 1, 'Assorted', 'Flowers, Chocolate', 35, 0, 0, 0, TRUE),
 ('Charming Greetings Bouquet', 59.99, 49.99, 17, 'A beautiful bouquet of assorted flowers paired with a heartfelt greeting card, perfect for expressing warm wishes.', 'Medium', 2, 'Assorted', 'Flowers, Paper', 30, 0, 0, 0, TRUE);
 
-INSERT INTO products (name, price, sale_price, sale_percentage, detail_description, size, color, material, stock, sold, rating_avg, total_rating, is_available) VALUES 
-('Red Roses Bouquet', 30, 25, 17, 'A classic bouquet of fresh red roses, symbolizing love and passion.', 'Standard', 'Red', 'Fresh Roses', 50, 0, 0, 0, TRUE),
-('White Orchid Arrangement', 40, 35, 12.5, 'Elegant arrangement of white orchids, perfect for sophisticated occasions.', 'Medium', 'White', 'Fresh Orchids', 30, 0, 0, 0, TRUE),
-('Rainbow Gerbera Bouquet', 25, 20, 20, 'Vibrant bouquet featuring a mix of colorful gerbera daisies.', 'Standard', 'Multi-color', 'Fresh Gerbera Daisies', 40, 0, 0, 0, TRUE),
-('Pink Lily Vase', 35, 30, 14.3, 'Graceful arrangement of pink lilies in a glass vase.', 'Large', 'Pink', 'Fresh Lilies', 20, 0, 0, 0, TRUE),
-('Mixed Flower Basket', 50, 45, 10, 'Charming basket filled with an assortment of seasonal flowers.', 'Medium', 'Mixed', 'Fresh Mixed Flowers', 25, 0, 0, 0, TRUE),
-('Elegant Carnation Bouquet', 30, 25, 17, 'Classic bouquet of carnations in elegant hues.', 'Standard', 'Various', 'Fresh Carnations', 35, 0, 0, 0, TRUE),
-('Chocolate Bouquet', 45, 40, 11.1, 'Bouquet crafted from premium chocolates, a delightful treat for any occasion.', 'Large', 'Brown', 'Assorted Chocolates', 15, 0, 0, 0, TRUE),
-('Sunshine Yellow Roses Bouquet', 35, 30, 14.3, 'Bright and cheerful bouquet featuring yellow roses to spread happiness.', 'Standard', 'Yellow', 'Fresh Roses', 45, 0, 0, 0, TRUE),
-('Purple Orchid Lei', 25, 20, 20, 'Exotic lei made of purple orchids, perfect for Hawaiian-themed parties.', 'Standard', 'Purple', 'Fresh Orchids', 20, 0, 0, 0, TRUE),
-('Pink Gerbera Daisy Bunch', 20, 18, 10, 'Delicate bunch of pink gerbera daisies, perfect for expressing affection.', 'Small', 'Pink', 'Fresh Gerbera Daisies', 30, 0, 0, 0, TRUE);
+INSERT INTO products (name, price, sale_price, sale_percentage, detail_description, size, weight, color, material, stock, sold, rating_avg, total_rating, is_available) VALUES 
+('Red Roses Bouquet', 30, 25, 17, 'A classic bouquet of fresh red roses, symbolizing love and passion.', 'Standard', 0, 'Red', 'Fresh Roses', 50, 0, 0, 0, TRUE),
+('White Orchid Arrangement', 40, 35, 12.5, 'Elegant arrangement of white orchids, perfect for sophisticated occasions.', 'Medium', 0, 'White', 'Fresh Orchids', 30, 0, 0, 0, TRUE),
+('Rainbow Gerbera Bouquet', 25, 20, 20, 'Vibrant bouquet featuring a mix of colorful gerbera daisies.', 'Standard', 0, 'Multi-color', 'Fresh Gerbera Daisies', 40, 0, 0, 0, TRUE),
+('Pink Lily Vase', 35, 30, 14.3, 'Graceful arrangement of pink lilies in a glass vase.', 'Large', 0, 'Pink', 'Fresh Lilies', 20, 0, 0, 0, TRUE),
+('Mixed Flower Basket', 50, 45, 10, 'Charming basket filled with an assortment of seasonal flowers.', 'Medium', 0, 'Mixed', 'Fresh Mixed Flowers', 25, 0, 0, 0, TRUE),
+('Elegant Carnation Bouquet', 30, 25, 17, 'Classic bouquet of carnations in elegant hues.', 'Standard', 0, 'Various', 'Fresh Carnations', 35, 0, 0, 0, TRUE),
+('Chocolate Bouquet', 45, 40, 11.1, 'Bouquet crafted from premium chocolates, a delightful treat for any occasion.', 'Large', 0, 'Brown', 'Assorted Chocolates', 15, 0, 0, 0, TRUE),
+('Sunshine Yellow Roses Bouquet', 35, 30, 14.3, 'Bright and cheerful bouquet featuring yellow roses to spread happiness.', 'Standard', 0, 'Yellow', 'Fresh Roses', 45, 0, 0, 0, TRUE),
+('Purple Orchid Lei', 25, 20, 20, 'Exotic lei made of purple orchids, perfect for Hawaiian-themed parties.', 'Standard', 0, 'Purple', 'Fresh Orchids', 20, 0, 0, 0, TRUE),
+('Pink Gerbera Daisy Bunch', 20, 18, 10, 'Delicate bunch of pink gerbera daisies, perfect for expressing affection.', 'Small', 0, 'Pink', 'Fresh Gerbera Daisies', 30, 0, 0, 0, TRUE);
 
 INSERT INTO products (name, price, sale_price, sale_percentage, detail_description, size, weight, color, material, stock, sold, rating_avg, total_rating, is_available) VALUES 
 ('Happy Birthday Bash Cake', 39.99, 34.99, 12.5, 'A colorful and fun birthday cake decorated with balloons and confetti.', 'Medium', 2, 'Assorted', 'Fondant', 30, 0, 0, 0, TRUE),
@@ -241,10 +241,10 @@ INSERT INTO products (name, price, sale_price, sale_percentage, detail_descripti
 ('Adorable Teddy Bear Cake', 44.99, 39.99, 11.1, 'A cute cake featuring a fondant teddy bear, perfect for children''s birthdays.', 'Medium', 2, 'Brown, White', 'Fondant', 35, 0, 0, 0, TRUE);
 
 INSERT INTO product_images (product_id, image_url) VALUES 
-(2, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713765245/products/Sweetheart%20Surprise/sweetheart-surprise-1_ozqt2p.jpg'),
-(2, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713765255/products/Sweetheart%20Surprise/sweetheart-surprise-2_uqqifb.jpg'),
-(2, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713765267/products/Sweetheart%20Surprise/sweetheart-surprise-3_gsiwr7.jpg'),
-(2, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713765276/products/Sweetheart%20Surprise/sweetheart-surprise-4_hcdpur.jpg'),
+(1, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713765245/products/Sweetheart%20Surprise/sweetheart-surprise-1_ozqt2p.jpg'),
+(1, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713765255/products/Sweetheart%20Surprise/sweetheart-surprise-2_uqqifb.jpg'),
+(1, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713765267/products/Sweetheart%20Surprise/sweetheart-surprise-3_gsiwr7.jpg'),
+(1, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713765276/products/Sweetheart%20Surprise/sweetheart-surprise-4_hcdpur.jpg'),
 
 (2, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713765337/products/Birthday%20Bliss%20Bouquet/birthday-bliss-bouquet-1_fpbm3b.jpg'),
 (2, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713765347/products/Birthday%20Bliss%20Bouquet/birthday-bliss-bouquet-2_me7pml.jpg'),
@@ -286,55 +286,55 @@ INSERT INTO product_images (product_id, image_url) VALUES
 (9, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713766358/products/Springtime%20Surprise/springtime-surprise-3_qzt50m.jpg'),
 (9, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713766371/products/Springtime%20Surprise/springtime-surprise-4_whbnze.jpg'),
 
-(20, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713766462/products/Charming%20Greetings%20Bouquet/charming-greetings-bouquet-1_bropqz.jpg'),
-(20, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713775426/products/Charming%20Greetings%20Bouquet/charming-greetings-bouquet-2_ipebbb.jpg'),
-(20, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713775424/products/Charming%20Greetings%20Bouquet/charming-greetings-bouquet-3_wsl71z.png'),
-(20, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713775432/products/Charming%20Greetings%20Bouquet/charming-greetings-bouquet-4_ddaisj.jpg'),
+(10, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713766462/products/Charming%20Greetings%20Bouquet/charming-greetings-bouquet-1_bropqz.jpg'),
+(10, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713775426/products/Charming%20Greetings%20Bouquet/charming-greetings-bouquet-2_ipebbb.jpg'),
+(10, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713775424/products/Charming%20Greetings%20Bouquet/charming-greetings-bouquet-3_wsl71z.png'),
+(10, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713775432/products/Charming%20Greetings%20Bouquet/charming-greetings-bouquet-4_ddaisj.jpg'),
 
-(21, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713757379/products/Red%20Roses%20Bouquet/red-roses-bouquet-1_xqci3j.png'),
-(21, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713757384/products/Red%20Roses%20Bouquet/red-roses-bouquet-2_icbim4.jpg'),
-(21, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713757374/products/Red%20Roses%20Bouquet/red-roses-bouquet-3_bmpuyo.jpg'),
-(21, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713757371/products/Red%20Roses%20Bouquet/red-roses-bouquet-4_hlaw3v.jpg'),
+(11, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713757379/products/Red%20Roses%20Bouquet/red-roses-bouquet-1_xqci3j.png'),
+(11, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713757384/products/Red%20Roses%20Bouquet/red-roses-bouquet-2_icbim4.jpg'),
+(11, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713757374/products/Red%20Roses%20Bouquet/red-roses-bouquet-3_bmpuyo.jpg'),
+(11, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713757371/products/Red%20Roses%20Bouquet/red-roses-bouquet-4_hlaw3v.jpg'),
 
-(22, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713758882/products/White%20Orchid%20Arrangement/white-orchid-arrangement-1_h1aws8.jpg'),
-(22, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713758901/products/White%20Orchid%20Arrangement/white-orchid-arrangement-2_qze6xz.jpg'),
-(22, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713758890/products/White%20Orchid%20Arrangement/white-orchid-arrangement-3_o8ld0o.jpg'),
-(22, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713758896/products/White%20Orchid%20Arrangement/white-orchid-arrangement-4_ru0fbv.jpg'),
+(12, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713758882/products/White%20Orchid%20Arrangement/white-orchid-arrangement-1_h1aws8.jpg'),
+(12, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713758901/products/White%20Orchid%20Arrangement/white-orchid-arrangement-2_qze6xz.jpg'),
+(12, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713758890/products/White%20Orchid%20Arrangement/white-orchid-arrangement-3_o8ld0o.jpg'),
+(12, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713758896/products/White%20Orchid%20Arrangement/white-orchid-arrangement-4_ru0fbv.jpg'),
 
-(23, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759042/products/Rainbow%20Gerbera%20Bouquet/rainbow-gerbera-bouquet-1_fhngpp.jpg'),
-(23, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759047/products/Rainbow%20Gerbera%20Bouquet/rainbow-gerbera-bouquet-2_xhbznl.jpg'),
-(23, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759053/products/Rainbow%20Gerbera%20Bouquet/rainbow-gerbera-bouquet-3_rcjd78.jpg'),
-(23, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759059/products/Rainbow%20Gerbera%20Bouquet/rainbow-gerbera-bouquet-4_ql3oht.jpg'),
+(13, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759042/products/Rainbow%20Gerbera%20Bouquet/rainbow-gerbera-bouquet-1_fhngpp.jpg'),
+(13, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759047/products/Rainbow%20Gerbera%20Bouquet/rainbow-gerbera-bouquet-2_xhbznl.jpg'),
+(13, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759053/products/Rainbow%20Gerbera%20Bouquet/rainbow-gerbera-bouquet-3_rcjd78.jpg'),
+(13, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759059/products/Rainbow%20Gerbera%20Bouquet/rainbow-gerbera-bouquet-4_ql3oht.jpg'),
 
-(24, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759147/products/Pink%20Lily%20Vase/pink-lily-vase-1_gp98xx.jpg'),
-(24, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759142/products/Pink%20Lily%20Vase/pink-lily-vase-2_dux35f.jpg'),
-(24, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759179/products/Pink%20Lily%20Vase/pink-lily-vase-3_yiclfw.jpg'),
-(24, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759185/products/Pink%20Lily%20Vase/pink-lily-vase-4_hipor0.jpg'),
+(14, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759147/products/Pink%20Lily%20Vase/pink-lily-vase-1_gp98xx.jpg'),
+(14, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759142/products/Pink%20Lily%20Vase/pink-lily-vase-2_dux35f.jpg'),
+(14, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759179/products/Pink%20Lily%20Vase/pink-lily-vase-3_yiclfw.jpg'),
+(14, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759185/products/Pink%20Lily%20Vase/pink-lily-vase-4_hipor0.jpg'),
 
-(25, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759270/products/Mixed%20Flower%20Basket/mixed-flower-basket-1_ch4ot4.jpg'),
-(25, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759281/products/Mixed%20Flower%20Basket/mixed-flower-basket-2_yihnsh.jpg'),
-(25, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759288/products/Mixed%20Flower%20Basket/mixed-flower-basket-3_hqvsi2.jpg'),
-(25, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759293/products/Mixed%20Flower%20Basket/mixed-flower-basket-4_vnstrc.jpg'),
+(15, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759270/products/Mixed%20Flower%20Basket/mixed-flower-basket-1_ch4ot4.jpg'),
+(15, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759281/products/Mixed%20Flower%20Basket/mixed-flower-basket-2_yihnsh.jpg'),
+(15, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759288/products/Mixed%20Flower%20Basket/mixed-flower-basket-3_hqvsi2.jpg'),
+(15, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759293/products/Mixed%20Flower%20Basket/mixed-flower-basket-4_vnstrc.jpg'),
 
-(26, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759359/products/Elegant%20Carnation%20Bouquet/elegant-carnation-bouquet-1_a0kh8t.jpg'),
-(26, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759365/products/Elegant%20Carnation%20Bouquet/elegant-carnation-bouquet-2_tc1lw5.jpg'),
-(26, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759375/products/Elegant%20Carnation%20Bouquet/elegant-carnation-bouquet-3_tiz2bd.jpg'),
-(26, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759384/products/Elegant%20Carnation%20Bouquet/elegant-carnation-bouquet-4_sk93lb.jpg'),
+(16, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759359/products/Elegant%20Carnation%20Bouquet/elegant-carnation-bouquet-1_a0kh8t.jpg'),
+(16, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759365/products/Elegant%20Carnation%20Bouquet/elegant-carnation-bouquet-2_tc1lw5.jpg'),
+(16, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759375/products/Elegant%20Carnation%20Bouquet/elegant-carnation-bouquet-3_tiz2bd.jpg'),
+(16, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759384/products/Elegant%20Carnation%20Bouquet/elegant-carnation-bouquet-4_sk93lb.jpg'),
 
-(27, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759783/products/Chocolate%20Bouquet/chocolate-bouquet-1_nkjqlr.jpg'),
-(27, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759799/products/Chocolate%20Bouquet/chocolate-bouquet-2_gxvbvh.jpg'),
-(27, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759806/products/Chocolate%20Bouquet/chocolate-bouquet-3_lowcga.jpg'),
-(27, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759813/products/Chocolate%20Bouquet/chocolate-bouquet-4_tos25n.jpg'),
+(17, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759783/products/Chocolate%20Bouquet/chocolate-bouquet-1_nkjqlr.jpg'),
+(17, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759799/products/Chocolate%20Bouquet/chocolate-bouquet-2_gxvbvh.jpg'),
+(17, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759806/products/Chocolate%20Bouquet/chocolate-bouquet-3_lowcga.jpg'),
+(17, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759813/products/Chocolate%20Bouquet/chocolate-bouquet-4_tos25n.jpg'),
 
-(28, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759888/products/Sunshine%20Yellow%20Roses%20Bouquet/sunshine-yellow-roses-bouquet-1_qpbybu.jpg'),
-(28, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759895/products/Sunshine%20Yellow%20Roses%20Bouquet/sunshine-yellow-roses-bouquet-2_rvosdl.jpg'),
-(28, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759901/products/Sunshine%20Yellow%20Roses%20Bouquet/sunshine-yellow-roses-bouquet-3_t78tuy.jpg'),
-(28, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759907/products/Sunshine%20Yellow%20Roses%20Bouquet/sunshine-yellow-roses-bouquet-4_fg9usw.jpg'),
+(18, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759888/products/Sunshine%20Yellow%20Roses%20Bouquet/sunshine-yellow-roses-bouquet-1_qpbybu.jpg'),
+(18, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759895/products/Sunshine%20Yellow%20Roses%20Bouquet/sunshine-yellow-roses-bouquet-2_rvosdl.jpg'),
+(18, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759901/products/Sunshine%20Yellow%20Roses%20Bouquet/sunshine-yellow-roses-bouquet-3_t78tuy.jpg'),
+(18, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713759907/products/Sunshine%20Yellow%20Roses%20Bouquet/sunshine-yellow-roses-bouquet-4_fg9usw.jpg'),
 
-(29, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713760013/products/Purple%20Orchid%20Lei/purple-orchid-lei-1_xnrlky.jpg'),
-(29, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713760019/products/Purple%20Orchid%20Lei/purple-orchid-lei-2_nug1nw.jpg'),
-(29, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713760000/products/Purple%20Orchid%20Lei/purple-orchid-lei-3_jsyxak.jpg'),
-(29, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713760007/products/Purple%20Orchid%20Lei/purple-orchid-lei-4_axzy7x.jpg'),
+(19, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713760013/products/Purple%20Orchid%20Lei/purple-orchid-lei-1_xnrlky.jpg'),
+(19, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713760019/products/Purple%20Orchid%20Lei/purple-orchid-lei-2_nug1nw.jpg'),
+(19, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713760000/products/Purple%20Orchid%20Lei/purple-orchid-lei-3_jsyxak.jpg'),
+(19, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713760007/products/Purple%20Orchid%20Lei/purple-orchid-lei-4_axzy7x.jpg'),
 
 (20, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713760098/products/Pink%20Gerbera%20Daisy%20Bunch/pink-gerbera-daisy-bunch-1_f6gbqd.jpg'),
 (20, 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713760091/products/Pink%20Gerbera%20Daisy%20Bunch/pink-gerbera-daisy-bunch-2_dilvz8.jpg'),
@@ -393,12 +393,14 @@ INSERT INTO product_images (product_id, image_url) VALUES
 
 INSERT INTO product_type (product_id, type_id) VALUES
 (1, 1),
+(1, 2),
 (1, 3),
 
 (2, 1),
 (2, 4),
 
 (3, 1),
+(3, 2),
 (3, 6),
 
 (4, 1),
@@ -414,6 +416,7 @@ INSERT INTO product_type (product_id, type_id) VALUES
 (7, 5),
 
 (8, 1),
+(8, 2),
 (8, 6),
 
 (9, 1),
@@ -532,9 +535,11 @@ INSERT INTO product_occasion (product_id, occasion_id) VALUES
 (20, 7),
 (20, 9),
 (20, 10),
+(21, 11),
 (21, 12),
 (22, 13),
 (23, 16),
+(24, 11),
 (24, 12),
 (24, 13),
 (24, 14),
@@ -543,6 +548,7 @@ INSERT INTO product_occasion (product_id, occasion_id) VALUES
 (24, 17),
 (24, 18),
 (25, 12),
+(26, 11),
 (26, 13),
 (27, 12),
 (27, 13),

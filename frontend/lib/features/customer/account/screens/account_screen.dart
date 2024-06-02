@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/auth/screens/main_auth_screen.dart';
+import 'package:frontend/features/auth/widgets/pinput_form.dart';
+import 'package:frontend/features/customer/account/services/account_service.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
+import 'package:frontend/providers/auth_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/features/customer/account/widgets/item_tag.dart';
+import 'package:provider/provider.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -11,8 +17,62 @@ class AccountScreen extends StatelessWidget {
     Navigator.of(context).pushNamed(CartScreen.routeName);
   }
 
+  void navigateToPinputForm(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(
+      context,
+      listen: false,
+    );
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    PinputForm.isUserChangePassword = true;
+    authProvider.setForm(new PinputForm(
+      isMoveBack: false,
+      isValidateSignUpEmail: false,
+    ));
+    authProvider.setPreviousForm(null);
+    authProvider.setResentEmail(userProvider.user.email);
+
+    Navigator.of(context).pushNamed(MainAuthScreen.routeName);
+  }
+
+  void logOut(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Text('Log out confirm'),
+          content: const Text('Are you sure to log out the app?'),
+          actions: [
+            // The "Yes" button
+            TextButton(
+              onPressed: () {
+                final accountService = AccountService();
+                accountService.logOut(context);
+
+                Navigator.of(context).pop();
+              },
+              child: const Text('Yes'),
+            ),
+            // The "No" button
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('No'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _userProvider = context.watch<UserProvider>();
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -88,10 +148,15 @@ class AccountScreen extends StatelessWidget {
                               child: ClipOval(
                                 child: SizedBox(
                                   width: double.infinity,
-                                  child: Image.asset(
-                                    'assets/images/img_account.png',
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: _userProvider.user.imageUrl == ''
+                                      ? Image.asset(
+                                          'assets/images/img_account.png',
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.network(
+                                          _userProvider.user.imageUrl,
+                                          fit: BoxFit.cover,
+                                        ),
                                 ),
                               ),
                             ),
@@ -105,7 +170,7 @@ class AccountScreen extends StatelessWidget {
                           margin: EdgeInsets.symmetric(horizontal: 16),
                           child: Center(
                             child: _usernameText(
-                              'Mai Hoàng Nhật Duy Siêu Cấp Đẹp Trai Nhất Vũ Trụ',
+                              _userProvider.user.username,
                             ),
                           ),
                         ),
@@ -333,7 +398,7 @@ class AccountScreen extends StatelessWidget {
               child: ItemTag(
                 title: 'Change password',
                 description: 'Change your account password',
-                onTap: () {},
+                onTap: () => navigateToPinputForm(context),
                 iconData: Icons.password,
               ),
             ),
@@ -341,7 +406,7 @@ class AccountScreen extends StatelessWidget {
               child: ItemTag(
                 title: 'Log out',
                 description: 'Log out of your account',
-                onTap: () {},
+                onTap: () => logOut(context),
                 iconData: Icons.logout,
               ),
             ),

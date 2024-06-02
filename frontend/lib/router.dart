@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/customer/category_products/screens/category_products_screen.dart';
 import 'package:frontend/features/customer/customer_bottom_bar.dart';
 import 'package:frontend/features/auth/screens/main_auth_screen.dart';
 import 'package:frontend/features/auth/screens/welcome_screen.dart';
@@ -6,6 +7,10 @@ import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:frontend/features/customer/deals_of_day/screens/deals_of_day_screen.dart';
 import 'package:frontend/features/customer/product_details/screens/product_details_screen.dart';
 import 'package:frontend/features/customer/checkout/screens/checkout_screen.dart';
+import 'package:frontend/features/customer/recommended_products/screens/recommended_products_screen.dart';
+import 'package:frontend/features/customer/search/screens/search_screen.dart';
+import 'package:frontend/models/occasion.dart';
+import 'package:frontend/models/type.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
   switch (routeSettings.name) {
@@ -27,7 +32,34 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     case DealsOfDayScreen.routeName:
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) => const DealsOfDayScreen(),
+        builder: (_) => DealsOfDayScreen(),
+      );
+    case RecommendedProductsScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => RecommendedProductsScreen(),
+      );
+    case CategoryProductsScreen.routeName:
+      var category = routeSettings.arguments;
+      if (category is Type?) {
+        return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (_) => CategoryProductsScreen(
+            type: category,
+          ),
+        );
+      } else {
+        return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (_) => CategoryProductsScreen(
+            occasion: category as Occasion?,
+          ),
+        );
+      }
+    case SearchScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => const SearchScreen(),
       );
     case CartScreen.routeName:
       return MaterialPageRoute(

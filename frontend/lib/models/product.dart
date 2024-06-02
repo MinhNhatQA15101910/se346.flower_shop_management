@@ -61,9 +61,9 @@ class Product {
     return Product(
       id: map['id'] ?? 0,
       name: map['name'] ?? '',
-      price: map['price'] ?? 0,
-      salePrice: map['sale_price'] ?? 0,
-      salePercentage: map['sale_percentage'] ?? 0,
+      price: double.tryParse(map['price']) ?? 0.0,
+      salePrice: double.tryParse(map['sale_price']) ?? 0.0,
+      salePercentage: double.tryParse(map['sale_percentage']) ?? 0.0,
       detailDescription: map['detail_description'] ?? '',
       size: Size.values
               .where(
@@ -71,14 +71,14 @@ class Product {
               )
               .firstOrNull ??
           Size.standard,
-      weight: map['weight'] ?? 0,
+      weight: double.tryParse(map['weight']) ?? 0.0,
       color: map['color'] ?? '',
       material: map['material'] ?? '',
       stock: map['stock'] ?? 0,
       sold: map['sold'] ?? 0,
-      ratingAvg: map['rating_avg'] ?? 0,
+      ratingAvg: double.tryParse(map['rating_avg']) ?? 0.0,
       totalRating: map['total_rating'] ?? 0,
-      imageUrls: map['image_urls'] ?? [],
+      imageUrls: List<String>.from(map['image_urls']),
     );
   }
 

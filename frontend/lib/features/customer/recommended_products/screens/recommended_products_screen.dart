@@ -6,15 +6,16 @@ import 'package:frontend/features/customer/home/services/home_service.dart';
 import 'package:frontend/models/product.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class DealsOfDayScreen extends StatefulWidget {
-  static const String routeName = "/deals-of-day";
-  const DealsOfDayScreen({super.key});
+class RecommendedProductsScreen extends StatefulWidget {
+  static const String routeName = "/recommended-products";
+  const RecommendedProductsScreen({super.key});
 
   @override
-  State<DealsOfDayScreen> createState() => _DealsOfDayScreenState();
+  State<RecommendedProductsScreen> createState() =>
+      _RecommendedProductsScreenState();
 }
 
-class _DealsOfDayScreenState extends State<DealsOfDayScreen> {
+class _RecommendedProductsScreenState extends State<RecommendedProductsScreen> {
   final _homeService = HomeService();
 
   final _controller = ScrollController();
@@ -29,13 +30,13 @@ class _DealsOfDayScreenState extends State<DealsOfDayScreen> {
     Navigator.of(context).pushNamed(CartScreen.routeName);
   }
 
-  void _fetchAllDealOfDayProducts() async {
+  void _fetchAllRecommendedProducts() async {
     if (_isLoading) return;
     _isLoading = true;
 
     const limit = 10;
 
-    final newProducts = await _homeService.fetchAllDealOfDayProducts(
+    final newProducts = await _homeService.fetchAllRecommendedProducts(
       context,
       _currentPage++,
     );
@@ -62,18 +63,18 @@ class _DealsOfDayScreenState extends State<DealsOfDayScreen> {
       _productList.clear();
     });
 
-    _fetchAllDealOfDayProducts();
+    _fetchAllRecommendedProducts();
   }
 
   @override
   void initState() {
     super.initState();
 
-    _fetchAllDealOfDayProducts();
+    _fetchAllRecommendedProducts();
 
     _controller.addListener(() {
       if (_controller.position.maxScrollExtent == _controller.offset) {
-        _fetchAllDealOfDayProducts();
+        _fetchAllRecommendedProducts();
       }
     });
   }
@@ -89,7 +90,7 @@ class _DealsOfDayScreenState extends State<DealsOfDayScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Deals of the day',
+                'Recommended products',
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w700,
                   fontSize: 18,

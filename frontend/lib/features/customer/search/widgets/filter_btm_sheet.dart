@@ -3,13 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 
 const List<Widget> priceRangeList = [
-  Text('Under 100.000đ'),
-  Text('100.000đ - 200.000đ'),
-  Text('200.000đ - 750.000đ'),
-  Text('Over 750.000đ'),
+  Text('Under \$29.99'),
+  Text('\$30.00 - \$49.99'),
+  Text('\$50.00 - \$69.99'),
+  Text('Over \$70.00'),
 ];
 
 const List<Widget> productTypeList = [
+  Text('Old'),
   Text('New'),
   Text('On sale'),
 ];
@@ -37,7 +38,7 @@ class _FilterBtmSheetState extends State<FilterBtmSheet> {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
     return SizedBox(
       width: GlobalVariables.screenWidth,
-      height: GlobalVariables.screenHeight * 0.6 + keyboardSpace,
+      height: GlobalVariables.screenHeight * 0.7 + keyboardSpace,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -58,9 +59,9 @@ class _FilterBtmSheetState extends State<FilterBtmSheet> {
                   Text(
                     'Filter',
                     style: GoogleFonts.inter(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
+                      color: GlobalVariables.blackTextColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   IconButton(
@@ -77,8 +78,8 @@ class _FilterBtmSheetState extends State<FilterBtmSheet> {
                 textAlign: TextAlign.left,
                 style: GoogleFonts.inter(
                   color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -89,76 +90,106 @@ class _FilterBtmSheetState extends State<FilterBtmSheet> {
               children: List.generate(
                 priceRangeList.length,
                 (index) => _buildToggleButton(
-                    index, priceRangeList, _selectedPriceRange),
+                  index,
+                  priceRangeList,
+                  _selectedPriceRange,
+                ),
               ),
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 8),
               child: Text(
-                'Or enter a price range:',
+                'Or enter a price range',
                 textAlign: TextAlign.left,
                 style: GoogleFonts.inter(
                   color: GlobalVariables.darkGrey,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
                 ),
               ),
             ),
             Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Lowest Price',
-                      suffixIcon: Align(
-                        alignment: Alignment.center,
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: Text(
-                          '| đ',
-                          style: GoogleFonts.inter(fontSize: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'From',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: GlobalVariables.blackTextColor,
                         ),
                       ),
-                      hintStyle: GoogleFonts.inter(
-                        color: GlobalVariables.darkGrey,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: GlobalVariables.darkGrey,
+                      const SizedBox(height: 4),
+                      TextField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: 'Lowest Price',
+                          prefixIcon: Align(
+                            alignment: Alignment.center,
+                            widthFactor: 1.0,
+                            heightFactor: 1.0,
+                            child: Text(
+                              '\$ |',
+                              style: GoogleFonts.inter(fontSize: 16),
+                            ),
+                          ),
+                          hintStyle: GoogleFonts.inter(
+                            color: GlobalVariables.darkGrey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: GlobalVariables.darkGrey,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-                SizedBox(
-                  width: 8,
-                ),
+                SizedBox(width: 8),
                 Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Highest Price',
-                      suffixIcon: Align(
-                        alignment: Alignment.center,
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: Text(
-                          '| đ',
-                          style: GoogleFonts.inter(fontSize: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'To',
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: GlobalVariables.blackTextColor,
                         ),
                       ),
-                      hintStyle: GoogleFonts.inter(
-                        color: GlobalVariables.darkGrey,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: GlobalVariables.darkGrey,
+                      const SizedBox(height: 4),
+                      TextField(
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: 'Highest Price',
+                          prefixIcon: Align(
+                            alignment: Alignment.center,
+                            widthFactor: 1.0,
+                            heightFactor: 1.0,
+                            child: Text(
+                              '\$ |',
+                              style: GoogleFonts.inter(fontSize: 16),
+                            ),
+                          ),
+                          hintStyle: GoogleFonts.inter(
+                            color: GlobalVariables.darkGrey,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: GlobalVariables.darkGrey,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ],
@@ -170,8 +201,8 @@ class _FilterBtmSheetState extends State<FilterBtmSheet> {
                 textAlign: TextAlign.left,
                 style: GoogleFonts.inter(
                   color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -207,7 +238,7 @@ class _FilterBtmSheetState extends State<FilterBtmSheet> {
                       ),
                     ),
                     child: Text(
-                      'Cancel',
+                      'Clear',
                       style: GoogleFonts.inter(
                         color: GlobalVariables.green,
                         fontSize: 16,
@@ -253,7 +284,10 @@ class _FilterBtmSheetState extends State<FilterBtmSheet> {
   }
 
   Widget _buildToggleButton(
-      int index, List<Widget> selectedList, List<bool> selectedListState) {
+    int index,
+    List<Widget> selectedList,
+    List<bool> selectedListState,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: OutlinedButton(
