@@ -65,6 +65,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _fetchAllComboTypes() async {
     _comboTypes = await _categoryService.fetchAllTypes(context, 1);
+
+    if (!mounted) return;
+
     setState(() {});
   }
 

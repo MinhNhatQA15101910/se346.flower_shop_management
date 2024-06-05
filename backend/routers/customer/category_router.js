@@ -21,6 +21,7 @@ function getDatabaseInstance() {
 categoryRouter.get("/customer/categories", authValidator, async (req, res) => {
   try {
     const db = getDatabaseInstance();
+    
 
     const categories = await db.query("SELECT * FROM categories");
 

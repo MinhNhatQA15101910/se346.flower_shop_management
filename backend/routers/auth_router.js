@@ -125,11 +125,11 @@ authRouter.post(
       }
 
       const products = await db.query(
-        "SELECT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1",
+        "SELECT DISTINCT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1 ORDER BY p.id ASC",
         [user.rows[0].id]
       );
       const quantities = await db.query(
-        "SELECT quantity FROM carts WHERE user_id = $1",
+        "SELECT quantity FROM carts WHERE user_id = $1 ORDER BY product_id ASC",
         [user.rows[0].id]
       );
 
@@ -176,11 +176,11 @@ authRouter.post(
         );
 
         const products = await db.query(
-          "SELECT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1",
+          "SELECT DISTINCT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1 ORDER BY p.id ASC",
           [existingUser.rows[0].id]
         );
         const quantities = await db.query(
-          "SELECT quantity FROM carts WHERE user_id = $1",
+          "SELECT quantity FROM carts WHERE user_id = $1 ORDER BY product_id ASC",
           [existingUser.rows[0].id]
         );
 
@@ -383,11 +383,11 @@ authRouter.get("/user", authValidator, async (req, res) => {
 
   const user = await db.query("SELECT * FROM users WHERE id = $1", [req.user]);
   const products = await db.query(
-    "SELECT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1",
+    "SELECT DISTINCT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1 ORDER BY p.id ASC",
     [user.rows[0].id]
   );
   const quantities = await db.query(
-    "SELECT quantity FROM carts WHERE user_id = $1",
+    "SELECT quantity FROM carts WHERE user_id = $1 ORDER BY product_id ASC",
     [user.rows[0].id]
   );
 

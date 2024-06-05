@@ -3,7 +3,7 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/account/screens/account_screen.dart';
 import 'package:frontend/features/customer/category/screens/category_screen.dart';
 import 'package:frontend/features/customer/home/screens/home_screen.dart';
-import 'package:frontend/features/customer/search/screens/search_result_screen.dart';
+import 'package:frontend/features/customer/search/screens/search_screen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class CustomerBottomBar extends StatefulWidget {
@@ -19,7 +19,7 @@ class _CustomerBottomBarState extends State<CustomerBottomBar> {
 
   final List<Widget> _pages = [
     const CategoryScreen(),
-    const SearchResultScreen(),
+    const SearchScreen(),
     const AccountScreen(),
   ];
 
