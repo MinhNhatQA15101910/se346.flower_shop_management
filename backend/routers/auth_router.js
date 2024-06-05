@@ -128,10 +128,14 @@ authRouter.post(
         "SELECT DISTINCT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1 ORDER BY p.id ASC",
         [user.rows[0].id]
       );
-      const quantities = await db.query(
+      const quantitiesResult = await db.query(
         "SELECT quantity FROM carts WHERE user_id = $1 ORDER BY product_id ASC",
         [user.rows[0].id]
       );
+      let quantities = [];
+      for (let i = 0; i < quantitiesResult.rowCount; i++) {
+        quantities.push(quantitiesResult.rows[i].quantity);
+      }
 
       await db.end();
 
@@ -140,7 +144,7 @@ authRouter.post(
         token,
         ...user.rows[0],
         products: products.rows,
-        quantities: quantities.rows,
+        quantities,
       });
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -179,10 +183,14 @@ authRouter.post(
           "SELECT DISTINCT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1 ORDER BY p.id ASC",
           [existingUser.rows[0].id]
         );
-        const quantities = await db.query(
+        const quantitiesResult = await db.query(
           "SELECT quantity FROM carts WHERE user_id = $1 ORDER BY product_id ASC",
           [existingUser.rows[0].id]
         );
+        let quantities = [];
+        for (let i = 0; i < quantitiesResult.rowCount; i++) {
+          quantities.push(quantitiesResult.rows[i].quantity);
+        }
 
         await db.end();
 
@@ -190,7 +198,7 @@ authRouter.post(
           token,
           ...existingUser.rows[0],
           products: products.rows,
-          quantities: quantities.rows,
+          quantities,
         });
       }
 
@@ -386,17 +394,21 @@ authRouter.get("/user", authValidator, async (req, res) => {
     "SELECT DISTINCT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1 ORDER BY p.id ASC",
     [user.rows[0].id]
   );
-  const quantities = await db.query(
+  const quantitiesResult = await db.query(
     "SELECT quantity FROM carts WHERE user_id = $1 ORDER BY product_id ASC",
     [user.rows[0].id]
   );
+  let quantities = [];
+  for (let i = 0; i < quantitiesResult.rowCount; i++) {
+    quantities.push(quantitiesResult.rows[i].quantity);
+  }
 
   await db.end();
   res.json({
     token: req.token,
     ...user.rows[0],
     products: products.rows,
-    quantities: quantities.rows,
+    quantities,
   });
 });
 
