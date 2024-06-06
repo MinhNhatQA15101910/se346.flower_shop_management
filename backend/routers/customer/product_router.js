@@ -212,4 +212,38 @@ productRouter.get(
   }
 );
 
+productRouter.get(
+  "/customer/products/:product_id",
+  authValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const { product_id } = req.params;
+
+      const product = await db.query("SELECT * FROM products WHERE id = $1", [
+        product_id,
+      ]);
+
+      let imageUrlList = await db.query(
+        "SELECT image_url FROM product_images WHERE product_id = $1",
+        [product_id]
+      );
+
+      let imageUrls = [];
+      for (let i = 0; i < imageUrlList.rowCount; i++) {
+        imageUrls.push(imageUrlList.rows[i].image_url);
+      }
+
+      product.rows[0].image_urls = imageUrls;
+
+      await db.end();
+
+      res.json(product.rows[0]);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
 export default productRouter;
