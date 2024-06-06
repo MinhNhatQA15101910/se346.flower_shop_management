@@ -21,22 +21,42 @@ productRouter.get("/customer/products", authValidator, async (req, res) => {
   try {
     const db = getDatabaseInstance();
 
-    let { page, type_id, occasion_id } = req.query;
+    let { page, type_id, occasion_id, keyword } = req.query;
 
     let products;
 
     if (type_id) {
-      products = await db.query(
-        "SELECT p.* FROM products p, product_type pt, types t WHERE p.id = pt.product_id AND pt.type_id = t.id AND t.id = $1",
-        [type_id]
-      );
-    }
-
-    if (occasion_id) {
-      products = await db.query(
-        "SELECT p.* FROM products p, product_occasion po, occasions o WHERE p.id = po.product_id AND po.occasion_id = o.id AND o.id = $1",
-        [occasion_id]
-      );
+      if (keyword) {
+        products = await db.query(
+          "SELECT p.* FROM products p, product_type pt, types t WHERE p.id = pt.product_id AND pt.type_id = t.id AND t.id = $1 AND p.name LIKE $2",
+          [type_id, "%" + keyword + "%"]
+        );
+      } else {
+        products = await db.query(
+          "SELECT p.* FROM products p, product_type pt, types t WHERE p.id = pt.product_id AND pt.type_id = t.id AND t.id = $1",
+          [type_id]
+        );
+      }
+    } else if (occasion_id) {
+      if (keyword) {
+        products = await db.query(
+          "SELECT p.* FROM products p, product_occasion po, occasions o WHERE p.id = po.product_id AND po.occasion_id = o.id AND o.id = $1 AND p.name LIKE $2",
+          [occasion_id, "%" + keyword + "%"]
+        );
+      } else {
+        products = await db.query(
+          "SELECT p.* FROM products p, product_occasion po, occasions o WHERE p.id = po.product_id AND po.occasion_id = o.id AND o.id = $1",
+          [occasion_id]
+        );
+      }
+    } else {
+      if (keyword) {
+        products = await db.query("SELECT * FROM products WHERE name LIKE $1", [
+          "%" + keyword + "%",
+        ]);
+      } else {
+        products = await db.query("SELECT * FROM products");
+      }
     }
 
     const totalPages = Math.ceil(products.rowCount / 10);
