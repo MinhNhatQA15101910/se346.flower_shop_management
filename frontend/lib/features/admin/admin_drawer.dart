@@ -21,13 +21,23 @@ class _AdminDrawerState extends State<AdminDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.white,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              GlobalVariables.green,
+              GlobalVariables.lightGreen,
+              GlobalVariables.lightGrey,
+            ],
+          ),
+        ),
         child: ListView(
           children: [
             Container(
-              height: 100,
+              height: 111,
               decoration: BoxDecoration(
                 border: Border.all(style: BorderStyle.none),
               ),
