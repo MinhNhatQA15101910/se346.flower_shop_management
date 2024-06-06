@@ -57,10 +57,25 @@ cartRouter.post("/customer/add-to-cart", authValidator, async (req, res) => {
     }
 
     let user = await db.query("SELECT * FROM users WHERE id = $1", [req.user]);
-    const products = await db.query(
+    const productsResult = await db.query(
       "SELECT DISTINCT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1 ORDER BY p.id ASC",
       [user.rows[0].id]
     );
+    const products = productsResult.rows;
+    for (let i = 0; i < products.length; i++) {
+      let imageUrlList = await db.query(
+        "SELECT image_url FROM product_images WHERE product_id = $1",
+        [products[i].id]
+      );
+
+      let imageUrls = [];
+      for (let j = 0; j < imageUrlList.rowCount; j++) {
+        imageUrls.push(imageUrlList.rows[j].image_url);
+      }
+
+      products[i].image_urls = imageUrls;
+    }
+
     const quantitiesResult = await db.query(
       "SELECT quantity FROM carts WHERE user_id = $1 ORDER BY product_id ASC",
       [user.rows[0].id]
@@ -74,7 +89,7 @@ cartRouter.post("/customer/add-to-cart", authValidator, async (req, res) => {
     res.json({
       token: req.token,
       ...user.rows[0],
-      products: products.rows,
+      products,
       quantities,
     });
   } catch (e) {
@@ -110,10 +125,24 @@ cartRouter.delete(
       let user = await db.query("SELECT * FROM users WHERE id = $1", [
         req.user,
       ]);
-      const products = await db.query(
+      const productsResult = await db.query(
         "SELECT DISTINCT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1 ORDER BY p.id ASC",
         [user.rows[0].id]
       );
+      const products = productsResult.rows;
+      for (let i = 0; i < products.length; i++) {
+        let imageUrlList = await db.query(
+          "SELECT image_url FROM product_images WHERE product_id = $1",
+          [products[i].id]
+        );
+
+        let imageUrls = [];
+        for (let j = 0; j < imageUrlList.rowCount; j++) {
+          imageUrls.push(imageUrlList.rows[j].image_url);
+        }
+
+        products[i].image_urls = imageUrls;
+      }
       const quantitiesResult = await db.query(
         "SELECT quantity FROM carts WHERE user_id = $1 ORDER BY product_id ASC",
         [user.rows[0].id]
@@ -127,7 +156,7 @@ cartRouter.delete(
       res.json({
         token: req.token,
         ...user.rows[0],
-        products: products.rows,
+        products,
         quantities,
       });
     } catch (e) {
