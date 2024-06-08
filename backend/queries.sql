@@ -618,3 +618,10 @@ CREATE TABLE export_product_records (
     export_date TIMESTAMP,
     CONSTRAINT fk_export_product_records FOREIGN KEY (product_id) REFERENCES products(id)
 );
+
+CREATE TABLE params (
+    name VARCHAR(50) NOT NULL,
+    value BIGINT NOT NULL
+);
+
+INSERT INTO params VALUES ('SHIPPING_PRICE', 100);
