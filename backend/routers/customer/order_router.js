@@ -61,13 +61,44 @@ orderRouter.get(
 
       const { order_id } = req.params;
 
-      let orders = await db.query("SELECT * FROM orders WHERE id = $1", [
+      // Get order from database
+      const order = await db.query("SELECT * FROM orders WHERE id = $1", [
         order_id,
       ]);
 
+      // Load all products from order
+      const productsResult = await db.query(
+        "SELECT DISTINCT p.* FROM products p, order_details od WHERE p.id = od.product_id AND od.order_id = $1 ORDER BY p.id ASC",
+        [order_id]
+      );
+      const products = productsResult.rows;
+      for (let i = 0; i < products.length; i++) {
+        let imageUrlList = await db.query(
+          "SELECT image_url FROM product_images WHERE product_id = $1",
+          [products[i].id]
+        );
+
+        let imageUrls = [];
+        for (let j = 0; j < imageUrlList.rowCount; j++) {
+          imageUrls.push(imageUrlList.rows[j].image_url);
+        }
+
+        products[i].image_urls = imageUrls;
+      }
+
+      // Load all quantities from order
+      const quantitiesResult = await db.query(
+        "SELECT quantity FROM order_details WHERE order_id = $1 ORDER BY product_id ASC",
+        [order_id]
+      );
+      let quantities = [];
+      for (let i = 0; i < quantitiesResult.rowCount; i++) {
+        quantities.push(quantitiesResult.rows[i].quantity);
+      }
+
       await db.end();
 
-      res.json(orders.rows[0]);
+      res.json({ ...order.rows[0], products, quantities });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
@@ -181,8 +212,6 @@ orderRouter.post(
       orderProduct.rows[0].image_urls = imageUrls;
 
       products.push(orderProduct.rows[0]);
-
-      console.log(products);
 
       // Load quantities to list
       let quantities = [1];
