@@ -17,6 +17,7 @@ function getDatabaseInstance() {
   return db;
 }
 
+// Add product to cart
 cartRouter.post("/customer/add-to-cart", authValidator, async (req, res) => {
   try {
     const db = getDatabaseInstance();
@@ -97,6 +98,7 @@ cartRouter.post("/customer/add-to-cart", authValidator, async (req, res) => {
   }
 });
 
+// Remove product from cart
 cartRouter.delete(
   "/customer/remove-from-cart/:product_id",
   authValidator,
@@ -165,6 +167,7 @@ cartRouter.delete(
   }
 );
 
+// Delete product from cart
 cartRouter.delete(
   "/customer/delete-from-cart/:product_id",
   authValidator,

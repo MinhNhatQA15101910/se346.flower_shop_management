@@ -148,14 +148,128 @@ orderRouter.post(
     try {
       const db = getDatabaseInstance();
 
+      const {
+        estimated_receive_date,
+        province,
+        district,
+        ward,
+        detail_address,
+        receiver_name,
+        receiver_phone_number,
+      } = req.body;
+
+      const cart = await db.query("SELECT * FROM carts WHERE user_id = $1", [
+        req.user,
+      ]);
+
+      // Check if exist product with stock is smaller than quantity in cart.
+      for (let i = 0; i < cart.rowCount; i++) {
+        let product = await db.query("SELECT * FROM products WHERE id = $1", [
+          cart.rows[i].product_id,
+        ]);
+        let stock = product.rows[0].stock;
+        let quantity = cart.rows[i].quantity;
+        if (stock >= quantity) {
+          db.query("UPDATE products SET stock = $1, sold = $2 WHERE id = $3", [
+            stock - quantity,
+            quantity,
+            cart.rows[i].product_id,
+          ]);
+        } else {
+          return res
+            .status(400)
+            .json({ msg: `${product.rows[0].name} is out of stock!` });
+        }
+      }
+
+      // Get shipping price
+      const shippingPriceValue = await db.query(
+        "SELECT value FROM params WHERE name = $1",
+        [shippingPriceKey]
+      );
+
+      // Get product price
+      const productPrice = await db.query(
+        "SELECT SUM(p.sale_price * c.quantity) FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = u.id AND u.id = $1",
+        [req.user]
+      );
+
+      // Get total price
+      const totalPrice =
+        Number(shippingPriceValue.rows[0].value) +
+        Number(productPrice.rows[0].sum);
+
+      // Create order
+      const newOrderResult = await db.query(
+        "INSERT INTO orders(user_id, total_price, product_price, shipping_price, status, estimated_receive_date, order_date, province, district, ward, detail_address, receiver_name, receiver_phone_number) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *",
+        [
+          req.user,
+          Number(totalPrice),
+          Number(productPrice.rows[0].sum),
+          Number(shippingPriceValue.rows[0].value),
+          "Pending",
+          estimated_receive_date,
+          new Date(),
+          province,
+          district,
+          ward,
+          detail_address,
+          receiver_name,
+          receiver_phone_number,
+        ]
+      );
+
+      // Create order details
+      for (let i = 0; i < cart.rowCount; i++) {
+        db.query("INSERT INTO order_details VALUES ($1, $2, $3)", [
+          newOrderResult.rows[0].id,
+          cart.rows[i].product_id,
+          cart.rows[i].quantity,
+        ]);
+      }
+
+      // Empty cart
+      db.query("DELETE FROM carts WHERE user_id = $1", [req.user]);
+
+      // Get all order details
+      const productsResult = await db.query(
+        "SELECT DISTINCT p.* FROM products p, order_details od WHERE p.id = od.product_id AND od.order_id = $1 ORDER BY p.id ASC",
+        [newOrderResult.rows[0].id]
+      );
+      const products = productsResult.rows;
+      for (let i = 0; i < products.length; i++) {
+        let imageUrlList = await db.query(
+          "SELECT image_url FROM product_images WHERE product_id = $1",
+          [products[i].id]
+        );
+
+        let imageUrls = [];
+        for (let j = 0; j < imageUrlList.rowCount; j++) {
+          imageUrls.push(imageUrlList.rows[j].image_url);
+        }
+
+        products[i].image_urls = imageUrls;
+      }
+
+      const quantitiesResult = await db.query(
+        "SELECT quantity FROM order_details WHERE order_id = $1 ORDER BY product_id ASC",
+        [newOrderResult.rows[0].id]
+      );
+      let quantities = [];
+      for (let i = 0; i < quantitiesResult.rowCount; i++) {
+        quantities.push(quantitiesResult.rows[i].quantity);
+      }
+
       await db.end();
+
+      res.json({ ...newOrderResult.rows[0], products, quantities });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   }
 );
 
-// Create order form product
+// Create order from product
 orderRouter.post(
   "/customer/create-order-from-product",
   authValidator,
@@ -185,7 +299,7 @@ orderRouter.post(
       }
 
       // Decrease the product stock
-      db.query("UPDATE products SET stock = $1 WHERE id = $2", [
+      db.query("UPDATE products SET stock = $1, sold = 1 WHERE id = $2", [
         product.rows[0].stock - 1,
         product_id,
       ]);
