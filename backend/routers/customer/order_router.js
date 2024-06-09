@@ -43,6 +43,41 @@ orderRouter.get("/customer/orders", authValidator, async (req, res) => {
       orders = await db.query("SELECT * FROM orders");
     }
 
+    for (let i = 0; i < orders.rowCount; i++) {
+      // Load all products from order
+      const productsResult = await db.query(
+        "SELECT DISTINCT p.* FROM products p, order_details od WHERE p.id = od.product_id AND od.order_id = $1 ORDER BY p.id ASC",
+        [orders.rows[i].id]
+      );
+      const products = productsResult.rows;
+      for (let j = 0; j < products.length; j++) {
+        let imageUrlList = await db.query(
+          "SELECT image_url FROM product_images WHERE product_id = $1",
+          [products[j].id]
+        );
+
+        let imageUrls = [];
+        for (let k = 0; k < imageUrlList.rowCount; k++) {
+          imageUrls.push(imageUrlList.rows[k].image_url);
+        }
+
+        products[j].image_urls = imageUrls;
+      }
+
+      // Load all quantities from order
+      const quantitiesResult = await db.query(
+        "SELECT quantity FROM order_details WHERE order_id = $1 ORDER BY product_id ASC",
+        [orders.rows[i].id]
+      );
+      let quantities = [];
+      for (let j = 0; j < quantitiesResult.rowCount; j++) {
+        quantities.push(quantitiesResult.rows[j].quantity);
+      }
+
+      orders.rows[i].products = products;
+      orders.rows[i].quantities = quantities;
+    }
+
     await db.end();
 
     res.json(orders.rows);
