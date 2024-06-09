@@ -579,6 +579,7 @@ CREATE TABLE carts (
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
+    total_price DECIMAL NOT NULL,
     product_price DECIMAL NOT NULL,
     shipping_price DECIMAL NOT NULL,
     status VARCHAR(20) NOT NULL,
@@ -624,4 +625,4 @@ CREATE TABLE params (
     value BIGINT NOT NULL
 );
 
-INSERT INTO params VALUES ('SHIPPING_PRICE', 100);
+INSERT INTO params VALUES ('SHIPPING_PRICE', 2);
