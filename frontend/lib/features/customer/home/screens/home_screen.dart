@@ -77,6 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
       1,
     );
 
+    if (!mounted) return;
+
     setState(() {
       _recommendedProducts = newProducts;
     });

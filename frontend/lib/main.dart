@@ -81,7 +81,6 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       onGenerateRoute: (routeSettings) => generateRoute(routeSettings),
-      home: AdminBottomBar(),
       home: _isFirstLaunch
           ? IntroScreen()
           : Provider.of<UserProvider>(context).user.token.isNotEmpty
