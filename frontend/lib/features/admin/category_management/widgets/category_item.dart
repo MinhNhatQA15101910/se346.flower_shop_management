@@ -1,27 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/admin/category_management/widgets/add_update_category_btm_sheet.dart';
+import 'package:frontend/models/occasion.dart';
+import 'package:frontend/models/type.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CategoryItem extends StatefulWidget {
-  final String imagePath;
-  final String title;
-  final String description;
+class CategoryItem extends StatelessWidget {
+  final Type? type;
+  final Occasion? occasion;
 
-  const CategoryItem(
-      {super.key,
-      required this.imagePath,
-      required this.title,
-      required this.description});
+  const CategoryItem({
+    super.key,
+    this.type,
+    this.occasion,
+  });
 
-  @override
-  _CategoryItemState createState() => _CategoryItemState();
-}
+  String capitalize(String s) {
+    return "${s[0].toUpperCase()}${s.substring(1).toLowerCase()}";
+  }
 
-class _CategoryItemState extends State<CategoryItem> {
   @override
   Widget build(BuildContext context) {
+    final imageUrl = type != null
+        ? type!.imageUrl
+        : occasion != null
+            ? occasion!.imageUrl
+            : '';
+    final title = type != null
+        ? type!.name
+        : occasion != null
+            ? occasion!.name
+            : '';
+    final description = type != null ? 'Type' : 'Occasion';
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 16,
@@ -38,7 +49,7 @@ class _CategoryItemState extends State<CategoryItem> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     image: DecorationImage(
-                      image: AssetImage(widget.imagePath),
+                      image: NetworkImage(imageUrl),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -51,8 +62,8 @@ class _CategoryItemState extends State<CategoryItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      _TilteText(widget.title),
-                      _DescriptionText(widget.description),
+                      _titleText(title),
+                      _descriptionText(description),
                     ],
                   ),
                 ),
@@ -84,7 +95,7 @@ class _CategoryItemState extends State<CategoryItem> {
                               topRight: Radius.circular(8),
                             ),
                           ),
-                          child: AddUpdateCategotyBottomSheet(),
+                          child: AddUpdateCategoryBottomSheet(),
                         );
                       },
                     ),
@@ -122,7 +133,7 @@ class _CategoryItemState extends State<CategoryItem> {
     );
   }
 
-  Widget _TilteText(String text) {
+  Widget _titleText(String text) {
     return Text(
       text,
       textAlign: TextAlign.start,
@@ -136,7 +147,7 @@ class _CategoryItemState extends State<CategoryItem> {
     );
   }
 
-  Widget _DescriptionText(String text) {
+  Widget _descriptionText(String text) {
     return Text(
       text,
       textAlign: TextAlign.start,

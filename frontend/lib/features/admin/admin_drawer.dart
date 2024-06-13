@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/account/services/account_service.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class AdminDrawer extends StatefulWidget {
   const AdminDrawer({super.key});
@@ -19,8 +22,41 @@ final Map<String, IconData> drawerItems = {
 class _AdminDrawerState extends State<AdminDrawer> {
   List<bool> listTileSelected = drawerItems.keys.map((e) => false).toList();
 
+  void _logOut() {
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const Text('Log out confirm'),
+          content: const Text('Are you sure to log out the app?'),
+          actions: [
+            // The "Yes" button
+            TextButton(
+              onPressed: () {
+                final accountService = AccountService();
+                accountService.logOut(context);
+
+                Navigator.of(context).pop();
+              },
+              child: const Text('Yes'),
+            ),
+            // The "No" button
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('No'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.watch<UserProvider>();
+
     return Drawer(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -46,25 +82,25 @@ class _AdminDrawerState extends State<AdminDrawer> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    margin: EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/img_account.png'),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
+                  userProvider.user.imageUrl != ''
+                      ? Image.network(
+                          userProvider.user.imageUrl,
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.fill,
+                        )
+                      : Image.asset(
+                          'assets/images/img_account.png',
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                        ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Nguyen Van Vu',
+                        userProvider.user.username,
                         style: GoogleFonts.inter(
                           color: Colors.black,
                           fontSize: 16,
@@ -72,7 +108,7 @@ class _AdminDrawerState extends State<AdminDrawer> {
                         ),
                       ),
                       Text(
-                        'nguyenvanvu@blabla.com',
+                        userProvider.user.email,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.inter(
                           color: GlobalVariables.darkGrey,
@@ -87,13 +123,10 @@ class _AdminDrawerState extends State<AdminDrawer> {
             ),
             ...drawerItems.entries
                 .map(
-                  (e) => GestureDetector(
-                    onTap: () => print('Tapped'),
-                    child: _buildDrawerItem(
-                      title: e.key,
-                      icon: e.value,
-                      index: drawerItems.keys.toList().indexOf(e.key),
-                    ),
+                  (e) => _buildDrawerItem(
+                    title: e.key,
+                    icon: e.value,
+                    index: drawerItems.keys.toList().indexOf(e.key),
                   ),
                 )
                 .toList()
@@ -131,12 +164,9 @@ class _AdminDrawerState extends State<AdminDrawer> {
             listTileSelected[index] ? Colors.white : GlobalVariables.darkGrey,
       ),
       onTap: () {
-        setState(() {
-          listTileSelected[index] = true;
-          listTileSelected
-              .asMap()
-              .forEach((key, value) => listTileSelected[key] = key == index);
-        });
+        if (index == 3) {
+          _logOut();
+        }
       },
     );
   }

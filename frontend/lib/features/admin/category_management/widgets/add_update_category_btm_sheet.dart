@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AddUpdateCategotyBottomSheet extends StatefulWidget {
-  const AddUpdateCategotyBottomSheet({
+class AddUpdateCategoryBottomSheet extends StatefulWidget {
+  const AddUpdateCategoryBottomSheet({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<AddUpdateCategotyBottomSheet> createState() =>
-      _AddUpdateCategotyBottomSheetState();
+  State<AddUpdateCategoryBottomSheet> createState() =>
+      _AddUpdateCategoryBottomSheetState();
 }
 
-class _AddUpdateCategotyBottomSheetState
-    extends State<AddUpdateCategotyBottomSheet> {
+class _AddUpdateCategoryBottomSheetState
+    extends State<AddUpdateCategoryBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;

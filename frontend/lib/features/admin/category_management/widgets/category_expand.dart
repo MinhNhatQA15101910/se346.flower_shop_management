@@ -1,17 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:frontend/features/admin/category_management/widgets/category_item.dart';
+import 'package:frontend/features/admin/category_management/widgets/listview_category.dart';
+import 'package:frontend/features/customer/category/services/category_service.dart';
+import 'package:frontend/models/occasion.dart';
+import 'package:frontend/models/type.dart';
 
 class CategoryExpand extends StatefulWidget {
   final String titleText;
+  final int categoryId;
 
-  const CategoryExpand({super.key, required this.titleText});
+  const CategoryExpand({
+    super.key,
+    required this.titleText,
+    required this.categoryId,
+  });
 
   @override
   State<CategoryExpand> createState() => _CategoryExpandState();
 }
 
 class _CategoryExpandState extends State<CategoryExpand> {
+  final _categoryService = CategoryService();
+
+  List<Object>? _objectList;
+
+  void _fetchObjectList() async {
+    if (widget.titleText == 'Types') {
+      _objectList = await _categoryService.fetchAllTypes(
+        context,
+        widget.categoryId,
+      );
+    } else {
+      _objectList = await _categoryService.fetchAllOccasions(
+        context,
+        widget.categoryId,
+      );
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchObjectList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -43,41 +78,14 @@ class _CategoryExpandState extends State<CategoryExpand> {
               ),
             ),
             children: [
-              CategoryItem(
-                imagePath: 'assets/images/img_category_demo.png',
-                title: 'Category 1',
-                description: 'Types/Occasions',
-              ),
-              CategoryItem(
-                imagePath: 'assets/images/img_category_demo.png',
-                title: 'Category 1',
-                description: 'Types/Occasions',
-              ),
-              CategoryItem(
-                imagePath: 'assets/images/img_category_demo.png',
-                title: 'Category 1',
-                description: 'Types/Occasions',
-              ),
-              CategoryItem(
-                imagePath: 'assets/images/img_category_demo.png',
-                title: 'Category 1',
-                description: 'Types/Occasions',
-              ),
-              CategoryItem(
-                imagePath: 'assets/images/img_category_demo.png',
-                title: 'Category 1',
-                description: 'Types/Occasions',
-              ),
-              CategoryItem(
-                imagePath: 'assets/images/img_category_demo.png',
-                title: 'Category 1',
-                description: 'Types/Occasions',
-              ),
-              CategoryItem(
-                imagePath: 'assets/images/img_category_demo.png',
-                title: 'Category 1',
-                description: 'Types/Occasions',
-              ),
+              if (widget.titleText == 'Types')
+                ListViewCategory(
+                  types: _objectList as List<Type>?,
+                ),
+              if (widget.titleText == 'Occasions')
+                ListViewCategory(
+                  occasions: _objectList as List<Occasion>?,
+                ),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,

@@ -175,10 +175,17 @@ class AuthService {
           Provider.of<UserProvider>(context, listen: false)
               .setUser(response.body);
 
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            CustomerBottomBar.routeName,
-            (route) => false,
-          );
+          if (jsonDecode(response.body)['role'] == 'admin') {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AdminBottomBar.routeName,
+              (route) => false,
+            );
+          } else {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              CustomerBottomBar.routeName,
+              (route) => false,
+            );
+          }
 
           IconSnackBar.show(
             context,
