@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-
-//import screens
+import 'package:frontend/features/admin/category_management/screens/category_management_screen.dart';
 import 'package:frontend/features/admin/product_management/screens/product_management_screen.dart';
 import 'package:frontend/features/customer/order_management/screens/order_management_screen.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 class AdminBottomBar extends StatefulWidget {
   static const String routeName = '/admin-bottom-bar';
@@ -18,10 +17,12 @@ class _AdminBottomBarState extends State<AdminBottomBar> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const ProductMangementScreen(),
+    const ProductManagementScreen(),
+    const CategoryManagementScreen(),
     const OrderManagementScreen(),
-    const OrderManagementScreen(),
-    const OrderManagementScreen(),
+    const Center(
+      child: Text('Statistics Screen'),
+    ),
   ];
 
   @override
@@ -51,7 +52,10 @@ class _AdminBottomBarState extends State<AdminBottomBar> {
               color: Colors.white,
               activeColor: GlobalVariables.darkGreen,
               tabBackgroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+              padding: EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 10.0,
+              ),
               selectedIndex: _selectedIndex,
               onTabChange: (index) {
                 setState(() {

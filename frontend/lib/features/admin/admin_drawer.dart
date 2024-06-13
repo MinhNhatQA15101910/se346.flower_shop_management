@@ -18,6 +18,7 @@ final Map<String, IconData> drawerItems = {
 
 class _AdminDrawerState extends State<AdminDrawer> {
   List<bool> listTileSelected = drawerItems.keys.map((e) => false).toList();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -86,10 +87,13 @@ class _AdminDrawerState extends State<AdminDrawer> {
             ),
             ...drawerItems.entries
                 .map(
-                  (e) => _buildDrawerItem(
-                    title: e.key,
-                    icon: e.value,
-                    index: drawerItems.keys.toList().indexOf(e.key),
+                  (e) => GestureDetector(
+                    onTap: () => print('Tapped'),
+                    child: _buildDrawerItem(
+                      title: e.key,
+                      icon: e.value,
+                      index: drawerItems.keys.toList().indexOf(e.key),
+                    ),
                   ),
                 )
                 .toList()
@@ -99,8 +103,11 @@ class _AdminDrawerState extends State<AdminDrawer> {
     );
   }
 
-  Widget _buildDrawerItem(
-      {required String title, required IconData icon, required int index}) {
+  Widget _buildDrawerItem({
+    required String title,
+    required IconData icon,
+    required int index,
+  }) {
     return ListTile(
       selected: listTileSelected[index],
       tileColor: Colors.transparent,

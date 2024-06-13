@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
@@ -9,14 +8,14 @@ import 'package:frontend/features/admin/product_management/widgets/product_manag
 import 'package:frontend/features/admin/product_management/widgets/admin_product_filter_btm_sheet.dart';
 import 'package:frontend/features/admin/product_management/widgets/admin_product_sort_btm_sheet.dart';
 
-class ProductMangementScreen extends StatefulWidget {
-  const ProductMangementScreen({super.key});
+class ProductManagementScreen extends StatefulWidget {
+  const ProductManagementScreen({super.key});
 
   @override
-  State<ProductMangementScreen> createState() => _ProductMangementScreenState();
+  State<ProductManagementScreen> createState() => _ProductManagementScreenState();
 }
 
-class _ProductMangementScreenState extends State<ProductMangementScreen> {
+class _ProductManagementScreenState extends State<ProductManagementScreen> {
   final _textController = TextEditingController();
 
   @override
@@ -37,7 +36,7 @@ class _ProductMangementScreenState extends State<ProductMangementScreen> {
             children: [
               SizedBox(width: 10), // To center the title
               Text(
-                'Flowerfly',
+                'FlowerFly',
                 style: GoogleFonts.pacifico(
                   fontSize: 30,
                   decoration: TextDecoration.none,

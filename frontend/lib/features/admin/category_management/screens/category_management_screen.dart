@@ -22,9 +22,9 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              AdminDrawer(),
+              SizedBox(width: 10), // To center the title
               Text(
-                'Flowerfly',
+                'FlowerFly',
                 style: GoogleFonts.pacifico(
                   fontSize: 30,
                   decoration: TextDecoration.none,
@@ -32,10 +32,10 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                 ),
               ),
               IconButton(
-                onPressed: null,
+                onPressed: () => {},
                 iconSize: 30,
                 icon: const Icon(
-                  Icons.account_circle,
+                  Icons.account_circle_outlined,
                   color: GlobalVariables.darkGreen,
                 ),
               ),
@@ -43,6 +43,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
           ),
         ),
       ),
+      drawer: AdminDrawer(),
       body: const SingleChildScrollView(
         child: Column(
           children: [

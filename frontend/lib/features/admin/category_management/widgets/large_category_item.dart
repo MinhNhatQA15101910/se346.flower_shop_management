@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/admin/category_management/widgets/category_expand.dart';
-import 'package:frontend/features/admin/category_management/widgets/category_item.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LargeCategoryItem extends StatefulWidget {
