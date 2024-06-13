@@ -32,7 +32,7 @@ const adminValidator = async (req, res, next) => {
     const user = await db.query("SELECT * FROM users WHERE id = $1", [
       verified.id,
     ]);
-    if (user.role !== "admin") {
+    if (user.rows[0].role !== "admin") {
       return res.status(401).json({ msg: "You are not an admin!" });
     }
 

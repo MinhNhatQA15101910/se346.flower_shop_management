@@ -95,7 +95,12 @@ class CategoryItem extends StatelessWidget {
                               topRight: Radius.circular(8),
                             ),
                           ),
-                          child: AddUpdateCategoryBottomSheet(),
+                          child: AddUpdateCategoryBottomSheet(
+                            featureName: type != null
+                                ? 'Update type'
+                                : 'Update occasion',
+                            categoryId: type != null ? type!.id : occasion!.id,
+                          ),
                         );
                       },
                     ),

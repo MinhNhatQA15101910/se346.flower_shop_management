@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/admin/category_management/widgets/add_update_category_btm_sheet.dart';
 import 'package:frontend/features/admin/category_management/widgets/listview_category.dart';
 import 'package:frontend/features/customer/category/services/category_service.dart';
 import 'package:frontend/models/occasion.dart';
@@ -38,6 +39,30 @@ class _CategoryExpandState extends State<CategoryExpand> {
     }
 
     setState(() {});
+  }
+
+  void _displayAddCategoryBtmSheet() {
+    showModalBottomSheet<dynamic>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: AddUpdateCategoryBottomSheet(
+            featureName:
+                widget.titleText == 'Types' ? 'Add type' : 'Add occasion',
+            categoryParentId: widget.categoryId,
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -92,13 +117,13 @@ class _CategoryExpandState extends State<CategoryExpand> {
                   vertical: 12,
                 ),
                 child: GlobalVariables.customButton(
-                  buttonText: widget.titleText == 'Types'
-                      ? 'Add a type'
-                      : 'Add an occasion',
-                  borderColor: GlobalVariables.green,
-                  fillColor: Colors.white,
-                  textColor: GlobalVariables.green,
-                ),
+                    buttonText: widget.titleText == 'Types'
+                        ? 'Add a type'
+                        : 'Add an occasion',
+                    borderColor: GlobalVariables.green,
+                    fillColor: Colors.white,
+                    textColor: GlobalVariables.green,
+                    onTap: _displayAddCategoryBtmSheet),
               ),
             ],
           ),

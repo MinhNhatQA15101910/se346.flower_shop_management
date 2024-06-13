@@ -17,6 +17,103 @@ function getDatabaseInstance() {
   return db;
 }
 
+// Get alllllllllllllllllllll
+productRouter.get("/customer/products/all", authValidator, async (req, res) => {
+  try {
+    const db = getDatabaseInstance();
+
+    const products = await db.query("SELECT * FROM products ORDER BY id ASC");
+
+    for (let i = 0; i < products.rowCount; i++) {
+      let imageUrlList = await db.query(
+        "SELECT image_url FROM product_images WHERE product_id = $1",
+        [products.rows[i].id]
+      );
+
+      let imageUrls = [];
+      for (let j = 0; j < imageUrlList.rowCount; j++) {
+        imageUrls.push(imageUrlList.rows[j].image_url);
+      }
+
+      products.rows[i].image_urls = imageUrls;
+    }
+
+    db.end();
+
+    res.json(products.rows);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+productRouter.get(
+  "/customer/deals-of-day/all",
+  authValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const products = await db.query(
+        "SELECT * FROM products ORDER BY (rating_avg * total_rating) DESC"
+      );
+
+      for (let i = 0; i < products.rowCount; i++) {
+        let imageUrlList = await db.query(
+          "SELECT image_url FROM product_images WHERE product_id = $1",
+          [products.rows[i].id]
+        );
+
+        let imageUrls = [];
+        for (let j = 0; j < imageUrlList.rowCount; j++) {
+          imageUrls.push(imageUrlList.rows[j].image_url);
+        }
+
+        products.rows[i].image_urls = imageUrls;
+      }
+
+      db.end();
+
+      res.json(products.rows);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
+productRouter.get(
+  "/customer/recommended-products/all",
+  authValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const products = await db.query(
+        "SELECT * FROM products ORDER BY rating_avg DESC"
+      );
+
+      for (let i = 0; i < products.rowCount; i++) {
+        let imageUrlList = await db.query(
+          "SELECT image_url FROM product_images WHERE product_id = $1",
+          [products.rows[i].id]
+        );
+
+        let imageUrls = [];
+        for (let j = 0; j < imageUrlList.rowCount; j++) {
+          imageUrls.push(imageUrlList.rows[j].image_url);
+        }
+
+        products.rows[i].image_urls = imageUrls;
+      }
+
+      db.end();
+
+      res.json(products.rows);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
 productRouter.get("/customer/products", authValidator, async (req, res) => {
   try {
     const db = getDatabaseInstance();
