@@ -265,7 +265,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       fit: BoxFit.fill,
                     )
                   : Image.file(
-                      _selectedImage!,
+                      _selectedImage,
                       fit: BoxFit.fill,
                     ),
             ),
