@@ -1,46 +1,104 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/widgets/drop_down_button.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/checkout/services/checkout_service.dart';
+import 'package:frontend/models/district.dart';
+import 'package:frontend/models/shipping_info.dart';
+import 'package:frontend/models/ward.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AddressInfoBottomSheet extends StatefulWidget {
-  const AddressInfoBottomSheet({
-    Key? key,
-  }) : super(key: key);
+  const AddressInfoBottomSheet({Key? key}) : super(key: key);
 
   @override
-  State<AddressInfoBottomSheet> createState() => _AddressInfoBottomSheetState();
+  _AddressInfoBottomSheetState createState() => _AddressInfoBottomSheetState();
 }
 
 class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
-  List<String> provinceList = [
-    'TP Hồ Chí Minh',
-    'Hà Nội',
-    'Đà Nẵng',
-    'Cần Thơ',
-    'Đồng Nai',
-  ];
-  List<String> districtList = [
-    'TP Hồ Chí Minh',
-    'Hà Nội',
-    'Đà Nẵng',
-    'Cần Thơ',
-    'Đồng Nai',
-  ];
-  List<String> wardList = [
-    'TP Hồ Chí Minh',
-    'Hà Nội',
-    'Đà Nẵng',
-    'Cần Thơ',
-    'Đồng Nai',
-  ];
+  List<String> provinceList = ['TP Hồ Chí Minh'];
+  final CheckoutService _checkoutService = CheckoutService();
+  List<String> _districtNames = ['Loading...']; // Initial placeholder
+  List<String> _wardNames = ['Choose a district first']; // Initial placeholder
+  String? _selectedProvince;
+  String? _selectedDistrict;
+  String? _selectedWard;
+
+  final TextEditingController _streetController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+
+  void _fetchDistricts() async {
+    try {
+      List<District> districts = await _checkoutService.fetchDistricts('79');
+      if (!mounted) return;
+      setState(() {
+        _districtNames =
+            districts.map((district) => district.districtName).toList();
+        _selectedDistrict =
+            _districtNames.isNotEmpty ? _districtNames[0] : null;
+        _wardNames = ['Choose a ward']; // Reset wards
+        _selectedWard = null; // Reset selected ward
+      });
+    } catch (e) {
+      print('Error fetching districts: $e');
+      setState(() {
+        _districtNames = ['Error loading districts'];
+      });
+    }
+  }
+
+  Future<String?> _getDistrictId(String districtName) async {
+    List<District> districts = await _checkoutService.fetchDistricts('79');
+    if (!mounted) return null;
+
+    District? selectedDistrict = districts.firstWhere(
+      (district) => district.districtName == districtName,
+    );
+
+    // Return the district ID if found, otherwise return null
+    return selectedDistrict.districtId;
+  }
+
+  void _fetchWards(String districtId) async {
+    try {
+      List<Ward> wards = await _checkoutService.fetchWards(districtId);
+      setState(() {
+        _wardNames = wards.map((ward) => ward.wardName).toList();
+        _selectedWard = _wardNames.isNotEmpty ? _wardNames[0] : null;
+      });
+    } catch (e) {
+      print('Error fetching wards: $e');
+      setState(() {
+        _wardNames = ['Error loading wards'];
+        _selectedWard = null; // Clear selected ward on error
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchDistricts();
+    _fetchWards('785');
+  }
+
+  @override
+  void dispose() {
+    _streetController.dispose();
+    _phoneNumberController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+
     return Container(
-      padding: EdgeInsets.only(
-        bottom: keyboardSpace,
+      padding: EdgeInsets.only(bottom: keyboardSpace),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -52,9 +110,7 @@ class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  SizedBox(
-                    width: 24,
-                  ),
+                  SizedBox(width: 24),
                   Expanded(
                     child: Container(
                       child: _BoldSizeText('Change shipping info'),
@@ -63,91 +119,105 @@ class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
                   IconButton(
                     onPressed: () => Navigator.pop(context),
                     iconSize: 24,
-                    icon: const Icon(
-                      Icons.clear,
-                      color: Colors.black,
-                    ),
+                    icon: const Icon(Icons.clear, color: Colors.black),
                   ),
                 ],
               ),
             ),
-            Divider(
-              color: GlobalVariables.lightGrey,
-              thickness: 1.0,
-            ),
+            Divider(color: GlobalVariables.lightGrey, thickness: 1.0),
             Container(
-              padding: EdgeInsets.only(
-                bottom: 12,
-                left: 16,
-                right: 16,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _PaddingText('Province'),
-                  CustomDropdownButton(
-                    items: provinceList,
-                    initialSelectedItem: provinceList[0],
-                    onChanged: (selectedItem) {
-                      print('Selected item: $selectedItem');
+                  _buildDropdown(
+                    value: _selectedProvince ?? provinceList[0],
+                    items: provinceList.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedProvince = newValue;
+                      });
                     },
                   ),
                   _PaddingText('District'),
-                  CustomDropdownButton(
-                    items: districtList,
-                    initialSelectedItem: districtList[0],
-                    onChanged: (selectedItem) {
-                      print('Selected item: $selectedItem');
+                  _buildDropdown(
+                    value: _selectedDistrict ?? _districtNames[0],
+                    items: _districtNames.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) async {
+                      setState(() {
+                        _selectedDistrict = newValue;
+                      });
+
+                      if (_selectedDistrict != null) {
+                        String? districtId =
+                            await _getDistrictId(_selectedDistrict!);
+                        if (districtId != null) {
+                          _fetchWards(districtId);
+                        }
+                      }
                     },
                   ),
                   _PaddingText('Ward'),
-                  CustomDropdownButton(
-                    items: wardList,
-                    initialSelectedItem: wardList[0],
-                    onChanged: (selectedItem) {
-                      print('Selected item: $selectedItem');
+                  _buildDropdown(
+                    value: _selectedWard ?? _wardNames[0],
+                    items: _wardNames.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedWard = newValue;
+                      });
                     },
                   ),
                   _PaddingText('Street / Home Number'),
-                  _customTextField(
-                      TextInputType.text, 'Type street & home Number'),
+                  _customTextField(TextInputType.text,
+                      'Type street & home Number', _streetController),
                   _PaddingText('Phone Number'),
-                  _customTextField(TextInputType.number, 'Type phone number'),
+                  _customTextField(TextInputType.number, 'Type phone number',
+                      _phoneNumberController),
                 ],
               ),
             ),
-            Divider(
-              color: GlobalVariables.defaultColor,
-              thickness: 12.0,
-            ),
+            Divider(color: GlobalVariables.defaultColor, thickness: 12.0),
             Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      child: GlobalVariables.customButton(
-                        onTap: () => Navigator.pop(context),
-                        buttonText: 'Cancel',
-                        borderColor: GlobalVariables.green,
-                        fillColor: Colors.white,
-                        textColor: GlobalVariables.green,
-                      ),
+                    child: GlobalVariables.customButton(
+                      buttonText: 'Cancel',
+                      borderColor: GlobalVariables.green,
+                      fillColor: Colors.white,
+                      textColor: GlobalVariables.green,
+                      onTap: () => Navigator.pop(context),
                     ),
                   ),
                   SizedBox(width: 8),
                   Expanded(
-                    child: Container(
-                      child: GlobalVariables.customButton(
-                        onTap: () {},
-                        buttonText: 'Confirm',
-                        borderColor: GlobalVariables.green,
-                        fillColor: GlobalVariables.green,
-                        textColor: Colors.white,
-                      ),
+                    child: GlobalVariables.customButton(
+                      buttonText: 'Confirm',
+                      borderColor: GlobalVariables.green,
+                      fillColor: GlobalVariables.green,
+                      textColor: Colors.white,
+                      onTap: () => {
+                        Navigator.pop(context),
+                      },
                     ),
                   ),
                 ],
@@ -175,10 +245,7 @@ class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
 
   Widget _PaddingText(String text) {
     return Container(
-      padding: EdgeInsets.only(
-        bottom: 8,
-        top: 12,
-      ),
+      padding: EdgeInsets.only(bottom: 8, top: 12),
       child: Text(
         text,
         textAlign: TextAlign.start,
@@ -193,30 +260,52 @@ class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
     );
   }
 
-  Widget _customTextField(TextInputType inputText, String hint) {
+  Widget _customTextField(
+      TextInputType inputType, String hint, TextEditingController controller) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 16,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: GlobalVariables.darkGrey),
+        borderRadius: BorderRadius.circular(8),
       ),
-      child: TextFormField(
-        cursorColor: GlobalVariables.darkGrey,
-        keyboardType: inputText,
-        style: TextStyle(
-          color: GlobalVariables.darkGrey,
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-        ),
+      height: 48,
+      child: TextField(
+        controller: controller,
+        keyboardType: inputType,
         decoration: InputDecoration(
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            errorBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
-            hintText: hint),
+          hintText: hint,
+          hintStyle:
+              GoogleFonts.inter(fontSize: 14, color: GlobalVariables.darkGrey),
+          border: InputBorder.none,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDropdown({
+    required String value,
+    required List<DropdownMenuItem<String>> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Container(
+      height: 48,
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 1,
+          color: GlobalVariables.darkGrey,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: value,
+          isDense: true,
+          onChanged: onChanged,
+          items: items,
+          icon: Icon(Icons.expand_more, color: Colors.grey),
+        ),
       ),
     );
   }

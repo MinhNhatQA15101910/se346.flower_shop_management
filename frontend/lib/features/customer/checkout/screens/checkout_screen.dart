@@ -4,7 +4,10 @@ import 'package:frontend/features/customer/checkout/widgets/estimated_time.dart'
 import 'package:frontend/features/customer/checkout/widgets/product_item.dart';
 import 'package:frontend/features/customer/checkout/widgets/shipping_info_item.dart';
 import 'package:frontend/features/customer/checkout/widgets/total_price.dart';
+import 'package:frontend/models/product.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
   static const String routeName = '/checkout';
@@ -18,6 +21,20 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
+    final bool isNavigateFromCart =
+        ModalRoute.of(context)!.settings.arguments as bool;
+    final userProvider = context.watch<UserProvider>();
+    final _productsScrollController = ScrollController();
+
+    double _calculateSubTotalPrice() {
+      double total = 0.0;
+      for (int i = 0; i < userProvider.user.products.length; i++) {
+        total += userProvider.user.products[i].price *
+            userProvider.user.quantities[i];
+      }
+      return total;
+    }
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(56),
@@ -62,30 +79,36 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     GlobalVariables.customContainer(
                       child: Column(
                         children: [
-                          ProductItem(
-                            productName: 'Product 1,',
-                            quantity: 12,
-                            price: 1234,
-                            imagePath: 'assets/images/product1.png',
-                          ),
-                          ProductItem(
-                            productName: 'Product 1,',
-                            quantity: 12,
-                            price: 1234,
-                            imagePath: 'assets/images/product1.png',
-                          ),
-                          ProductItem(
-                            productName: 'Product 1,',
-                            quantity: 12,
-                            price: 1234,
-                            imagePath: 'assets/images/product1.png',
-                          ),
+                          (isNavigateFromCart)
+                              ? ListView.builder(
+                                  controller: _productsScrollController,
+                                  itemCount: userProvider.user.products.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    Product product =
+                                        userProvider.user.products[index];
+                                    return ProductItem(
+                                      productName: product.name,
+                                      price: product.price,
+                                      imagePath: product.imageUrls.first,
+                                      quantity:
+                                          userProvider.user.quantities[index],
+                                    );
+                                  },
+                                  physics: const NeverScrollableScrollPhysics(),
+                                )
+                              : ProductItem(
+                                  productName: 'name',
+                                  price: 20,
+                                  imagePath: '',
+                                  quantity: 1,
+                                ),
                         ],
                       ),
                     ),
                     TotalPrice(
-                      subTotalPrice: 100,
-                      shippingPrice: 5,
+                      subTotalPrice: _calculateSubTotalPrice(),
+                      shippingPrice: 0,
                       promotionPrice: 0,
                     ),
                     SizedBox(
