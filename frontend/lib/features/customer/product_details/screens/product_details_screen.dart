@@ -3,7 +3,6 @@ import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 
-import 'package:frontend/common/widgets/single_product_card.dart';
 import 'package:frontend/features/customer/product_details/widgets/product_details_widget.dart';
 
 class ProductDetailsScreen extends StatefulWidget {

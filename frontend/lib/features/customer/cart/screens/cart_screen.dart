@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/cart/widgets/product_cart_item.dart';
 import 'package:frontend/features/customer/checkout/screens/checkout_screen.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
   static const String routeName = '/cart';
@@ -19,6 +21,8 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.watch<UserProvider>();
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -63,6 +67,21 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     child: Column(
                       children: [
+                        ListView.builder(
+                          itemCount: userProvider.user.products.length,
+                          itemBuilder: (context, index) {
+                            final product = userProvider.user.products[index];
+                            final currentQuantity =
+                                userProvider.user.quantities[index];
+                            return ProductCartItem(
+                              productName: product.name,
+                              price: product.price,
+                              imagePath: product.imageUrls.first,
+                              quantity: currentQuantity,
+                              limitQuantity: product.stock,
+                            );
+                          },
+                        ),
                         ProductCartItem(
                           productName: 'Product name',
                           price: 100000,

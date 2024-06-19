@@ -7,7 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class ProductCartItem extends StatefulWidget {
   final String productName;
   final String imagePath;
-  final int price;
+  final double price;
   final int quantity;
   final int limitQuantity;
 
