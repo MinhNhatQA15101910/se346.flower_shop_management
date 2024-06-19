@@ -26,7 +26,7 @@ app.use(orderRouter);
 app.use(adminProductRouter);
 app.use(adminCategoryRouter);
 
-app.get("/document", (req, res) => {
+app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
