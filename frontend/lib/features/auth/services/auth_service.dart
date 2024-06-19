@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:frontend/constants/error_handling.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/admin/admin_bottom_bar.dart';
 import 'package:frontend/features/auth/widgets/forgot_password_form.dart';
 import 'package:frontend/features/auth/widgets/login_form.dart';
 import 'package:frontend/features/auth/widgets/pinput_form.dart';
@@ -106,10 +107,17 @@ class AuthService {
             listen: false,
           ).setUser(response.body);
 
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            CustomerBottomBar.routeName,
-            (route) => false,
-          );
+          if (jsonDecode(response.body)['role'] == 'admin') {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AdminBottomBar.routeName,
+              (route) => false,
+            );
+          } else {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              CustomerBottomBar.routeName,
+              (route) => false,
+            );
+          }
 
           IconSnackBar.show(
             context,
@@ -167,10 +175,17 @@ class AuthService {
           Provider.of<UserProvider>(context, listen: false)
               .setUser(response.body);
 
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            CustomerBottomBar.routeName,
-            (route) => false,
-          );
+          if (jsonDecode(response.body)['role'] == 'admin') {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AdminBottomBar.routeName,
+              (route) => false,
+            );
+          } else {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              CustomerBottomBar.routeName,
+              (route) => false,
+            );
+          }
 
           IconSnackBar.show(
             context,

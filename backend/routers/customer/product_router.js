@@ -17,26 +17,143 @@ function getDatabaseInstance() {
   return db;
 }
 
+// Get alllllllllllllllllllll
+productRouter.get("/customer/products/all", authValidator, async (req, res) => {
+  try {
+    const db = getDatabaseInstance();
+
+    const products = await db.query("SELECT * FROM products ORDER BY id ASC");
+
+    for (let i = 0; i < products.rowCount; i++) {
+      let imageUrlList = await db.query(
+        "SELECT image_url FROM product_images WHERE product_id = $1",
+        [products.rows[i].id]
+      );
+
+      let imageUrls = [];
+      for (let j = 0; j < imageUrlList.rowCount; j++) {
+        imageUrls.push(imageUrlList.rows[j].image_url);
+      }
+
+      products.rows[i].image_urls = imageUrls;
+    }
+
+    db.end();
+
+    res.json(products.rows);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+productRouter.get(
+  "/customer/deals-of-day/all",
+  authValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const products = await db.query(
+        "SELECT * FROM products ORDER BY (rating_avg * total_rating) DESC"
+      );
+
+      for (let i = 0; i < products.rowCount; i++) {
+        let imageUrlList = await db.query(
+          "SELECT image_url FROM product_images WHERE product_id = $1",
+          [products.rows[i].id]
+        );
+
+        let imageUrls = [];
+        for (let j = 0; j < imageUrlList.rowCount; j++) {
+          imageUrls.push(imageUrlList.rows[j].image_url);
+        }
+
+        products.rows[i].image_urls = imageUrls;
+      }
+
+      db.end();
+
+      res.json(products.rows);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
+productRouter.get(
+  "/customer/recommended-products/all",
+  authValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const products = await db.query(
+        "SELECT * FROM products ORDER BY rating_avg DESC"
+      );
+
+      for (let i = 0; i < products.rowCount; i++) {
+        let imageUrlList = await db.query(
+          "SELECT image_url FROM product_images WHERE product_id = $1",
+          [products.rows[i].id]
+        );
+
+        let imageUrls = [];
+        for (let j = 0; j < imageUrlList.rowCount; j++) {
+          imageUrls.push(imageUrlList.rows[j].image_url);
+        }
+
+        products.rows[i].image_urls = imageUrls;
+      }
+
+      db.end();
+
+      res.json(products.rows);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
 productRouter.get("/customer/products", authValidator, async (req, res) => {
   try {
     const db = getDatabaseInstance();
 
-    let { page, type_id, occasion_id } = req.query;
+    let { page, type_id, occasion_id, keyword } = req.query;
 
     let products;
 
     if (type_id) {
-      products = await db.query(
-        "SELECT p.* FROM products p, product_type pt, types t WHERE p.id = pt.product_id AND pt.type_id = t.id AND t.id = $1",
-        [type_id]
-      );
-    }
-
-    if (occasion_id) {
-      products = await db.query(
-        "SELECT p.* FROM products p, product_occasion po, occasions o WHERE p.id = po.product_id AND po.occasion_id = o.id AND o.id = $1",
-        [occasion_id]
-      );
+      if (keyword) {
+        products = await db.query(
+          "SELECT p.* FROM products p, product_type pt, types t WHERE p.id = pt.product_id AND pt.type_id = t.id AND t.id = $1 AND p.name LIKE $2",
+          [type_id, "%" + keyword + "%"]
+        );
+      } else {
+        products = await db.query(
+          "SELECT p.* FROM products p, product_type pt, types t WHERE p.id = pt.product_id AND pt.type_id = t.id AND t.id = $1",
+          [type_id]
+        );
+      }
+    } else if (occasion_id) {
+      if (keyword) {
+        products = await db.query(
+          "SELECT p.* FROM products p, product_occasion po, occasions o WHERE p.id = po.product_id AND po.occasion_id = o.id AND o.id = $1 AND p.name LIKE $2",
+          [occasion_id, "%" + keyword + "%"]
+        );
+      } else {
+        products = await db.query(
+          "SELECT p.* FROM products p, product_occasion po, occasions o WHERE p.id = po.product_id AND po.occasion_id = o.id AND o.id = $1",
+          [occasion_id]
+        );
+      }
+    } else {
+      if (keyword) {
+        products = await db.query("SELECT * FROM products WHERE name LIKE $1", [
+          "%" + keyword + "%",
+        ]);
+      } else {
+        products = await db.query("SELECT * FROM products");
+      }
     }
 
     const totalPages = Math.ceil(products.rowCount / 10);
@@ -186,6 +303,40 @@ productRouter.get(
         total_pages: totalPages,
         total_results: totalResults,
       });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
+productRouter.get(
+  "/customer/products/:product_id",
+  authValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const { product_id } = req.params;
+
+      const product = await db.query("SELECT * FROM products WHERE id = $1", [
+        product_id,
+      ]);
+
+      let imageUrlList = await db.query(
+        "SELECT image_url FROM product_images WHERE product_id = $1",
+        [product_id]
+      );
+
+      let imageUrls = [];
+      for (let i = 0; i < imageUrlList.rowCount; i++) {
+        imageUrls.push(imageUrlList.rows[i].image_url);
+      }
+
+      product.rows[0].image_urls = imageUrls;
+
+      await db.end();
+
+      res.json(product.rows[0]);
     } catch (e) {
       res.status(500).json({ error: e.message });
     }

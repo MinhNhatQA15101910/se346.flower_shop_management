@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/admin/admin_drawer.dart';
-import 'package:frontend/features/customer/order_management/widgets/order_detail_cart.dart';
+import 'package:frontend/features/customer/order_management/widgets/order_detail_card.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 
@@ -93,9 +93,13 @@ class _OrderManagementScreenState extends State<OrderManagementScreen> {
                   horizontal: 16.0,
                   vertical: 12.0,
                 ),
-                child: Column(
+                child: ListView(
                   children: [
-                    OrderDetailCart(),
+                    OrderDetailCard(),
+                    OrderDetailCard(),
+                    OrderDetailCard(),
+                    OrderDetailCard(),
+                    OrderDetailCard(),
                   ],
                 ),
               ),

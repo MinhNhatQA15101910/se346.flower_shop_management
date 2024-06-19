@@ -37,6 +37,8 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
           email: _emailController.text.trim(),
         );
 
+        if (!mounted) return;
+
         setState(() {
           _isValidateLoading = false;
         });
