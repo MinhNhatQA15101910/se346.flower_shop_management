@@ -48,6 +48,31 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
   }
 
+  Future<void> _createOrderFormProduct(
+    int Product_id,
+    DateTime estimated_receive_date,
+    String province,
+    String district,
+    String ward,
+    String detail_address,
+    String receiver_name,
+    String receiver_phone_number,
+  ) async {
+    final success = await _checkoutService.createOrderFromProduct(
+        context,
+        Product_id,
+        estimated_receive_date,
+        province,
+        district,
+        ward,
+        detail_address,
+        receiver_name,
+        receiver_phone_number);
+    if (success) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isNavigateFromCart =
@@ -59,7 +84,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     double _calculateSubTotalPrice() {
       double total = 0.0;
       for (int i = 0; i < userProvider.user.products.length; i++) {
-        total += userProvider.user.products[i].price *
+        total += userProvider.user.products[i].salePrice *
             userProvider.user.quantities[i];
       }
       return total;
@@ -160,7 +185,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         userProvider.user.products[index];
                                     return ProductItem(
                                       productName: product.name,
-                                      price: product.price,
+                                      price: product.salePrice,
                                       imagePath: product.imageUrls.first,
                                       quantity:
                                           userProvider.user.quantities[index],
@@ -169,19 +194,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   physics: const NeverScrollableScrollPhysics(),
                                 )
                               : ProductItem(
-                                  productName: 'name',
-                                  price: 20,
-                                  imagePath: '',
+                                  productName: GlobalVariables.productName,
+                                  price: GlobalVariables.productPrice,
+                                  imagePath: GlobalVariables.productURL,
                                   quantity: 1,
                                 ),
                         ],
                       ),
                     ),
-                    TotalPrice(
-                      subTotalPrice: _calculateSubTotalPrice(),
-                      shippingPrice: 0,
-                      promotionPrice: 0,
-                    ),
+                    (isNavigateFromCart)
+                        ? TotalPrice(
+                            subTotalPrice: _calculateSubTotalPrice(),
+                            shippingPrice: 0,
+                            promotionPrice: 0,
+                          )
+                        : TotalPrice(
+                            subTotalPrice: GlobalVariables.productPrice,
+                            shippingPrice: 0,
+                            promotionPrice: 0,
+                          ),
                     SizedBox(
                       height: 12,
                     ),
@@ -207,15 +238,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       wardName.isNotEmpty &&
                       receiverName.isNotEmpty &&
                       phoneNumber.isNotEmpty) {
-                    _createOrderFormCart(
-                      _selectedDateTime,
-                      'TP Hồ Chí Minh',
-                      districtName,
-                      wardName,
-                      detailAddress,
-                      receiverName,
-                      phoneNumber,
-                    );
+                    (isNavigateFromCart)
+                        ? _createOrderFormCart(
+                            _selectedDateTime,
+                            'TP Hồ Chí Minh',
+                            districtName,
+                            wardName,
+                            detailAddress,
+                            receiverName,
+                            phoneNumber,
+                          )
+                        : _createOrderFormProduct(
+                            GlobalVariables.productId,
+                            _selectedDateTime,
+                            'TP Hồ Chí Minh',
+                            districtName,
+                            wardName,
+                            detailAddress,
+                            receiverName,
+                            phoneNumber,
+                          );
                     Navigator.of(context).pop();
                   } else {
                     IconSnackBar.show(
@@ -225,8 +267,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     );
                   }
                 },
-                buttonText:
-                    'Checkout \$' + _calculateSubTotalPrice().toString(),
+                buttonText: 'Checkout \$' +
+                    _calculateSubTotalPrice().toStringAsFixed(2),
                 borderColor: GlobalVariables.green,
                 fillColor: GlobalVariables.green,
                 textColor: Colors.white),

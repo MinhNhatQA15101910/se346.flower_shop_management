@@ -29,6 +29,11 @@ class GlobalVariables {
   static const Color black = Color(0xFF000000);
   static const Color blackTextColor = Color(0xFF27272A);
 
+  static int productId = -1;
+  static String productName = '';
+  static String productURL = '';
+  static double productPrice = 0;
+
   // Define Scales
   static void init(BuildContext context) async {
     // Sizes

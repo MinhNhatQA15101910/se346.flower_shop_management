@@ -46,8 +46,8 @@ class _CartScreenState extends State<CartScreen> {
     final userProvider = context.read<UserProvider>();
     double total = 0.0;
     for (int i = 0; i < userProvider.user.products.length; i++) {
-      total +=
-          userProvider.user.products[i].price * userProvider.user.quantities[i];
+      total += userProvider.user.products[i].salePrice *
+          userProvider.user.quantities[i];
     }
     setState(() {
       _subTotalPrice = total;
@@ -114,7 +114,7 @@ class _CartScreenState extends State<CartScreen> {
                                   return ProductCartItem(
                                     productId: product.id,
                                     productName: product.name,
-                                    price: product.price,
+                                    price: product.salePrice,
                                     imagePath: product.imageUrls.first,
                                     quantity:
                                         userProvider.user.quantities[index],
