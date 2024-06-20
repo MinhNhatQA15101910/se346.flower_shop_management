@@ -120,16 +120,4 @@ class SingleProductCard extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildText(String text) {
-    return Text(
-      text,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: GoogleFonts.inter(
-        fontSize: 14,
-        color: GlobalVariables.blackTextColor,
-      ),
-    );
-  }
 }

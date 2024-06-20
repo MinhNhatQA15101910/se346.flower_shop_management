@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/cart/widgets/product_cart_item.dart';
@@ -169,7 +170,17 @@ class _CartScreenState extends State<CartScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: GlobalVariables.customButton(
-                onTap: () => _navigateToCheckoutScreen(context),
+                onTap: () => {
+                      (userProvider.user.products.isNotEmpty)
+                          ? _navigateToCheckoutScreen(context)
+                          : {
+                              IconSnackBar.show(
+                                context,
+                                label: 'You have no product in your cart!',
+                                snackBarType: SnackBarType.fail,
+                              ),
+                            },
+                    },
                 buttonText: 'Process to checkout',
                 borderColor: GlobalVariables.green,
                 fillColor: GlobalVariables.green,

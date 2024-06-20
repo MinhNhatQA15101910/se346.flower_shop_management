@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/checkout/models/district.dart';
+import 'package:frontend/features/customer/checkout/models/ward.dart';
+import 'package:frontend/features/customer/checkout/providers/shipping_info_provider.dart';
 import 'package:frontend/features/customer/checkout/services/checkout_service.dart';
-import 'package:frontend/models/district.dart';
-import 'package:frontend/models/shipping_info.dart';
-import 'package:frontend/models/ward.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class AddressInfoBottomSheet extends StatefulWidget {
   const AddressInfoBottomSheet({Key? key}) : super(key: key);
@@ -24,6 +26,7 @@ class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
 
   final TextEditingController _streetController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _receiverNameController = TextEditingController();
 
   void _fetchDistricts() async {
     try {
@@ -34,8 +37,8 @@ class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
             districts.map((district) => district.districtName).toList();
         _selectedDistrict =
             _districtNames.isNotEmpty ? _districtNames[0] : null;
-        _wardNames = ['Choose a ward']; // Reset wards
-        _selectedWard = null; // Reset selected ward
+        _wardNames = ['Choose a ward'];
+        _selectedWard = null;
       });
     } catch (e) {
       print('Error fetching districts: $e');
@@ -53,7 +56,6 @@ class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
       (district) => district.districtName == districtName,
     );
 
-    // Return the district ID if found, otherwise return null
     return selectedDistrict.districtId;
   }
 
@@ -68,7 +70,7 @@ class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
       print('Error fetching wards: $e');
       setState(() {
         _wardNames = ['Error loading wards'];
-        _selectedWard = null; // Clear selected ward on error
+        _selectedWard = null;
       });
     }
   }
@@ -84,13 +86,15 @@ class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
   void dispose() {
     _streetController.dispose();
     _phoneNumberController.dispose();
+    _receiverNameController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
-
+    final shippingInfoProvider = context.watch<ShippingInfoProvider>();
+    final shippingInfo = shippingInfoProvider.shippingInfo;
     return Container(
       padding: EdgeInsets.only(bottom: keyboardSpace),
       decoration: BoxDecoration(
@@ -188,6 +192,9 @@ class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
                   _PaddingText('Street / Home Number'),
                   _customTextField(TextInputType.text,
                       'Type street & home Number', _streetController),
+                  _PaddingText('Receiver Name'),
+                  _customTextField(TextInputType.text, 'Type receiver name',
+                      _receiverNameController),
                   _PaddingText('Phone Number'),
                   _customTextField(TextInputType.number, 'Type phone number',
                       _phoneNumberController),
@@ -216,7 +223,33 @@ class _AddressInfoBottomSheetState extends State<AddressInfoBottomSheet> {
                       fillColor: GlobalVariables.green,
                       textColor: Colors.white,
                       onTap: () => {
-                        Navigator.pop(context),
+                        if (_selectedDistrict != 'Loading...' &&
+                            _selectedDistrict != null &&
+                            _selectedWard != 'Choose a ward' &&
+                            _selectedWard != 'Error loading wards' &&
+                            _selectedWard != null &&
+                            _receiverNameController.text != "" &&
+                            _phoneNumberController.text != "")
+                          {
+                            Navigator.pop(context),
+                            shippingInfoProvider.setShippingInfo(
+                              shippingInfo.copyWith(
+                                districtName: _selectedDistrict,
+                                wardName: _selectedWard,
+                                detailAddress: _streetController.text,
+                                receiverName: _receiverNameController.text,
+                                phoneNumber: _phoneNumberController.text,
+                              ),
+                            ),
+                          }
+                        else
+                          {
+                            IconSnackBar.show(
+                              context,
+                              label: 'Shipping info must not be empty',
+                              snackBarType: SnackBarType.fail,
+                            ),
+                          }
                       },
                     ),
                   ),

@@ -62,7 +62,7 @@ class _ProductCartItemState extends State<ProductCartItem> {
       setState(() {
         _quantity++;
         _updateButtonState();
-        widget.onQuantityChanged(); // Call this line
+        widget.onQuantityChanged();
       });
     }
   }
@@ -75,7 +75,7 @@ class _ProductCartItemState extends State<ProductCartItem> {
           _quantity--;
         }
         _updateButtonState();
-        widget.onQuantityChanged(); // Call this line
+        widget.onQuantityChanged();
       });
     }
   }
@@ -85,7 +85,7 @@ class _ProductCartItemState extends State<ProductCartItem> {
     if (success) {
       setState(() {
         widget.onRemove();
-        widget.onQuantityChanged(); // Call this line
+        widget.onQuantityChanged();
       });
     }
   }
