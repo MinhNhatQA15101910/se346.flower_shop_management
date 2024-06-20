@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
+import 'package:frontend/features/customer/product_details/services/product_details.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
-
+import 'package:frontend/common/widgets/loader.dart';
 import 'package:frontend/common/widgets/single_product_card.dart';
+
+import 'package:frontend/models/product.dart';
 import 'package:frontend/features/customer/product_details/widgets/product_details_widget.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -15,15 +18,41 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  final _productDetailService = ProductDetailService();
+
+  final _recommendProductsScrollController = ScrollController();
+
   bool _isReadMore = false;
   DateTime _selectedDate = DateTime.now();
+  List<Product>? _recommendedProducts;
+  late Product _product;
 
   void _navigateToCartScreen() {
     Navigator.of(context).pushNamed(CartScreen.routeName);
   }
 
+  void _fetchRecommendedProductsInFirstPage() async {
+    List<Product> newProducts =
+        await _productDetailService.fetchAllRecommendedProducts(
+      context,
+      1,
+    );
+
+    setState(() {
+      _recommendedProducts = newProducts;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchRecommendedProductsInFirstPage();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _product = ModalRoute.of(context)!.settings.arguments as Product;
+    //initState();
     return Scaffold(
         backgroundColor: GlobalVariables.lightGrey,
         appBar: PreferredSize(
@@ -47,7 +76,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ProductDetailsWidget(),
+              ProductDetailsWidget(product: _product),
               SizedBox(height: 10),
               //Delivery info Container
               Container(
@@ -120,7 +149,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
               ),
               SizedBox(height: 10),
-//Delivery Time Container
+              //Delivery Time Container
               Container(
                 width: GlobalVariables.screenWidth,
                 padding: EdgeInsets.all(16),
@@ -201,15 +230,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         color: GlobalVariables.green,
                       ),
                     ),
-                    _buildProductDetail('Size', 'Size data'),
-                    _buildProductDetail('Weight:', 'Weight data'),
-                    _buildProductDetail('Color:', 'Color data'),
-                    _buildProductDetail('Material:', 'Material data'),
+                    _buildProductDetail('Size', _product.size.toString()),
+                    _buildProductDetail('Weight:', _product.weight.toString()),
+                    _buildProductDetail('Color:', _product.color),
+                    _buildProductDetail('Material:', _product.material),
 
                     SizedBox(height: 12),
                     // Read more
                     Text(
-                      'Product details A Flutter plugin that allows for expanding and collapsing text with the added capability to style and interact with specific patterns in the text like hashtags, URLs, and mentions using the new Annotation feature.',
+                      _product.detailDescription,
                       maxLines: _isReadMore ? null : 3,
                       style: GoogleFonts.inter(
                         fontSize: 16,
@@ -251,22 +280,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 0.7,
-                      ),
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        // return SingleProductCard();
-                        return Container();
-                      },
-                    ),
+                    _recommendedProducts == null
+                        ? const Loader()
+                        : GridView.builder(
+                            controller: _recommendProductsScrollController,
+                            itemCount: _recommendedProducts!.length,
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 3 / 4,
+                            ),
+                            itemBuilder: (context, index) {
+                              return SingleProductCard(
+                                product: _recommendedProducts![index],
+                              );
+                            },
+                            physics: const NeverScrollableScrollPhysics(),
+                          ),
                   ],
                 ),
               ),
