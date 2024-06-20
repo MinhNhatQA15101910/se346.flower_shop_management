@@ -3,9 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:frontend/models/product.dart';
 
 class ProductDetailsWidget extends StatefulWidget {
-  const ProductDetailsWidget({super.key});
+  const ProductDetailsWidget({super.key, required this.product});
+  final Product product;
 
   @override
   _ProductDetailsWidgetState createState() => _ProductDetailsWidgetState();
@@ -13,8 +15,6 @@ class ProductDetailsWidget extends StatefulWidget {
 
 class _ProductDetailsWidgetState extends State<ProductDetailsWidget> {
   int _activeIndex = 0;
-  final _tempImageQuantity = 5;
-  int _rateNumber = 44;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget> {
           alignment: AlignmentDirectional.bottomEnd,
           children: [
             CarouselSlider.builder(
-              itemCount: _tempImageQuantity,
+              itemCount: widget.product.imageUrls.length,
               options: CarouselOptions(
                 viewportFraction: 1.0,
                 aspectRatio: 1.2,
@@ -36,7 +36,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget> {
                 return Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/product2.png'),
+                      image: NetworkImage(widget.product.imageUrls[index]),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -51,7 +51,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                '${_activeIndex + 1} / $_tempImageQuantity',
+                '${_activeIndex + 1} / ${widget.product.imageUrls.length}',
                 style: GoogleFonts.inter(
                   color: Colors.white,
                   fontSize: 16,
@@ -70,7 +70,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                'Product name',
+                widget.product.name,
                 style: GoogleFonts.inter(
                     fontSize: 20, fontWeight: FontWeight.w500),
               ),
@@ -89,7 +89,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget> {
                     onRatingUpdate: (rating) {},
                   ),
                   Text(
-                    ' ($_rateNumber)',
+                    '(${widget.product.totalRating})',
                     style: GoogleFonts.inter(
                       color: GlobalVariables.darkGrey,
                     ),
@@ -97,7 +97,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget> {
                 ],
               ),
               Text(
-                'Price:',
+                '\$ ${widget.product.salePrice.toString()}',
                 style: GoogleFonts.inter(
                     fontSize: 20, fontWeight: FontWeight.w600),
               ),
@@ -110,7 +110,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Text(
-                      '- 100%',
+                      '-${widget.product.salePercentage}%',
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -120,7 +120,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    '\$120',
+                    '\$ ${widget.product.price.toString()}',
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       decoration: TextDecoration.lineThrough,

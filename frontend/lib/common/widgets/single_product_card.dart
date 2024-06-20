@@ -14,7 +14,8 @@ class SingleProductCard extends StatelessWidget {
   final Product product;
 
   void navigateToProductDetailsScreen(BuildContext context) {
-    Navigator.of(context).pushNamed(ProductDetailsScreen.routeName);
+    Navigator.of(context)
+        .pushNamed(ProductDetailsScreen.routeName, arguments: product);
   }
 
   @override
