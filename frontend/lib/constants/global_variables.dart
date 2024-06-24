@@ -1,7 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String uri = 'http://192.168.4.108:3000';
+String uri = 'http://192.168.111.204:3000';
 
 class GlobalVariables {
   // Base Variables
@@ -64,6 +66,90 @@ class GlobalVariables {
   static const double fontSize_32 = 32;
   static const double fontSize_36 = 36;
   static const double fontSize_48 = 48;
+
+  //Create list color for chart
+  List<Color> chartColors = [
+    Color(0xFFFF5733),
+    Color(0xFFC70039),
+    Color(0xFF900C3F),
+    Color(0xFF581845),
+    Color(0xFFF44336),
+    Color(0xFFE91E63),
+    Color(0xFF9C27B0),
+    Color(0xFF673AB7),
+    Color(0xFF3F51B5),
+    Color(0xFF2196F3),
+    Color(0xFF03A9F4),
+    Color(0xFF00BCD4),
+    Color(0xFF009688),
+    Color(0xFF4CAF50),
+    Color(0xFF8BC34A),
+    Color(0xFFCDDC39),
+    Color(0xFFFFEB3B),
+    Color(0xFFFFC107),
+    Color(0xFFFF9800),
+    Color(0xFFFF5722),
+    Color(0xFF795548),
+    Color(0xFF9E9E9E),
+    Color(0xFF607D8B),
+    Color(0xFFD32F2F),
+    Color(0xFFC2185B),
+    Color(0xFF7B1FA2),
+    Color(0xFF512DA8),
+    Color(0xFF303F9F),
+    Color(0xFF1976D2),
+    Color(0xFF0288D1),
+    Color(0xFF0097A7),
+    Color(0xFF00796B),
+    Color(0xFF388E3C),
+    Color(0xFF689F38),
+    Color(0xFFAFB42B),
+    Color(0xFFFBC02D),
+    Color(0xFFFFA000),
+    Color(0xFFF57C00),
+    Color(0xFFE64A19),
+    Color(0xFF5D4037),
+    Color(0xFF616161),
+    Color(0xFF455A64),
+    Color(0xFFE53935),
+    Color(0xFFD81B60),
+    Color(0xFF8E24AA),
+    Color(0xFF5E35B1),
+    Color(0xFF3949AB),
+    Color(0xFF1E88E5),
+    Color(0xFF039BE5),
+    Color(0xFF00ACC1),
+    Color(0xFF00897B),
+    Color(0xFF43A047),
+    Color(0xFF7CB342),
+    Color(0xFFC0CA33),
+    Color(0xFFFDD835),
+    Color(0xFFFFB300),
+    Color(0xFFFB8C00),
+    Color(0xFFF4511E),
+    Color(0xFF6D4C41),
+    Color(0xFF757575),
+    Color(0xFF546E7A),
+    Color(0xFFD32F2F),
+    Color(0xFFC2185B),
+    Color(0xFF7B1FA2),
+    Color(0xFF512DA8),
+    Color(0xFF303F9F),
+    Color(0xFF1976D2),
+    Color(0xFF0288D1),
+    Color(0xFF0097A7),
+    Color(0xFF00796B),
+    Color(0xFF388E3C),
+    Color(0xFF689F38),
+    Color(0xFFAFB42B),
+    Color(0xFFFBC02D),
+    Color(0xFFFFA000),
+    Color(0xFFF57C00),
+    Color(0xFFE64A19),
+    Color(0xFF5D4037),
+    Color(0xFF616161),
+    Color(0xFF455A64)
+  ];
 
   //Custom container
   static Widget customContainer({Widget? child}) {

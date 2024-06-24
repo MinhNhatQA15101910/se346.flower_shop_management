@@ -55,6 +55,7 @@ dependencies:
   file_picker: ^8.0.5
   cloudinary_public: ^0.23.1
   pay: ^2.0.0
+  fl_chart: ^0.68.0
 
 dev_dependencies:
   flutter_test:
