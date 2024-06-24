@@ -26,6 +26,7 @@ function getDatabaseInstance() {
 adminCategoryRouter.get(
   "/admin/types/:type_id",
   adminValidator,
+  typeIdValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
@@ -131,6 +132,7 @@ adminCategoryRouter.patch(
 adminCategoryRouter.get(
   "/admin/occasions/:occasion_id",
   adminValidator,
+  occasionIdValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
