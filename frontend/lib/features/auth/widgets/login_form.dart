@@ -223,7 +223,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
               const SizedBox(height: 36),
 
-              // Log in button
+              // Login button
               Align(
                 alignment: Alignment.center,
                 child: _isLoading

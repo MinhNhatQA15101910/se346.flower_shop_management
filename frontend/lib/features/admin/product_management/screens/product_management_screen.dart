@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/admin/product_management/screens/add_product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 
-//Widget imports
 import 'package:frontend/features/admin/admin_drawer.dart';
 import 'package:frontend/features/admin/product_management/widgets/product_manage_card.dart';
 import 'package:frontend/features/admin/product_management/widgets/admin_product_filter_btm_sheet.dart';
@@ -12,7 +12,8 @@ class ProductManagementScreen extends StatefulWidget {
   const ProductManagementScreen({super.key});
 
   @override
-  State<ProductManagementScreen> createState() => _ProductManagementScreenState();
+  State<ProductManagementScreen> createState() =>
+      _ProductManagementScreenState();
 }
 
 class _ProductManagementScreenState extends State<ProductManagementScreen> {
@@ -22,6 +23,10 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
   void dispose() {
     _textController.dispose();
     super.dispose();
+  }
+
+  void _navigateToAddProductScreen() {
+    Navigator.of(context).pushNamed(AddProductScreen.routeName);
   }
 
   @override
@@ -34,7 +39,7 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(width: 10), // To center the title
+              SizedBox(width: 10),
               Text(
                 'FlowerFly',
                 style: GoogleFonts.pacifico(
@@ -147,9 +152,18 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _navigateToAddProductScreen,
+        backgroundColor: GlobalVariables.green,
+        child: Icon(Icons.copy),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(28.0),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
