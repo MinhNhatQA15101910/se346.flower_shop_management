@@ -12,6 +12,7 @@ function getDatabaseInstance() {
   return db;
 }
 
+// Validate category id
 const categoryIdValidator = async (req, res, next) => {
   console.log("Category id validator middleware:");
   console.log("- Category id: " + req.body.category_id);

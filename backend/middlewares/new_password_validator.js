@@ -1,3 +1,4 @@
+// Validate new password
 const newPasswordValidator = (req, res, next) => {
   console.log("New password validator middleware:");
   console.log("- New password: " + req.body.newPassword);

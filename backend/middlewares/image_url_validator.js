@@ -1,3 +1,4 @@
+// Validate image url
 const imageUrlValidator = (req, res, next) => {
   console.log("Image url validator middleware:");
   console.log("- Image url: " + req.body.image_url);

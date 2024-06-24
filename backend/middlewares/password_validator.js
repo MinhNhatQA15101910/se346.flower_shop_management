@@ -1,3 +1,4 @@
+// Validate password
 const passwordValidator = (req, res, next) => {
   console.log("Password validator middleware:");
   console.log("- Password: " + req.body.password);

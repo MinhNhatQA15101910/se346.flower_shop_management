@@ -12,6 +12,7 @@ function getDatabaseInstance() {
   return db;
 }
 
+// Validate occasion id
 const occasionIdValidator = async (req, res, next) => {
   console.log("Occasion id validator middleware:");
   console.log("- Occasion id: " + req.params.occasion_id);

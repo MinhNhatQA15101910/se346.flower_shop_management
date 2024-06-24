@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 
+// Validate user
 const authValidator = async (req, res, next) => {
   try {
     const token = req.header("x-auth-token");
