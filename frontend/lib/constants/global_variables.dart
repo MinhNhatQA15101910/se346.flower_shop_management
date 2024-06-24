@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String uri = 'http://192.168.222.204:3000';
+String uri = 'http://192.168.4.108:3000';
 
 class GlobalVariables {
   // Base Variables
@@ -33,6 +33,7 @@ class GlobalVariables {
   static String productName = '';
   static String productURL = '';
   static double productPrice = 0;
+  static String paymentMethod = '';
 
   // Define Scales
   static void init(BuildContext context) async {

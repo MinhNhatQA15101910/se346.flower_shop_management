@@ -4,12 +4,14 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/checkout/providers/shipping_info_provider.dart';
 import 'package:frontend/features/customer/checkout/services/checkout_service.dart';
 import 'package:frontend/features/customer/checkout/widgets/estimated_time.dart';
+import 'package:frontend/features/customer/checkout/widgets/payment_method_btm_sheet.dart';
 import 'package:frontend/features/customer/checkout/widgets/product_item.dart';
 import 'package:frontend/features/customer/checkout/widgets/shipping_info_item.dart';
 import 'package:frontend/features/customer/checkout/widgets/total_price.dart';
 import 'package:frontend/models/product.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -24,6 +26,7 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final _checkoutService = CheckoutService();
   DateTime _selectedDateTime = DateTime.now().add(Duration(days: 3));
+  late final Future<PaymentConfiguration> _googlePayConfigFuture;
 
   Future<void> _createOrderFormCart(
     DateTime estimated_receive_date,
@@ -74,12 +77,32 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _googlePayConfigFuture =
+        PaymentConfiguration.fromAsset('default_google_pay_config.json');
+  }
+
+  @override
   Widget build(BuildContext context) {
     final bool isNavigateFromCart =
         ModalRoute.of(context)!.settings.arguments as bool;
     final userProvider = context.watch<UserProvider>();
     final shippingInfoProvider = context.watch<ShippingInfoProvider>();
     final _productsScrollController = ScrollController();
+    String districtName = shippingInfoProvider.shippingInfo.districtName;
+    String wardName = shippingInfoProvider.shippingInfo.wardName;
+    String detailAddress = shippingInfoProvider.shippingInfo.detailAddress;
+    String receiverName = shippingInfoProvider.shippingInfo.receiverName;
+    String phoneNumber = shippingInfoProvider.shippingInfo.phoneNumber;
+
+    const _paymentItems = [
+      PaymentItem(
+        label: 'Total',
+        amount: '99.99',
+        status: PaymentItemStatus.final_price,
+      )
+    ];
 
     double _calculateSubTotalPrice() {
       double total = 0.0;
@@ -105,6 +128,40 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               : '';
 
       return (city + district + ward + detailAddress);
+    }
+
+    void onGooglePayResult(paymentResult) {
+      districtName = shippingInfoProvider.shippingInfo.districtName;
+      wardName = shippingInfoProvider.shippingInfo.wardName;
+      detailAddress = shippingInfoProvider.shippingInfo.detailAddress;
+      receiverName = shippingInfoProvider.shippingInfo.receiverName;
+      phoneNumber = shippingInfoProvider.shippingInfo.phoneNumber;
+      (isNavigateFromCart)
+          ? _createOrderFormCart(
+              _selectedDateTime,
+              'TP Hồ Chí Minh',
+              districtName,
+              wardName,
+              detailAddress,
+              receiverName,
+              phoneNumber,
+            )
+          : _createOrderFormProduct(
+              GlobalVariables.productId,
+              _selectedDateTime,
+              'TP Hồ Chí Minh',
+              districtName,
+              wardName,
+              detailAddress,
+              receiverName,
+              phoneNumber,
+            );
+      Navigator.of(context).pop();
+      IconSnackBar.show(
+        context,
+        label: 'Checkout successfully',
+        snackBarType: SnackBarType.success,
+      );
     }
 
     String receiverDetail() {
@@ -202,6 +259,78 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ],
                       ),
                     ),
+                    _paddingText('Payment info'),
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet<dynamic>(
+                          context: context,
+                          useRootNavigator: true,
+                          isScrollControlled: true,
+                          builder: (BuildContext context) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                ),
+                              ),
+                              child: PaymentMethodBottomSheet(),
+                            );
+                          },
+                        );
+                      },
+                      child: GlobalVariables.customContainer(
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/img_google_pay.jpg'),
+                                  fit: BoxFit.fill,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Payment methods',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      decoration: TextDecoration.none,
+                                      color: GlobalVariables.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Google pay',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      decoration: TextDecoration.none,
+                                      color: GlobalVariables.black,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Icon(Icons.chevron_right_outlined)
+                          ],
+                        ),
+                      ),
+                    ),
                     (isNavigateFromCart)
                         ? TotalPrice(
                             subTotalPrice: _calculateSubTotalPrice(),
@@ -223,55 +352,56 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: GlobalVariables.customButton(
-                onTap: () {
-                  String districtName =
-                      shippingInfoProvider.shippingInfo.districtName;
-                  String wardName = shippingInfoProvider.shippingInfo.wardName;
-                  String detailAddress =
-                      shippingInfoProvider.shippingInfo.detailAddress;
-                  String receiverName =
-                      shippingInfoProvider.shippingInfo.receiverName;
-                  String phoneNumber =
-                      shippingInfoProvider.shippingInfo.phoneNumber;
-                  if (districtName.isNotEmpty &&
-                      wardName.isNotEmpty &&
-                      receiverName.isNotEmpty &&
-                      phoneNumber.isNotEmpty) {
-                    (isNavigateFromCart)
-                        ? _createOrderFormCart(
-                            _selectedDateTime,
-                            'TP Hồ Chí Minh',
-                            districtName,
-                            wardName,
-                            detailAddress,
-                            receiverName,
-                            phoneNumber,
-                          )
-                        : _createOrderFormProduct(
-                            GlobalVariables.productId,
-                            _selectedDateTime,
-                            'TP Hồ Chí Minh',
-                            districtName,
-                            wardName,
-                            detailAddress,
-                            receiverName,
-                            phoneNumber,
-                          );
-                    Navigator.of(context).pop();
-                  } else {
-                    IconSnackBar.show(
-                      context,
-                      label: 'Shipping info must not be empty',
-                      snackBarType: SnackBarType.fail,
-                    );
-                  }
-                },
-                buttonText: 'Checkout \$' +
-                    _calculateSubTotalPrice().toStringAsFixed(2),
-                borderColor: GlobalVariables.green,
-                fillColor: GlobalVariables.green,
-                textColor: Colors.white),
+            child: Stack(
+              children: [
+                GlobalVariables.customButton(
+                    onTap: () {
+                      if (districtName.isEmpty ||
+                          wardName.isEmpty ||
+                          receiverName.isEmpty ||
+                          phoneNumber.isEmpty) {
+                        IconSnackBar.show(
+                          context,
+                          label: 'Shipping address must not be empty!',
+                          snackBarType: SnackBarType.fail,
+                        );
+                      }
+                    },
+                    buttonText: 'Checkout \$' +
+                        _calculateSubTotalPrice().toStringAsFixed(2),
+                    borderColor: GlobalVariables.black,
+                    fillColor: GlobalVariables.black,
+                    textColor: Colors.white),
+                (districtName.isNotEmpty &&
+                        wardName.isNotEmpty &&
+                        receiverName.isNotEmpty &&
+                        phoneNumber.isNotEmpty)
+                    ? Container(
+                        child: FutureBuilder<PaymentConfiguration>(
+                          future: _googlePayConfigFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return SizedBox(
+                                width: double.infinity,
+                                child: GooglePayButton(
+                                  paymentConfiguration: snapshot.data!,
+                                  paymentItems: _paymentItems,
+                                  type: GooglePayButtonType.checkout,
+                                  onPaymentResult: onGooglePayResult,
+                                  loadingIndicator: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          },
+                        ),
+                      )
+                    : Container(),
+              ],
+            ),
           ),
         ],
       ),
