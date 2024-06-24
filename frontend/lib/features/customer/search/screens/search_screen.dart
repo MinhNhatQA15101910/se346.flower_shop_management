@@ -3,9 +3,11 @@ import 'package:frontend/common/widgets/product_grid_view.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:frontend/features/customer/home/services/home_service.dart';
+import 'package:frontend/features/customer/search/services/search_services.dart';
 import 'package:frontend/features/customer/search/widgets/filter_btm_sheet.dart';
 import 'package:frontend/features/customer/search/widgets/sort_btm_sheet.dart';
 import 'package:frontend/models/product.dart';
+import 'package:frontend/constants/sort_options.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -17,12 +19,14 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final _homeService = HomeService();
+  final _searchService = SearchService();
 
   final _controller = ScrollController();
   final _textController = TextEditingController();
 
   List<Product> _productList = [];
 
+  SortOption? _sortOption = null;
   var _currentPage = 1;
   var _hasProduct = true;
   var _isLoading = false;
@@ -50,6 +54,32 @@ class _SearchScreenState extends State<SearchScreen> {
       } else {
         _productList.addAll(newProducts);
         if (newProducts.length < limit) {
+          _hasProduct = false;
+        }
+      }
+    });
+  }
+
+  void _fetchSearchResults(String keyword) async {
+    if (_isLoading) return;
+    _isLoading = true;
+
+    const limit = 10;
+
+    final searchResults = await _searchService.fetchSearchResults(
+      context,
+      keyword,
+      _currentPage++,
+    );
+
+    setState(() {
+      _isLoading = false;
+      if (searchResults.isEmpty) {
+        _productList.clear();
+        _hasProduct = false;
+      } else {
+        _productList = searchResults;
+        if (searchResults.length < limit) {
           _hasProduct = false;
         }
       }
@@ -111,9 +141,12 @@ class _SearchScreenState extends State<SearchScreen> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            const SizedBox(height: 20),
             TextField(
               controller: _textController,
+              onSubmitted: (value) {
+                if (value.isEmpty) return;
+                _fetchSearchResults(value);
+              },
               style: GoogleFonts.inter(
                 color: GlobalVariables.darkGrey,
                 fontSize: 16,
@@ -151,14 +184,7 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () => {
-                    showModalBottomSheet<dynamic>(
-                      context: context,
-                      useRootNavigator: true,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return FilterBtmSheet();
-                      },
-                    )
+                    _openFilterBottomSheet(),
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
@@ -176,13 +202,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () => {
-                    showModalBottomSheet<dynamic>(
-                        context: context,
-                        useRootNavigator: true,
-                        isScrollControlled: true,
-                        builder: (BuildContext context) {
-                          return const SortBtmSheet();
-                        })
+                    _openSortBottomSheet(),
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.transparent,
@@ -196,24 +216,69 @@ class _SearchScreenState extends State<SearchScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Icon(Icons.sort_outlined),
-                      Text('Sort'),
+                      Text(_sortOption?.value ?? 'Sort'),
                     ],
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 20),
-            Expanded(
-              child: ProductGridView(
-                productList: _productList,
-                controller: _controller,
-                hasProduct: _hasProduct,
-                onRefresh: _onRefresh,
-              ),
-            )
+            _productList.isEmpty
+                ? const Center(
+                    child: Column(
+                    children: [
+                      Image(
+                        width: 200,
+                        height: 200,
+                        image: AssetImage('assets/images/img_no_result.png'),
+                      ),
+                      Text(
+                        'No products found!',
+                        style: TextStyle(
+                          color: GlobalVariables.darkGrey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ))
+                : Expanded(
+                    child: ProductGridView(
+                      productList: _productList,
+                      controller: _controller,
+                      hasProduct: _hasProduct,
+                      onRefresh: _onRefresh,
+                    ),
+                  )
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _openSortBottomSheet() async {
+    SortOption? _selectedSortOption = await showModalBottomSheet<SortOption>(
+      context: context,
+      builder: (BuildContext context) {
+        return SortBtmSheet(); // Your custom bottom sheet widget
+      },
+    );
+
+    setState(() {
+      if (_selectedSortOption != null) {
+        _sortOption = _selectedSortOption;
+      }
+    });
+  }
+
+  Future<void> _openFilterBottomSheet() async {
+    showModalBottomSheet<dynamic>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return FilterBtmSheet();
+      },
     );
   }
 

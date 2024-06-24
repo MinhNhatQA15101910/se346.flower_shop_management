@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
-import 'package:frontend/features/customer/product_details/services/product_details.dart';
+import 'package:frontend/features/customer/product_details/services/product_details_services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/common/widgets/loader.dart';
