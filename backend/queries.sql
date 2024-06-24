@@ -100,7 +100,9 @@ CREATE TABLE occasions (
     
     CONSTRAINT fk_types_categories_category_id
     FOREIGN KEY (category_id)
-    REFERENCES categories(id)
+    REFERENCES categories(id),
+    CONSTRAINT uq_occasions_category_id_name
+    UNIQUE (category_id, name)
 );
 
 INSERT INTO occasions (category_id, name, image_url)

@@ -60,7 +60,6 @@ adminCategoryRouter.post(
         "SELECT * FROM types WHERE name = $1 AND category_id = $2",
         [name, category_id]
       );
-
       if (existingType.rowCount !== 0) {
         db.end();
         return res.status(400).json({ msg: "Type name already existed." });
@@ -80,6 +79,7 @@ adminCategoryRouter.post(
   }
 );
 
+// Update type
 adminCategoryRouter.patch(
   "/admin/update-type",
   adminValidator,
@@ -130,11 +130,23 @@ adminCategoryRouter.get(
 adminCategoryRouter.post(
   "/admin/add-occasion",
   adminValidator,
+  categoryIdValidator,
+  imageUrlValidator,
+  categoryNameValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
 
       const { category_id, name, image_url } = req.body;
+
+      const existingOccasion = await db.query(
+        "SELECT * FROM occasions WHERE name = $1 AND category_id = $2",
+        [name, category_id]
+      );
+      if (existingOccasion.rowCount !== 0) {
+        db.end();
+        return res.status(400).json({ msg: "Occasion name already existed." });
+      }
 
       const occasion = await db.query(
         "INSERT INTO occasions (category_id, name, image_url) VALUES ($1, $2, $3) RETURNING *",
