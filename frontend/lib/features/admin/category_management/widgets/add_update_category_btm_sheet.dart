@@ -230,30 +230,30 @@ class _AddUpdateCategoryBottomSheetState
                 children: [
                   Expanded(
                     child: Container(
-                      child: _isExecuting
-                          ? const Loader()
-                          : GlobalVariables.customButton(
-                              onTap: () => Navigator.pop(context),
-                              buttonText: 'Cancel',
-                              borderColor: GlobalVariables.green,
-                              fillColor: Colors.white,
-                              textColor: GlobalVariables.green,
-                            ),
+                      child: GlobalVariables.customButton(
+                        onTap: () => Navigator.pop(context),
+                        buttonText: 'Cancel',
+                        borderColor: GlobalVariables.green,
+                        fillColor: Colors.white,
+                        textColor: GlobalVariables.green,
+                      ),
                     ),
                   ),
                   SizedBox(width: 8),
                   Expanded(
                     child: Container(
-                      child: GlobalVariables.customButton(
-                        onTap: _executeFeature,
-                        buttonText: widget.featureName == 'Add type' ||
-                                widget.featureName == 'Add occasion'
-                            ? 'Add'
-                            : 'Update',
-                        borderColor: GlobalVariables.green,
-                        fillColor: GlobalVariables.green,
-                        textColor: Colors.white,
-                      ),
+                      child: _isExecuting
+                          ? const Loader()
+                          : GlobalVariables.customButton(
+                              onTap: _executeFeature,
+                              buttonText: widget.featureName == 'Add type' ||
+                                      widget.featureName == 'Add occasion'
+                                  ? 'Add'
+                                  : 'Update',
+                              borderColor: GlobalVariables.green,
+                              fillColor: GlobalVariables.green,
+                              textColor: Colors.white,
+                            ),
                     ),
                   ),
                 ],
