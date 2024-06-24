@@ -66,7 +66,7 @@ class CategoryManagementService {
       CloudinaryResponse cloudinaryResponse = await cloudinary.uploadFile(
         CloudinaryFile.fromFile(
           image.path,
-          folder: name,
+          folder: 'types/$name',
         ),
       );
 

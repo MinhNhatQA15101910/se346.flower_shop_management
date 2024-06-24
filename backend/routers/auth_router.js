@@ -196,7 +196,7 @@ authRouter.post(
 
         const productsResult = await db.query(
           "SELECT DISTINCT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1 ORDER BY p.id ASC",
-          [user.rows[0].id]
+          [existingUser.rows[0].id]
         );
         const products = productsResult.rows;
         for (let i = 0; i < products.length; i++) {

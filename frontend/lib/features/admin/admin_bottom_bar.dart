@@ -38,7 +38,12 @@ class _AdminBottomBarState extends State<AdminBottomBar> {
               GlobalVariables.green,
             ],
           ),
-          boxShadow: [BoxShadow(blurRadius: 20, color: Colors.black)],
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black,
+            )
+          ],
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(10),
             topRight: Radius.circular(10),
