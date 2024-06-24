@@ -5,6 +5,7 @@ import adminValidator from "../../middlewares/admin_validator.js";
 import categoryNameValidator from "../../middlewares/category_name_validator.js";
 import categoryIdValidator from "../../middlewares/category_id_validator.js";
 import imageUrlValidator from "../../middlewares/image_url_validator.js";
+import typeIdValidator from "../../middlewares/type_id_validator.js";
 
 const adminCategoryRouter = express.Router();
 
@@ -81,16 +82,38 @@ adminCategoryRouter.post(
 
 // Update type
 adminCategoryRouter.patch(
-  "/admin/update-type",
+  "/admin/update-type/:type_id",
   adminValidator,
+  typeIdValidator,
+  categoryNameValidator,
+  imageUrlValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
 
-      const { type_id, name, image_url } = req.body;
+      const { type_id } = req.params;
+      const { name, image_url } = req.body;
+
+      // Get category_id from type_id
+      const categoryId = await db.query(
+        "SELECT category_id FROM types WHERE id = $1",
+        [type_id]
+      );
+
+      // Validate if type name already exists in the category
+      const result = await db.query(
+        "SELECT * FROM types WHERE category_id = $1 AND name = $2 AND id <> $3",
+        [categoryId.rows[0].category_id, name, type_id]
+      );
+      if (result.rowCount !== 0) {
+        db.end();
+        return res
+          .status(400)
+          .json({ msg: "Type name already exists in the category." });
+      }
 
       const type = await db.query(
-        "UPDATE types SET name = $1, image_url = $2 WHERE id = $3",
+        "UPDATE types SET name = $1, image_url = $2 WHERE id = $3 RETURNING *",
         [name, image_url, type_id]
       );
 
