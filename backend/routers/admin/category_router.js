@@ -2,6 +2,7 @@ import express from "express";
 import pg from "pg";
 
 import adminValidator from "../../middlewares/admin_validator.js";
+import categoryNameValidator from "../../middlewares/category_name_validator.js";
 
 const adminCategoryRouter = express.Router();
 
@@ -43,7 +44,8 @@ adminCategoryRouter.get(
 // Create new type
 adminCategoryRouter.post(
   "/admin/add-type",
-  adminValidator,
+  categoryNameValidator,
+
   async (req, res) => {
     try {
       const db = getDatabaseInstance();

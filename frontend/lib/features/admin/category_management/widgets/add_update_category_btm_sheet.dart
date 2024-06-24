@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/common/widgets/loader.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/constants/utils.dart';
 import 'package:frontend/features/admin/category_management/services/category_management_service.dart';
@@ -37,6 +38,10 @@ class _AddUpdateCategoryBottomSheetState
   Type? _type;
   Occasion? _occasion;
 
+  final _formKey = GlobalKey<FormState>();
+
+  bool _isExecuting = false;
+
   void _selectImages() async {
     var res = await pickOneImage();
     setState(() {
@@ -63,13 +68,27 @@ class _AddUpdateCategoryBottomSheetState
   }
 
   void _executeFeature() async {
-    if (widget.featureName == 'Add type') {
-      _categoryManagementService.addType(
-        categoryId: widget.categoryParentId!,
-        name: _categoryNameController.text,
-        image: _image!,
-        context: context,
-      );
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isExecuting = true;
+      });
+
+      if (widget.featureName == 'Add type') {
+        Future.delayed(Duration(seconds: 2), () async {
+          await _categoryManagementService.addType(
+            categoryId: widget.categoryParentId!,
+            name: _categoryNameController.text,
+            image: _image!,
+            context: context,
+          );
+        });
+
+        if (!mounted) return;
+
+        setState(() {
+          _isExecuting = false;
+        });
+      }
     }
   }
 
@@ -211,13 +230,15 @@ class _AddUpdateCategoryBottomSheetState
                 children: [
                   Expanded(
                     child: Container(
-                      child: GlobalVariables.customButton(
-                        onTap: () => Navigator.pop(context),
-                        buttonText: 'Cancel',
-                        borderColor: GlobalVariables.green,
-                        fillColor: Colors.white,
-                        textColor: GlobalVariables.green,
-                      ),
+                      child: _isExecuting
+                          ? const Loader()
+                          : GlobalVariables.customButton(
+                              onTap: () => Navigator.pop(context),
+                              buttonText: 'Cancel',
+                              borderColor: GlobalVariables.green,
+                              fillColor: Colors.white,
+                              textColor: GlobalVariables.green,
+                            ),
                     ),
                   ),
                   SizedBox(width: 8),
@@ -278,7 +299,10 @@ class _AddUpdateCategoryBottomSheetState
     );
   }
 
-  Widget _customTextField(TextInputType inputText, String hint) {
+  Widget _customTextField(
+    TextInputType inputText,
+    String hint,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 16,
@@ -287,22 +311,35 @@ class _AddUpdateCategoryBottomSheetState
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: GlobalVariables.darkGrey),
       ),
-      child: TextFormField(
-        controller: _categoryNameController,
-        cursorColor: GlobalVariables.darkGrey,
-        keyboardType: inputText,
-        style: TextStyle(
-          color: GlobalVariables.darkGrey,
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-        ),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          hintText: hint,
+      child: Form(
+        key: _formKey,
+        child: TextFormField(
+          controller: _categoryNameController,
+          cursorColor: GlobalVariables.darkGrey,
+          keyboardType: inputText,
+          style: GoogleFonts.inter(
+            color: GlobalVariables.blackTextColor,
+            fontSize: 16,
+          ),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            hintText: hint,
+            hintStyle: GoogleFonts.inter(
+              color: GlobalVariables.darkGrey,
+              fontSize: 16,
+            ),
+          ),
+          validator: (name) {
+            if (name == null || name.isEmpty) {
+              return 'Please enter type/occasion name.';
+            }
+
+            return null;
+          },
         ),
       ),
     );

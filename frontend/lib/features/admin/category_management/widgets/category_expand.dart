@@ -38,6 +38,8 @@ class _CategoryExpandState extends State<CategoryExpand> {
       );
     }
 
+    if (!mounted) return;
+
     setState(() {});
   }
 
