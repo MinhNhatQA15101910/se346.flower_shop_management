@@ -6,6 +6,7 @@ import categoryNameValidator from "../../middlewares/category_name_validator.js"
 import categoryIdValidator from "../../middlewares/category_id_validator.js";
 import imageUrlValidator from "../../middlewares/image_url_validator.js";
 import typeIdValidator from "../../middlewares/type_id_validator.js";
+import occasionIdValidator from "../../middlewares/occasion_id_validator.js";
 
 const adminCategoryRouter = express.Router();
 
@@ -185,17 +186,40 @@ adminCategoryRouter.post(
   }
 );
 
+// Update occasion
 adminCategoryRouter.patch(
-  "/admin/update-occasion",
+  "/admin/update-occasion/:occasion_id",
   adminValidator,
+  occasionIdValidator,
+  categoryNameValidator,
+  imageUrlValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
 
-      const { occasion_id, name, image_url } = req.body;
+      const { occasion_id } = req.params;
+      const { name, image_url } = req.body;
+
+      // Get category_id from occasion_id
+      const categoryId = await db.query(
+        "SELECT category_id FROM occasions WHERE id = $1",
+        [occasion_id]
+      );
+
+      // Validate if type name already exists in the category
+      const result = await db.query(
+        "SELECT * FROM occasions WHERE category_id = $1 AND name = $2 AND id <> $3",
+        [categoryId.rows[0].category_id, name, occasion_id]
+      );
+      if (result.rowCount !== 0) {
+        db.end();
+        return res
+          .status(400)
+          .json({ msg: "Occasion name already exists in the category." });
+      }
 
       const occasion = await db.query(
-        "UPDATE occasions SET name = $1, image_url = $2 WHERE id = $3",
+        "UPDATE occasions SET name = $1, image_url = $2 WHERE id = $3 RETURNING *",
         [name, image_url, occasion_id]
       );
 
