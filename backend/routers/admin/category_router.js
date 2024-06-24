@@ -3,6 +3,8 @@ import pg from "pg";
 
 import adminValidator from "../../middlewares/admin_validator.js";
 import categoryNameValidator from "../../middlewares/category_name_validator.js";
+import categoryIdValidator from "../../middlewares/category_id_validator.js";
+import imageUrlValidator from "../../middlewares/image_url_validator.js";
 
 const adminCategoryRouter = express.Router();
 
@@ -44,13 +46,25 @@ adminCategoryRouter.get(
 // Create new type
 adminCategoryRouter.post(
   "/admin/add-type",
+  adminValidator,
+  categoryIdValidator,
+  imageUrlValidator,
   categoryNameValidator,
-
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
 
       const { category_id, name, image_url } = req.body;
+
+      const existingType = await db.query(
+        "SELECT * FROM types WHERE name = $1 AND category_id = $2",
+        [name, category_id]
+      );
+
+      if (existingType.rowCount !== 0) {
+        db.end();
+        return res.status(400).json({ msg: "Type name already existed." });
+      }
 
       const type = await db.query(
         "INSERT INTO types (category_id, name, image_url) VALUES ($1, $2, $3) RETURNING *",
