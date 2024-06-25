@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String uri = 'http://192.168.2.237:3000';
+String uri = 'http://192.168.2.97:3000';
 
 class GlobalVariables {
   // Base Variables

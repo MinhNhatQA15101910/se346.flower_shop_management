@@ -105,6 +105,168 @@ class CategoryManagementService {
     }
   }
 
+  Future<void> updateType({
+    required int typeId,
+    required String name,
+    File? image,
+    String? imageUrl,
+    required BuildContext context,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    try {
+      String finalImageUrl = imageUrl ?? '';
+
+      if (image != null) {
+        final cloudinary = CloudinaryPublic('dauyd6npv', 'nkklif97');
+
+        CloudinaryResponse cloudinaryResponse = await cloudinary.uploadFile(
+          CloudinaryFile.fromFile(
+            image.path,
+            folder: 'types/$name',
+          ),
+        );
+
+        finalImageUrl = cloudinaryResponse.secureUrl;
+      }
+
+      http.Response response = await http.patch(
+        Uri.parse('$uri/admin/update-type/$typeId'),
+        body: jsonEncode(
+          {'name': name, 'image_url': finalImageUrl},
+        ),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: response,
+        context: context,
+        onSuccess: () {
+          IconSnackBar.show(
+            context,
+            label: 'Update type successfully',
+            snackBarType: SnackBarType.success,
+          );
+        },
+      );
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+  }
+
+  Future<void> updateOccasion({
+    required int occasionId,
+    required String name,
+    File? image,
+    String? imageUrl,
+    required BuildContext context,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    try {
+      String finalImageUrl = imageUrl ?? '';
+
+      if (image != null) {
+        final cloudinary = CloudinaryPublic('dauyd6npv', 'nkklif97');
+
+        CloudinaryResponse cloudinaryResponse = await cloudinary.uploadFile(
+          CloudinaryFile.fromFile(
+            image.path,
+            folder: 'types/$name',
+          ),
+        );
+
+        finalImageUrl = cloudinaryResponse.secureUrl;
+      }
+
+      http.Response response = await http.patch(
+        Uri.parse('$uri/admin/update-occasion/$occasionId'),
+        body: jsonEncode(
+          {'name': name, 'image_url': finalImageUrl},
+        ),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: response,
+        context: context,
+        onSuccess: () {
+          IconSnackBar.show(
+            context,
+            label: 'Update type successfully',
+            snackBarType: SnackBarType.success,
+          );
+        },
+      );
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+  }
+
+  Future<void> updateTypeNameOnly({
+    required int typeId,
+    required String name,
+    required BuildContext context,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    try {
+      http.Response response = await http.patch(
+        Uri.parse('$uri/admin/update-type/$typeId'),
+        body: jsonEncode(
+          {
+            'name': name,
+          },
+        ),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: response,
+        context: context,
+        onSuccess: () {
+          IconSnackBar.show(
+            context,
+            label: 'Update type successfully',
+            snackBarType: SnackBarType.success,
+          );
+        },
+      );
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+  }
+
   Future<Occasion?> getOccasion({
     required int occasionId,
     required BuildContext context,
@@ -124,7 +286,7 @@ class CategoryManagementService {
         },
       );
 
-      occasion = jsonDecode(response.body);
+      occasion = Occasion.fromJson(response.body);
     } catch (error) {
       IconSnackBar.show(
         context,
@@ -134,5 +296,61 @@ class CategoryManagementService {
     }
 
     return occasion;
+  }
+
+  Future<void> addOccasion({
+    required int categoryId,
+    required String name,
+    required File image,
+    required BuildContext context,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    try {
+      final cloudinary = CloudinaryPublic('dauyd6npv', 'nkklif97');
+
+      CloudinaryResponse cloudinaryResponse = await cloudinary.uploadFile(
+        CloudinaryFile.fromFile(
+          image.path,
+          folder: 'types/$name',
+        ),
+      );
+
+      http.Response response = await http.post(
+        Uri.parse('$uri/admin/add-occasion'),
+        body: jsonEncode(
+          {
+            'category_id': categoryId,
+            'name': name,
+            'image_url': cloudinaryResponse.secureUrl
+          },
+        ),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: response,
+        context: context,
+        onSuccess: () {
+          IconSnackBar.show(
+            context,
+            label: 'Add category successfully',
+            snackBarType: SnackBarType.success,
+          );
+        },
+      );
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
   }
 }

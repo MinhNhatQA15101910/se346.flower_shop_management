@@ -8,11 +8,13 @@ import 'package:google_fonts/google_fonts.dart';
 class CategoryItem extends StatelessWidget {
   final Type? type;
   final Occasion? occasion;
+  final VoidCallback onUpdate;
 
   const CategoryItem({
     super.key,
     this.type,
     this.occasion,
+    required this.onUpdate,
   });
 
   String capitalize(String s) {
@@ -81,8 +83,8 @@ class CategoryItem extends StatelessWidget {
                       size: 16,
                     ),
                   ),
-                  onTap: () => {
-                    showModalBottomSheet<dynamic>(
+                  onTap: () async {
+                    final result = await showModalBottomSheet(
                       context: context,
                       useRootNavigator: true,
                       isScrollControlled: true,
@@ -103,7 +105,10 @@ class CategoryItem extends StatelessWidget {
                           ),
                         );
                       },
-                    ),
+                    );
+                    if (result == true) {
+                      onUpdate();
+                    }
                   },
                 ),
                 SizedBox(width: 8),
