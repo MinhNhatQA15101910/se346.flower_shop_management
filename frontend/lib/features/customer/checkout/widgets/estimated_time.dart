@@ -5,8 +5,11 @@ import 'package:intl/intl.dart';
 
 class EstimatedTime extends StatefulWidget {
   final DateTime dateTime;
+  final ValueChanged<DateTime> onDateChanged;
+
   const EstimatedTime({
     required this.dateTime,
+    required this.onDateChanged,
     Key? key,
   }) : super(key: key);
 
@@ -97,6 +100,7 @@ class _EstimatedTimeState extends State<EstimatedTime> {
       setState(() {
         _selectedDateTime = picked;
       });
+      widget.onDateChanged(picked);
     }
   }
 }

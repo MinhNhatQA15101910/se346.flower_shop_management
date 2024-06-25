@@ -43,8 +43,8 @@ class _CategoryExpandState extends State<CategoryExpand> {
     setState(() {});
   }
 
-  void _displayAddCategoryBtmSheet() {
-    showModalBottomSheet<dynamic>(
+  Future<void> _displayAddCategoryBtmSheet() async {
+    final result = await showModalBottomSheet(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,
@@ -65,12 +65,15 @@ class _CategoryExpandState extends State<CategoryExpand> {
         );
       },
     );
+
+    if (result == true) {
+      _fetchObjectList();
+    }
   }
 
   @override
   void initState() {
     super.initState();
-
     _fetchObjectList();
   }
 
@@ -108,10 +111,12 @@ class _CategoryExpandState extends State<CategoryExpand> {
               if (widget.titleText == 'Types')
                 ListViewCategory(
                   types: _objectList as List<Type>?,
+                  onUpdate: _fetchObjectList,
                 ),
               if (widget.titleText == 'Occasions')
                 ListViewCategory(
                   occasions: _objectList as List<Occasion>?,
+                  onUpdate: _fetchObjectList,
                 ),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -119,13 +124,14 @@ class _CategoryExpandState extends State<CategoryExpand> {
                   vertical: 12,
                 ),
                 child: GlobalVariables.customButton(
-                    buttonText: widget.titleText == 'Types'
-                        ? 'Add a type'
-                        : 'Add an occasion',
-                    borderColor: GlobalVariables.green,
-                    fillColor: Colors.white,
-                    textColor: GlobalVariables.green,
-                    onTap: _displayAddCategoryBtmSheet),
+                  buttonText: widget.titleText == 'Types'
+                      ? 'Add a type'
+                      : 'Add an occasion',
+                  borderColor: GlobalVariables.green,
+                  fillColor: Colors.white,
+                  textColor: GlobalVariables.green,
+                  onTap: _displayAddCategoryBtmSheet,
+                ),
               ),
             ],
           ),

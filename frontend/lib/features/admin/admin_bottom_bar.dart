@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/admin/category_management/screens/category_management_screen.dart';
 import 'package:frontend/features/admin/product_management/screens/product_management_screen.dart';
+import 'package:frontend/features/admin/statistic/screens/statistic_screen.dart';
 import 'package:frontend/features/customer/order_management/screens/order_management_screen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -20,9 +21,7 @@ class _AdminBottomBarState extends State<AdminBottomBar> {
     const ProductManagementScreen(),
     const CategoryManagementScreen(),
     const OrderManagementScreen(),
-    const Center(
-      child: Text('Statistics Screen'),
-    ),
+    const StatisticScreen(),
   ];
 
   @override

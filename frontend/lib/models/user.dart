@@ -50,15 +50,11 @@ class User {
       token: map['token'] ?? '',
       products: List<Product>.from(
         map['products']?.map(
-          (x) => Product.fromMap(
-            x['product'],
-          ),
+          (x) => Product.fromMap(x),
         ),
       ),
       quantities: List<int>.from(
-        map['products']?.map(
-          (x) => x['quantity'],
-        ),
+        map['quantities'],
       ),
     );
   }

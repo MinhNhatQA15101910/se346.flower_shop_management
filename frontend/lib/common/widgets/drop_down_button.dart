@@ -24,18 +24,19 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
   @override
   void initState() {
     super.initState();
-    dropdownValue = widget.initialSelectedItem;
+    dropdownValue = widget.items!.contains(widget.initialSelectedItem)
+        ? widget.initialSelectedItem
+        : (widget.items!.isNotEmpty ? widget.items!.first : 'No Item found');
   }
 
   @override
   Widget build(BuildContext context) {
     List<String> items = widget.items ?? ['No Item found'];
+
     return Container(
       height: 48,
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: 16,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         border: Border.all(
           width: 1,

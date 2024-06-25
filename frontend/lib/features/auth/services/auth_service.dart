@@ -80,6 +80,11 @@ class AuthService {
     required String email,
     required String password,
   }) async {
+    final authProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
     try {
       http.Response response = await http.post(
         Uri.parse('$uri/login'),
@@ -102,10 +107,7 @@ class AuthService {
           await prefs.setString(
               'x-auth-token', jsonDecode(response.body)['token']);
 
-          Provider.of<UserProvider>(
-            context,
-            listen: false,
-          ).setUser(response.body);
+          authProvider.setUser(response.body);
 
           if (jsonDecode(response.body)['role'] == 'admin') {
             Navigator.of(context).pushNamedAndRemoveUntil(

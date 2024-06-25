@@ -51,9 +51,11 @@ dependencies:
   http: ^1.2.1
   google_nav_bar: ^5.0.6
   image_picker: ^1.1.1
-  intl: ^0.19.0
+  intl: ^0.18.1
   file_picker: ^8.0.5
   cloudinary_public: ^0.23.1
+  pay: ^2.0.0
+  fl_chart: ^0.68.0
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +87,7 @@ flutter:
   assets:
     - assets/images/
     - assets/vectors/
+    - assets/default_google_pay_config.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
