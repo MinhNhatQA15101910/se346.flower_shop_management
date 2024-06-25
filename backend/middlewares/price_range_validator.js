@@ -1,6 +1,8 @@
 // Validate price range
 const priceRangeValidator = (req, res, next) => {
   console.log("Price range validator middleware:");
+  console.log(`- Min price: ${req.query.min_price}`);
+  console.log(`- Max price: ${req.query.max_price}`);
 
   try {
     let { min_price, max_price } = req.query;

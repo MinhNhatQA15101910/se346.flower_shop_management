@@ -5,6 +5,7 @@ import authValidator from "../../middlewares/auth_validator.js";
 import pageValidator from "../../middlewares/page_validator.js";
 import productIdValidator from "../../middlewares/product_id_validator.js";
 import priceRangeValidator from "../../middlewares/price_range_validator.js";
+import sortValidator from "../../middlewares/sort_validator.js";
 
 const productRouter = express.Router();
 
@@ -25,6 +26,7 @@ productRouter.get(
   "/customer/products",
   authValidator,
   priceRangeValidator,
+  sortValidator,
   pageValidator,
   async (req, res) => {
     try {
@@ -76,13 +78,33 @@ productRouter.get(
 
       // Filter by price
       const { min_price, max_price } = req.query;
-      console.log(min_price);
-      console.log(max_price);
       products = products.filter(
         (product) =>
           Number(product.sale_price) > min_price &&
           Number(product.sale_price) < max_price
       );
+
+      // Sort
+      const { sort, order } = req.query;
+      if (order === "asc") {
+        if (sort === "id") {
+          products = products.sort((a, b) => a.id - b.id);
+        } else if (sort === "sold") {
+          products = products.sort((a, b) => a.sold - b.sold);
+        } else if (sort === "name") {
+          products = products.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sort === "price") {
+          products = products.sort((a, b) => a.sale_price - b.sale_price);
+        }
+      } else if (order === "desc") {
+        if (sort === "sold") {
+          products = products.sort((a, b) => b.sold - a.sold);
+        } else if (sort === "name") {
+          products = products.sort((a, b) => b.name.localeCompare(a.name));
+        } else if (sort === "price") {
+          products = products.sort((a, b) => b.sale_price - a.sale_price);
+        }
+      }
 
       // Pagination
       let { page } = req.query;
