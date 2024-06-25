@@ -1,7 +1,7 @@
 enum OrderStatus {
-  pending(value: 'Small'),
-  in_delivery(value: 'Medium'),
-  received(value: 'Standard');
+  pending(value: 'Pending'),
+  in_delivery(value: 'In Delivery'),
+  received(value: 'Received');
 
   const OrderStatus({required this.value});
 

@@ -40,7 +40,7 @@ productRouter.get(
       if (type_id) {
         if (keyword) {
           products = await db.query(
-            "SELECT p.* FROM products p, product_type pt, types t WHERE p.id = pt.product_id AND pt.type_id = t.id AND p.is_available = TRUE AND t.id = $1 AND p.name LIKE $2",
+            "SELECT p.* FROM products p, product_type pt, types t WHERE p.id = pt.product_id AND pt.type_id = t.id AND p.is_available = TRUE AND t.id = $1 AND LOWER(p.name) LIKE LOWER($2)",
             [type_id, "%" + keyword + "%"]
           );
         } else {
@@ -52,7 +52,7 @@ productRouter.get(
       } else if (occasion_id) {
         if (keyword) {
           products = await db.query(
-            "SELECT p.* FROM products p, product_occasion po, occasions o WHERE p.id = po.product_id AND po.occasion_id = o.id AND p.is_available = TRUE AND o.id = $1 AND p.name LIKE $2",
+            "SELECT p.* FROM products p, product_occasion po, occasions o WHERE p.id = po.product_id AND po.occasion_id = o.id AND p.is_available = TRUE AND o.id = $1 AND LOWER(p.name) LIKE LOWER($2)",
             [occasion_id, "%" + keyword + "%"]
           );
         } else {
@@ -64,7 +64,7 @@ productRouter.get(
       } else {
         if (keyword) {
           products = await db.query(
-            "SELECT * FROM products WHERE name LIKE $1 AND is_available = TRUE",
+            "SELECT * FROM products WHERE LOWER(name) LIKE LOWER($1) AND is_available = TRUE",
             ["%" + keyword + "%"]
           );
         } else {
