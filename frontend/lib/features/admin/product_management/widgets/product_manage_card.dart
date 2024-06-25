@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/models/product.dart';
 
 class ProductManageCard extends StatelessWidget {
-  const ProductManageCard({super.key});
+  const ProductManageCard({
+    super.key,
+    required this.product,
+  });
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -24,55 +29,59 @@ class ProductManageCard extends StatelessWidget {
                 height: 76,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image(
-                    image: AssetImage('assets/images/product2.png'),
+                  child: Image.network(
+                    product.imageUrls[0],
                     fit: BoxFit.fill,
                   ),
                 ),
               ),
               SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Product Name',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  Text(
-                    'Category: Combo',
-                    style: GoogleFonts.inter(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: GlobalVariables.darkGrey,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.star,
-                        size: 16,
-                        color: GlobalVariables.yellow,
+              Container(
+                width: 200,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.name,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
                       ),
-                      Text(
-                        '4.4 / 5.0 (12)',
-                        style: GoogleFonts.inter(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w400,
-                            color: GlobalVariables.darkGrey),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    'Price: \$100',
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
                     ),
-                  ),
-                ],
+                    Text(
+                      'Category: Combo',
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: GlobalVariables.darkGrey,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.star,
+                          size: 16,
+                          color: GlobalVariables.yellow,
+                        ),
+                        Text(
+                          '${product.ratingAvg} / 5.0 (${product.totalRating})',
+                          style: GoogleFonts.inter(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w400,
+                              color: GlobalVariables.darkGrey),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      '\$ ${product.salePrice}',
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

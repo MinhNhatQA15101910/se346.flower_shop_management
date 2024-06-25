@@ -568,7 +568,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
     Future.delayed(Duration(seconds: 2), () async {
       setState(() {
-        _isLoading = false;
+        _isLoading = true;
       });
     });
     Navigator.pop(context);
