@@ -4,7 +4,6 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/constants/sort_options.dart';
 
 List<Widget> sortOptionsList = [
-  Text('Popular'),
   Text('Top selling'),
   Text('Name: A to Z'),
   Text('Name: Z to A'),
@@ -29,7 +28,7 @@ class _SortBtmSheetState extends State<SortBtmSheet> {
   }
 
   void _confirmSelection() {
-    SortOption selectedOption = SortOption.popular; // Example logic
+    SortOption selectedOption = SortOption.topSelling; // Example logic
     for (int i = 0; i < _selectedSortOption.length; i++) {
       if (_selectedSortOption[i]) {
         selectedOption = SortOption.values[i];

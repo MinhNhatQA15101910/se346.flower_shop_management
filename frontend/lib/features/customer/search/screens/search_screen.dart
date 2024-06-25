@@ -25,8 +25,11 @@ class _SearchScreenState extends State<SearchScreen> {
   final _textController = TextEditingController();
 
   List<Product> _productList = [];
+  List<Product> _searchResults = [];
 
   SortOption? _sortOption = null;
+  double _minPrice = 0;
+  double _maxPrice = 900000;
   var _currentPage = 1;
   var _hasProduct = true;
   var _isLoading = false;
@@ -64,9 +67,10 @@ class _SearchScreenState extends State<SearchScreen> {
     if (_isLoading) return;
     _isLoading = true;
 
+    _currentPage = 1;
     const limit = 10;
 
-    final searchResults = await _searchService.fetchSearchResults(
+    _searchResults = await _searchService.fetchSearchResults(
       context,
       keyword,
       _currentPage++,
@@ -74,12 +78,41 @@ class _SearchScreenState extends State<SearchScreen> {
 
     setState(() {
       _isLoading = false;
-      if (searchResults.isEmpty) {
+      if (_searchResults.isEmpty) {
         _productList.clear();
         _hasProduct = false;
       } else {
-        _productList = searchResults;
-        if (searchResults.length < limit) {
+        _productList = _searchResults;
+        if (_searchResults.length < limit) {
+          _hasProduct = false;
+        }
+      }
+    });
+  }
+
+  void _fetchFilterSortResults() async {
+    if (_isLoading) return;
+    _isLoading = true;
+
+    _currentPage = 1;
+    const limit = 10;
+
+    final _sortResults = await _searchService.fetchFilterSortResults(
+      context,
+      _sortOption!,
+      _minPrice,
+      _maxPrice,
+      _currentPage++,
+    );
+
+    setState(() {
+      _isLoading = false;
+      if (_sortResults.isEmpty) {
+        _productList.clear();
+        _hasProduct = false;
+      } else {
+        _productList = _sortResults;
+        if (_sortResults.length < limit) {
           _hasProduct = false;
         }
       }
@@ -223,7 +256,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            _productList.isEmpty
+            _searchResults.isEmpty && _productList.isEmpty
                 ? const Center(
                     child: Column(
                     children: [
@@ -269,6 +302,7 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       if (_selectedSortOption != null) {
         _sortOption = _selectedSortOption;
+        _fetchFilterSortResults();
       }
     });
   }
@@ -284,7 +318,11 @@ class _SearchScreenState extends State<SearchScreen> {
     );
 
     if (result != null) {
-      print("Result: $result");
+      setState(() {
+        _minPrice = result['minPrice'];
+        _maxPrice = result['maxPrice'];
+        _fetchFilterSortResults();
+      });
     }
   }
 

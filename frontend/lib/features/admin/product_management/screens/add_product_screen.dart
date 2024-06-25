@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/constants/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,7 +19,7 @@ class AddProductScreen extends StatefulWidget {
 
 class _AddProductScreenState extends State<AddProductScreen> {
   File? _selectedMainImage;
-  List<XFile> _selectedImagesList = [];
+  List<File> _selectedImagesList = [];
 
   late ProductManagementService _productManagementService;
   List<String> _categories = [];
@@ -74,7 +75,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: _selectedMainImage == null ? _pickMainImage : null,
+                  onTap: _selectedImagesList.isEmpty ? _pickMulImage : null,
                   child: Stack(
                     fit: StackFit.loose,
                     alignment: AlignmentDirectional.topEnd,
@@ -84,31 +85,35 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         height: GlobalVariables.screenHeight * 0.5,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: _selectedMainImage == null
+                          child: _selectedImagesList.isEmpty
                               ? Image.asset(
                                   'assets/images/placeholderImage.png',
                                   fit: BoxFit.fill,
                                 )
                               : Image.file(
-                                  _selectedMainImage!,
+                                  _selectedImagesList[0],
                                   fit: BoxFit.fill,
                                 ),
                         ),
                       ),
-                      _selectedMainImage != null
+                      _selectedImagesList.isNotEmpty
                           ? IconButton(
                               onPressed: () {
                                 setState(() {
-                                  _selectedMainImage = null;
+                                  _selectedImagesList.removeAt(0);
                                 });
                               },
+                              style: ButtonStyle(
+                                visualDensity: VisualDensity.compact,
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.black54),
+                                shape:
+                                    MaterialStateProperty.all(CircleBorder()),
+                              ),
                               icon: Icon(
-                                Icons.close_outlined,
+                                Icons.close_rounded,
                                 color: Colors.white,
-                                size: 28,
-                                shadows: [
-                                  Shadow(color: Colors.black, blurRadius: 2)
-                                ],
+                                size: 20,
                               ),
                             )
                           : SizedBox(
@@ -149,33 +154,41 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildTextField('Product name', 0, false),
+                      _buildTextField(
+                          'Product name', 0, false, TextInputType.text),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildTextField('Quantity', 1, false),
+                          _buildTextField(
+                              'Quantity', 1, false, TextInputType.number),
                           SizedBox(width: 8),
-                          _buildTextField('Regular price', 1, false)
+                          _buildTextField(
+                              'Regular price', 1, false, TextInputType.number)
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildTextField('Discount percentage', 1, false),
+                          _buildTextField('Discount percentage', 1, false,
+                              TextInputType.number),
                           SizedBox(width: 8),
-                          _buildTextField('Colors', 1, false)
+                          _buildTextField(
+                              'Colors', 1, false, TextInputType.text)
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildTextField('Material', 1, false),
+                          _buildTextField(
+                              'Material', 1, false, TextInputType.text),
                           SizedBox(width: 8),
-                          _buildTextField('Weight', 1, false)
+                          _buildTextField(
+                              'Weight', 1, false, TextInputType.number)
                         ],
                       ),
                       // _buildDropdownMenu('Size: ', categoryList),
-                      _buildTextField('Description', 0, true)
+                      _buildTextField(
+                          'Description', 0, true, TextInputType.text)
                     ],
                   ),
                 ),
@@ -325,7 +338,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 
-  Widget _buildTextField(String labelText, int flexIndex, bool multiline) {
+  Widget _buildTextField(String labelText, int flexIndex, bool multiline,
+      TextInputType keyboardType) {
     final TextEditingController controller = TextEditingController();
 
     return Expanded(
@@ -345,6 +359,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             SizedBox(height: 8.0),
             TextFormField(
               controller: controller,
+              keyboardType: keyboardType,
               validator: (value) {
                 var validateText = null;
 
@@ -417,6 +432,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
               maxLines: multiline ? 5 : 1,
               decoration: InputDecoration(
                 isDense: true,
+                hintText: labelText,
+                hintStyle: GoogleFonts.inter(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: GlobalVariables.darkGrey,
+                ),
                 suffixIcon:
                     Icon(Icons.edit_square, color: GlobalVariables.green),
                 fillColor: Colors.white,
@@ -499,20 +520,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   Future _pickMulImage() async {
-    final List<XFile>? returnImages = await ImagePicker().pickMultiImage();
+    final List<File>? returnImages = await pickImages(_selectedImagesList);
     if (returnImages != null) {
       setState(() {
         _selectedImagesList.addAll(returnImages);
-      });
-    }
-  }
-
-  Future _pickMainImage() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage != null) {
-      setState(() {
-        _selectedMainImage = File(returnImage.path);
       });
     }
   }
