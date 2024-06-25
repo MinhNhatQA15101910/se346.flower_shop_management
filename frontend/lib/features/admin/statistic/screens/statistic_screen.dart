@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:frontend/features/admin/statistic/widgets/pie_chart.dart';
+import 'package:frontend/features/admin/statistic/widgets/category_pie_chart.dart';
+import 'package:frontend/features/admin/statistic/widgets/monthly_revenue_bar_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class StatisticScreen extends StatefulWidget {
@@ -44,10 +45,11 @@ class _StatisticScreenState extends State<StatisticScreen> {
             ),
           ),
         ),
-        body: Container(
+        body: SingleChildScrollView(
           child: Column(
             children: [
-              PieChartSample3(),
+              CategoryPieChart(),
+              BarChartSample6(),
             ],
           ),
         ),

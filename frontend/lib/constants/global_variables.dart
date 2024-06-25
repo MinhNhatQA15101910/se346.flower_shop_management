@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String uri = 'http://192.168.111.204:3000';
+String uri = 'http://192.168.2.237:3000';
 
 class GlobalVariables {
   // Base Variables
@@ -68,7 +68,7 @@ class GlobalVariables {
   static const double fontSize_48 = 48;
 
   //Create list color for chart
-  List<Color> chartColors = [
+  static const List<Color> chartColors = [
     Color(0xFFFF5733),
     Color(0xFFC70039),
     Color(0xFF900C3F),
