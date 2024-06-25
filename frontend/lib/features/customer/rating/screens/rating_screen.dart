@@ -4,6 +4,7 @@ import 'package:frontend/features/customer/rating/widgets/rating_item.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RatingScreen extends StatefulWidget {
+  static const String routeName = "/customer-rating-screen";
   const RatingScreen({super.key});
 
   @override
