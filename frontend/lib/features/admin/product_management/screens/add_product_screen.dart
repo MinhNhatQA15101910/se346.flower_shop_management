@@ -28,7 +28,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   final _addProdKey = GlobalKey<FormState>();
   var _isLoading = false;
-  String _errorMessage = "";
 
   @override
   void initState() {
