@@ -56,7 +56,7 @@ class SearchService {
 
   Future<List<Product>> fetchFilterSortResults(
     BuildContext context,
-    SortOption sortOption,
+    SortOption? sortOption,
     String minPrice,
     String maxPrice,
     int page,
@@ -69,7 +69,7 @@ class SearchService {
     try {
       http.Response res = await http.get(
         Uri.parse(
-            '$uri/customer/products?sort=${sortOption.type}&order=${sortOption.order}&min_price=${minPrice}&max_price${maxPrice}&page=${page}'),
+            '$uri/customer/products?sort=${sortOption?.type}&order=${sortOption?.order}&min_price=${minPrice}&max_price=${maxPrice}&page=${page}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,

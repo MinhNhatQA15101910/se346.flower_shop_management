@@ -27,9 +27,9 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Product> _productList = [];
   List<Product> _searchResults = [];
 
-  SortOption? _sortOption = null;
-  double _minPrice = 0;
-  double _maxPrice = 900000;
+  SortOption? _sortOption;
+  double _minPrice = 1;
+  double _maxPrice = 99999;
   var _currentPage = 1;
   var _hasProduct = true;
   var _isLoading = false;
@@ -78,6 +78,8 @@ class _SearchScreenState extends State<SearchScreen> {
       _currentPage++,
     );
 
+    if (!mounted) return;
+
     setState(() {
       _isLoading = false;
       if (_searchResults.isEmpty) {
@@ -101,16 +103,17 @@ class _SearchScreenState extends State<SearchScreen> {
 
     final _sortResults = await _searchService.fetchFilterSortResults(
       context,
-      _sortOption!,
-      _minPrice.toString(),
-      _maxPrice.toString(),
+      _sortOption,
+      _minPrice.toInt().toString(),
+      _maxPrice.toInt().toString(),
       _currentPage++,
     );
 
+    if (!mounted) return;
+    _productList.clear();
     setState(() {
       _isLoading = false;
       if (_sortResults.isEmpty) {
-        _productList.clear();
         _hasProduct = false;
       } else {
         _productList = _sortResults;
