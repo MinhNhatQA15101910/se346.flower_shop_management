@@ -8,7 +8,8 @@ const priceRangeValidator = (req, res, next) => {
     let { min_price, max_price } = req.query;
 
     if (min_price) {
-      if (!Number(min_price) || min_price < 0) {
+      console.log("Validate min price");
+      if (isNaN(Number(min_price)) || Number(min_price) < 0) {
         return res.status(400).json({ msg: "Invalid price range." });
       }
     } else {
@@ -17,7 +18,8 @@ const priceRangeValidator = (req, res, next) => {
     }
 
     if (max_price) {
-      if (!Number(max_price) || max_price < 0) {
+      console.log("Validate max price");
+      if (isNaN(Number(min_price)) || max_price < 0) {
         return res.status(400).json({ msg: "Invalid price range." });
       }
     } else {
