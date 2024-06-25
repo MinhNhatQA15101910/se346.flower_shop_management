@@ -15,8 +15,16 @@ class ListViewCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final length = types != null ? types!.length : occasions!.length;
-    final cardName = types != null ? 'type' : 'occasion';
+    final length = types != null
+        ? types!.length
+        : occasions != null
+            ? occasions!.length
+            : 0;
+    final cardName = types != null
+        ? 'type'
+        : occasions != null
+            ? 'occasion'
+            : "";
 
     return Container(
       margin: const EdgeInsets.only(top: 12),

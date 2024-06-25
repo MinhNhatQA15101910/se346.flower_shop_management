@@ -9,6 +9,7 @@ import orderRouter from "./routers/customer/order_router.js";
 
 import adminProductRouter from "./routers/admin/product_router.js";
 import adminCategoryRouter from "./routers/admin/category_router.js";
+import adminOrderRouter from "./routers/admin/order_router.js";
 
 import cors from "cors";
 
@@ -28,6 +29,7 @@ app.use(orderRouter);
 // Admin
 app.use(adminProductRouter);
 app.use(adminCategoryRouter);
+app.use(adminOrderRouter);
 
 app.get("/", (req, res) => {
   res.render("index.ejs");

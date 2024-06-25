@@ -49,6 +49,8 @@ class _SearchScreenState extends State<SearchScreen> {
       _currentPage++,
     );
 
+    if (!mounted) return;
+
     setState(() {
       _isLoading = false;
 

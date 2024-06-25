@@ -1,3 +1,4 @@
+// Validate pincode
 const pincodeValidator = (req, res, next) => {
   console.log("Pincode validator middleware:");
   console.log("- Pincode: " + req.body.pincode);

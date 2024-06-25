@@ -196,7 +196,7 @@ authRouter.post(
 
         const productsResult = await db.query(
           "SELECT DISTINCT p.* FROM products p, carts c, users u WHERE p.id = c.product_id AND c.user_id = $1 ORDER BY p.id ASC",
-          [user.rows[0].id]
+          [existingUser.rows[0].id]
         );
         const products = productsResult.rows;
         for (let i = 0; i < products.length; i++) {
@@ -275,12 +275,12 @@ authRouter.post("/email-exists", emailValidator, async (req, res) => {
       [email]
     );
     if (existingUser.rowCount > 0) {
-      db.end();
+      await db.end();
 
       return res.json(true);
     }
 
-    db.end();
+    await db.end();
 
     res.json(false);
   } catch (err) {
@@ -361,7 +361,7 @@ authRouter.patch(
         [email]
       );
       if (existingUser.rowCount === 0) {
-        db.end();
+        await db.end();
 
         return res
           .status(400)
@@ -378,7 +378,7 @@ authRouter.patch(
         [hashedPassword, email]
       );
 
-      db.end();
+      await db.end();
 
       res.json(existingUser.rows[0]);
     } catch (err) {
