@@ -38,7 +38,7 @@ productRouter.get("/customer/products/all", authValidator, async (req, res) => {
       products.rows[i].image_urls = imageUrls;
     }
 
-    db.end();
+    await db.end();
 
     res.json(products.rows);
   } catch (e) {
@@ -71,7 +71,7 @@ productRouter.get(
         products.rows[i].image_urls = imageUrls;
       }
 
-      db.end();
+      await db.end();
 
       res.json(products.rows);
     } catch (e) {
@@ -105,7 +105,7 @@ productRouter.get(
         products.rows[i].image_urls = imageUrls;
       }
 
-      db.end();
+      await db.end();
 
       res.json(products.rows);
     } catch (e) {

@@ -34,7 +34,7 @@ const categoryIdValidator = async (req, res, next) => {
       return res.status(400).json({ msg: "Category id not exists." });
     }
 
-    db.end();
+    await db.end();
 
     next();
   } catch (err) {

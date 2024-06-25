@@ -64,7 +64,7 @@ adminCategoryRouter.post(
         [name, category_id]
       );
       if (existingType.rowCount !== 0) {
-        db.end();
+        await db.end();
         return res.status(400).json({ msg: "Type name already existed." });
       }
 
@@ -108,7 +108,7 @@ adminCategoryRouter.patch(
         [categoryId.rows[0].category_id, name, type_id]
       );
       if (result.rowCount !== 0) {
-        db.end();
+        await db.end();
         return res
           .status(400)
           .json({ msg: "Type name already exists in the category." });
@@ -170,7 +170,7 @@ adminCategoryRouter.post(
         [name, category_id]
       );
       if (existingOccasion.rowCount !== 0) {
-        db.end();
+        await db.end();
         return res.status(400).json({ msg: "Occasion name already existed." });
       }
 
@@ -214,7 +214,7 @@ adminCategoryRouter.patch(
         [categoryId.rows[0].category_id, name, occasion_id]
       );
       if (result.rowCount !== 0) {
-        db.end();
+        await db.end();
         return res
           .status(400)
           .json({ msg: "Occasion name already exists in the category." });

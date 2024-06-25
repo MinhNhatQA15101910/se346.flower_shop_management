@@ -29,11 +29,11 @@ const typeIdValidator = async (req, res, next) => {
     let result = await db.query("SELECT * FROM types WHERE id = $1", [typeId]);
 
     if (result.rowCount === 0) {
-      db.end();
+      await db.end();
       return res.status(400).json({ msg: "Type id not exists." });
     }
 
-    db.end();
+    await db.end();
 
     next();
   } catch (err) {

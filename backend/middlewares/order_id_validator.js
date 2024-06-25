@@ -31,11 +31,11 @@ const orderIdValidator = async (req, res, next) => {
     ]);
 
     if (result.rowCount === 0) {
-      db.end();
+      await db.end();
       return res.status(400).json({ msg: "Order id not exists." });
     }
 
-    db.end();
+    await db.end();
 
     next();
   } catch (err) {
