@@ -4,6 +4,7 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/constants/sort_options.dart';
 
 List<Widget> sortOptionsList = [
+  Text('Default'),
   Text('Top selling'),
   Text('Name: A to Z'),
   Text('Name: Z to A'),

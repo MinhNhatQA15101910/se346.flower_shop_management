@@ -27,7 +27,8 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Product> _productList = [];
   List<Product> _searchResults = [];
 
-  SortOption? _sortOption;
+  String keyword = '';
+  SortOption _sortOption = SortOption.id;
   double _minPrice = 1;
   double _maxPrice = 99999;
   var _currentPage = 1;
@@ -65,44 +66,15 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  void _fetchSearchResults(String keyword) async {
+  void _fetchResults() async {
     if (_isLoading) return;
     _isLoading = true;
 
-    _currentPage = 1;
     const limit = 10;
 
-    _searchResults = await _searchService.fetchSearchResults(
+    final _sortResults = await _searchService.fetchResults(
       context,
       keyword,
-      _currentPage++,
-    );
-
-    if (!mounted) return;
-
-    setState(() {
-      _isLoading = false;
-      if (_searchResults.isEmpty) {
-        _productList.clear();
-        _hasProduct = false;
-      } else {
-        _productList = _searchResults;
-        if (_searchResults.length < limit) {
-          _hasProduct = false;
-        }
-      }
-    });
-  }
-
-  void _fetchFilterSortResults() async {
-    if (_isLoading) return;
-    _isLoading = true;
-
-    _currentPage = 1;
-    const limit = 10;
-
-    final _sortResults = await _searchService.fetchFilterSortResults(
-      context,
       _sortOption,
       _minPrice.toInt().toString(),
       _maxPrice.toInt().toString(),
@@ -183,7 +155,11 @@ class _SearchScreenState extends State<SearchScreen> {
               controller: _textController,
               onSubmitted: (value) {
                 if (value.isEmpty) return;
-                _fetchSearchResults(value);
+                setState(() {
+                  keyword = value;
+                  _currentPage = 1;
+                  _fetchResults();
+                });
               },
               style: GoogleFonts.inter(
                 color: GlobalVariables.darkGrey,
@@ -254,7 +230,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Icon(Icons.sort_outlined),
-                      Text(_sortOption?.value ?? 'Sort'),
+                      Text(_sortOption.value == 'Default'
+                          ? 'Sort'
+                          : _sortOption.value),
                     ],
                   ),
                 ),
@@ -307,7 +285,8 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       if (_selectedSortOption != null) {
         _sortOption = _selectedSortOption;
-        _fetchFilterSortResults();
+        _currentPage = 1;
+        _fetchResults();
       }
     });
   }
@@ -326,7 +305,8 @@ class _SearchScreenState extends State<SearchScreen> {
       setState(() {
         _minPrice = result['minPrice'];
         _maxPrice = result['maxPrice'];
-        _fetchFilterSortResults();
+        _currentPage = 1;
+        _fetchResults();
       });
     }
   }

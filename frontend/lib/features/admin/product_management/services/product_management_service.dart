@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -8,6 +9,7 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:frontend/constants/size.dart';
 
 import 'package:frontend/constants/error_handling.dart';
 
@@ -70,19 +72,17 @@ class ProductManagementService {
   Future<void> addProduct({
     required BuildContext context,
     required String name,
-    required double price,
-    required double salePrice,
-    required double salePercentage,
+    required String price,
+    required String salePercentage,
     required String detailDescription,
-    required Size size,
-    required double weight,
+    required String size,
+    required String weight,
     required String color,
     required String material,
-    required int stock,
-    required int sold,
-    required double ratingAvg,
-    required int totalRating,
-    required List<String> imageUrls,
+    required String stock,
+    required String type_ids,
+    required String occasion_ids,
+    required List<File> imageUrls,
   }) async {
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -94,11 +94,11 @@ class ProductManagementService {
 
       List<String> uploadedImageUrls = [];
 
-      for (String imageUrl in imageUrls) {
+      for (File imageUrl in imageUrls) {
         CloudinaryResponse cloudinaryResponse = await cloudinary.uploadFile(
           CloudinaryFile.fromFile(
-            imageUrl,
-            folder: name,
+            imageUrl.path,
+            folder: 'products/$name',
           ),
         );
         uploadedImageUrls.add(cloudinaryResponse.secureUrl);
@@ -110,7 +110,6 @@ class ProductManagementService {
           {
             "name": name,
             "price": price,
-            "sale_price": salePrice,
             "sale_percentage": salePercentage,
             "detail_description": detailDescription,
             "size": size,
@@ -118,10 +117,9 @@ class ProductManagementService {
             "color": color,
             "material": material,
             "stock": stock,
-            "sold": sold,
-            "rating_avg": ratingAvg,
-            "total_rating": totalRating,
             "image_urls": uploadedImageUrls,
+            "type_ids": type_ids,
+            "occasion_ids": occasion_ids,
           },
         ),
         headers: <String, String>{

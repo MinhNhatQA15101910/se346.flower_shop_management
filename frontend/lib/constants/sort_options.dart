@@ -1,4 +1,5 @@
 enum SortOption {
+  id(value: 'Default', type: 'id', order: 'asc'),
   topSelling(value: 'Top selling', type: 'sold', order: 'desc'),
   nameAtoZ(value: 'Name: A to Z', type: 'name', order: 'asc'),
   nameZtoA(value: 'Name: Z to A', type: 'name', order: 'desc'),

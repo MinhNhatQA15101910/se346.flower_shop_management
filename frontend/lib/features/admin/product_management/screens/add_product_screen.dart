@@ -5,9 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:frontend/models/product.dart';
+import 'package:frontend/constants/size.dart';
 
 import 'package:frontend/features/admin/product_management/services/product_management_service.dart';
+
+const List<Size> _sizes = [
+  Size.small,
+  Size.medium,
+  Size.large,
+  Size.extra_large,
+];
 
 class AddProductScreen extends StatefulWidget {
   static const String routeName = '/add-product-screen';
@@ -18,10 +26,22 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  File? _selectedMainImage;
+  final _productManagementService = ProductManagementService();
   List<File> _selectedImagesList = [];
 
-  late ProductManagementService _productManagementService;
+  final _productNameController = TextEditingController();
+  final _productPriceController = TextEditingController();
+  final _productQuantityController = TextEditingController();
+  final _productSalePercentController = TextEditingController();
+  final _productColorController = TextEditingController();
+  final _productMaterialController = TextEditingController();
+  final _productWeightController = TextEditingController();
+  final _productDescriptionController = TextEditingController();
+  final _productSizeController = TextEditingController();
+  final _productCategoryController = TextEditingController();
+  final _productTypeController = TextEditingController();
+  final _productOccasionController = TextEditingController();
+
   List<String> _categories = [];
   List<String> _occasions = [];
   List<String> _types = [];
@@ -32,7 +52,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   void initState() {
     super.initState();
-    _productManagementService = ProductManagementService();
     _fetchData();
   }
 
@@ -50,6 +69,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
       _types = types;
     });
   }
+
+  void onAddButtonClick() {}
 
   @override
   Widget build(BuildContext context) {
@@ -153,41 +174,48 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildTextField(
-                          'Product name', 0, false, TextInputType.text),
+                      _buildTextField('Product name', 0, false,
+                          TextInputType.text, _productNameController),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildTextField(
-                              'Quantity', 1, false, TextInputType.number),
+                          _buildTextField('Quantity', 1, false,
+                              TextInputType.number, _productQuantityController),
                           SizedBox(width: 8),
-                          _buildTextField(
-                              'Regular price', 1, false, TextInputType.number)
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _buildTextField('Discount percentage', 1, false,
-                              TextInputType.number),
-                          SizedBox(width: 8),
-                          _buildTextField(
-                              'Colors', 1, false, TextInputType.text)
+                          _buildTextField('Regular price', 1, false,
+                              TextInputType.number, _productPriceController),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _buildTextField(
-                              'Material', 1, false, TextInputType.text),
+                              'Discount percentage',
+                              1,
+                              false,
+                              TextInputType.number,
+                              _productSalePercentController),
                           SizedBox(width: 8),
-                          _buildTextField(
-                              'Weight', 1, false, TextInputType.number)
+                          _buildTextField('Colors', 1, false,
+                              TextInputType.text, _productColorController)
                         ],
                       ),
-                      // _buildDropdownMenu('Size: ', categoryList),
-                      _buildTextField(
-                          'Description', 0, true, TextInputType.text)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buildTextField('Material', 1, false,
+                              TextInputType.text, _productMaterialController),
+                          SizedBox(width: 8),
+                          _buildTextField('Weight', 1, false,
+                              TextInputType.number, _productWeightController)
+                        ],
+                      ),
+                      _buildDropdownMenu(
+                          'Size: ',
+                          _sizes.map((e) => e.value).toList(),
+                          _productSizeController),
+                      _buildTextField('Description', 0, true,
+                          TextInputType.text, _productDescriptionController),
                     ],
                   ),
                 ),
@@ -214,9 +242,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                   child: Column(
                     children: [
-                      _buildDropdownMenu('Category:', _categories),
-                      _buildDropdownMenu('Type:', _types),
-                      _buildDropdownMenu('Ocassions', _occasions),
+                      _buildDropdownMenu(
+                          'Category:', _categories, _productCategoryController),
+                      _buildDropdownMenu(
+                          'Type:', _types, _productTypeController),
+                      _buildDropdownMenu(
+                          'Ocassions', _occasions, _productOccasionController),
                     ],
                   ),
                 ),
@@ -338,9 +369,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   Widget _buildTextField(String labelText, int flexIndex, bool multiline,
-      TextInputType keyboardType) {
-    final TextEditingController controller = TextEditingController();
-
+      TextInputType keyboardType, TextEditingController controller) {
     return Expanded(
       flex: flexIndex,
       child: Padding(
@@ -395,25 +424,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       }
                     }
                     break;
-                  case 'Colors':
-                    if (value.isEmpty) {
-                      validateText = "Please enter a color.";
-                    }
-                    break;
-                  case 'Material':
-                    if (value.isEmpty) {
-                      validateText = "Please enter a material.";
-                    }
-                    break;
                   case 'Weight':
-                    if (value.isEmpty) {
-                      validateText = "Please enter the weight.";
-                    } else {
-                      double? weight = double.tryParse(value);
-                      if (weight == null || weight <= 0) {
-                        validateText =
-                            "Please enter a valid weight greater than 0.";
-                      }
+                    double? weight = double.tryParse(value);
+                    if (weight == null || weight <= 0) {
+                      validateText =
+                          "Please enter a valid weight greater than 0.";
                     }
                     break;
                   case 'Description':
@@ -463,7 +478,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 
-  Widget _buildDropdownMenu(String label, List<String> categoryList) {
+  Widget _buildDropdownMenu(String label, List<String> categoryList,
+      TextEditingController controller) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
@@ -479,6 +495,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           ),
           DropdownMenu(
             hintText: "Please make your choice.",
+            controller: controller,
             width: 224,
             dropdownMenuEntries: categoryList
                 .map(
@@ -531,6 +548,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
     if (_addProdKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
+        _productManagementService.addProduct(
+          context: context,
+          name: _productNameController.text,
+          price: _productPriceController.text,
+          salePercentage: _productSalePercentController.text,
+          detailDescription: _productDescriptionController.text,
+          size: _productSizeController.text,
+          weight: _productWeightController.text,
+          color: _productColorController.text,
+          material: _productMaterialController.text,
+          stock: _productQuantityController.text,
+          imageUrls: _selectedImagesList,
+          type_ids: _productTypeController.text,
+          occasion_ids: _productOccasionController.text,
+        );
       });
     }
 
@@ -539,5 +571,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
         _isLoading = false;
       });
     });
+    Navigator.pop(context);
   }
 }
