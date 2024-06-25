@@ -1,4 +1,4 @@
-const sortOptions = ["sold", "name", "price"];
+const sortOptions = ["id", "sold", "name", "price"];
 const orderOptions = ["asc", "desc"];
 
 // Validate sort
@@ -10,11 +10,13 @@ const sortValidator = (req, res, next) => {
   try {
     let { sort, order } = req.query;
 
-    if (sort && order) {
+    if (sort || order) {
+      console.log(sort);
       if (!sortOptions.includes(sort)) {
         return res.status(400).json({ msg: "Invalid sort attribute." });
       }
 
+      console.log(order);
       if (!orderOptions.includes(order)) {
         return res.status(400).json({ msg: "Invalid order option." });
       }

@@ -374,4 +374,22 @@ orderRouter.post(
   }
 );
 
+// Get shipping price
+orderRouter.get("/customer/shipping_price", authValidator, async (req, res) => {
+  try {
+    const db = getDatabaseInstance();
+
+    const shippingPrice = await db.query(
+      "SELECT * FROM params WHERE name = $1",
+      [shippingPriceKey]
+    );
+
+    await db.end();
+
+    res.json(shippingPrice.rows[0]);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 export default orderRouter;
