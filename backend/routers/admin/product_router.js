@@ -288,4 +288,28 @@ adminProductRouter.put(
   }
 );
 
+// Delete product
+adminProductRouter.delete(
+  "/admin/delete-product/:product_id",
+  adminValidator,
+  productIdValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      let { product_id } = req.params;
+
+      await db.query("UPDATE products SET is_available = FALSE WHERE id = $1", [
+        product_id,
+      ]);
+
+      await db.end();
+
+      res.status(200).json();
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
 export default adminProductRouter;
