@@ -221,15 +221,21 @@ orderRouter.post(
 
       // Create order details
       for (let i = 0; i < cart.rowCount; i++) {
-        db.query("INSERT INTO order_details VALUES ($1, $2, $3)", [
+        const salePrice = await db.query(
+          "SELECT sale_price FROM products WHERE id = $1",
+          [cart.rows[i].product_id]
+        );
+
+        db.query("INSERT INTO order_details VALUES ($1, $2, $3, $4)", [
           newOrderResult.rows[0].id,
           cart.rows[i].product_id,
           cart.rows[i].quantity,
+          Number(salePrice.rows[0].sale_price) * Number(cart.rows[i].quantity),
         ]);
       }
 
       // Empty cart
-      db.query("DELETE FROM carts WHERE user_id = $1", [req.user]);
+      await db.query("DELETE FROM carts WHERE user_id = $1", [req.user]);
 
       // Get all order details
       const productsResult = await db.query(

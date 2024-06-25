@@ -38,12 +38,131 @@ statisticsRouter.get(
           value += Number(products.rows[j].stock);
         }
 
-        categoryMap.push({ name: categories.rows[i].name, value });
+        categoryMap.push({
+          name: categories.rows[i].name,
+          value: value.toString(),
+        });
       }
 
       await db.end();
 
       res.json(categoryMap);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
+statisticsRouter.get(
+  "/admin/revenue-analytics",
+  adminValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const months = [
+        "JAN",
+        "FEB",
+        "MAR",
+        "APR",
+        "MAY",
+        "JUN",
+        "JUL",
+        "AUG",
+        "SEP",
+        "OCT",
+        "NOV",
+        "DEC",
+      ];
+
+      let map = [];
+      for (let i = 0; i < 12; i++) {
+        const sum = await db.query(
+          "SELECT SUM(total_price) FROM orders WHERE EXTRACT(MONTH FROM receive_date) = $1",
+          [i + 1]
+        );
+        if (sum.rows[0].sum) {
+          map.push({ name: months[i], value: sum.rows[0].sum });
+        } else {
+          map.push({ name: months[i], value: "0" });
+        }
+      }
+
+      await db.end();
+
+      res.json(map);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
+statisticsRouter.get("/admin/total-sales", adminValidator, async (req, res) => {
+  try {
+    const db = getDatabaseInstance();
+
+    const totalSale = await db.query("SELECT SUM (total_price) FROM orders");
+
+    await db.end();
+
+    res.json(totalSale.rows[0].sum);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+statisticsRouter.get(
+  "/admin/total-products",
+  adminValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const products = await db.query(
+        "SELECT * FROM products WHERE is_available = TRUE"
+      );
+
+      await db.end();
+
+      res.json(products.rowCount.toString());
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
+statisticsRouter.get(
+  "/admin/total-orders",
+  adminValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const orders = await db.query("SELECT * FROM orders");
+
+      await db.end();
+
+      res.json(orders.rowCount.toString());
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
+statisticsRouter.get(
+  "/admin/total-customers",
+  adminValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const customers = await db.query(
+        "SELECT * FROM users WHERE role = 'user'"
+      );
+
+      await db.end();
+
+      res.json(customers.rowCount.toString());
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
