@@ -100,8 +100,8 @@ class _SearchScreenState extends State<SearchScreen> {
     final _sortResults = await _searchService.fetchFilterSortResults(
       context,
       _sortOption!,
-      _minPrice,
-      _maxPrice,
+      _minPrice.toString(),
+      _maxPrice.toString(),
       _currentPage++,
     );
 

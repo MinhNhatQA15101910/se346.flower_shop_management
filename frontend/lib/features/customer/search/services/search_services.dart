@@ -57,8 +57,8 @@ class SearchService {
   Future<List<Product>> fetchFilterSortResults(
     BuildContext context,
     SortOption sortOption,
-    double minPrice,
-    double maxPrice,
+    String minPrice,
+    String maxPrice,
     int page,
   ) async {
     final userProvider = Provider.of<UserProvider>(
