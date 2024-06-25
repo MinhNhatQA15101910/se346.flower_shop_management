@@ -128,6 +128,39 @@ adminCategoryRouter.patch(
   }
 );
 
+// Delete type
+adminCategoryRouter.delete(
+  "/admin/delete-type/:type_id",
+  adminValidator,
+  typeIdValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const { type_id } = req.params;
+
+      const existingProducts = await db.query(
+        "SELECT * FROM product_type WHERE type_id = $1",
+        [type_id]
+      );
+      if (existingProducts.rowCount > 0) {
+        await db.end();
+        return res.status(400).json({
+          msg: "Cannot delete type because there are products belong to type.",
+        });
+      }
+
+      await db.query("DELETE FROM types WHERE id = $1", [type_id]);
+
+      await db.end();
+
+      res.json();
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
 // Get occasion by id
 adminCategoryRouter.get(
   "/admin/occasions/:occasion_id",
@@ -230,6 +263,39 @@ adminCategoryRouter.patch(
       await db.end();
 
       res.json(occasion.rows[0]);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
+// Delete occasion
+adminCategoryRouter.delete(
+  "/admin/delete-occasion/:occasion_id",
+  adminValidator,
+  occasionIdValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const { occasion_id } = req.params;
+
+      const existingProducts = await db.query(
+        "SELECT * FROM product_occasion WHERE occasion_id = $1",
+        [occasion_id]
+      );
+      if (existingProducts.rowCount > 0) {
+        await db.end();
+        return res.status(400).json({
+          msg: "Cannot delete occasion because there are products belong to occasion.",
+        });
+      }
+
+      await db.query("DELETE FROM occasions WHERE id = $1", [occasion_id]);
+
+      await db.end();
+
+      res.json();
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
