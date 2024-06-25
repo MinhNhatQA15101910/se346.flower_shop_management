@@ -10,7 +10,7 @@ const stockValidator = (req, res, next) => {
       return res.status(400).json({ msg: "Stock is required." });
     }
 
-    if (!Number.isInteger(stock) || Number(stock) <= 0) {
+    if (isNaN(Number(stock)) || Number(stock) <= 0) {
       return res.status(400).json({ msg: "Invalid stock." });
     }
 
