@@ -259,6 +259,8 @@ class _SearchScreenState extends State<SearchScreen> {
   Future<void> _openSortBottomSheet() async {
     SortOption? _selectedSortOption = await showModalBottomSheet<SortOption>(
       context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return SortBtmSheet(); // Your custom bottom sheet widget
       },
@@ -272,7 +274,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _openFilterBottomSheet() async {
-    showModalBottomSheet<dynamic>(
+    final result = await showModalBottomSheet<dynamic>(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,
@@ -280,6 +282,10 @@ class _SearchScreenState extends State<SearchScreen> {
         return FilterBtmSheet();
       },
     );
+
+    if (result != null) {
+      print("Result: $result");
+    }
   }
 
   @override
