@@ -92,4 +92,144 @@ class StatisticService {
 
     return chartValueList;
   }
+
+  Future<double> getTotalSales(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    double value = 0;
+
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$uri/admin/total-sales'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        String cleanedString =
+            response.body.replaceAll('"', ''); // Remove the quotes
+        value = double.parse(cleanedString);
+      } else {
+        throw Exception('Failed to load total sales');
+      }
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+
+    return value;
+  }
+
+  Future<double> getTotalProducts(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    double value = 0;
+
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$uri/admin/total-products'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        String cleanedString =
+            response.body.replaceAll('"', ''); // Remove the quotes
+        value = double.parse(cleanedString);
+      } else {
+        throw Exception('Failed to load total products');
+      }
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+
+    return value;
+  }
+
+  Future<double> getTotalOrders(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    double value = 0;
+
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$uri/admin/total-orders'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        String cleanedString =
+            response.body.replaceAll('"', ''); // Remove the quotes
+        value = double.parse(cleanedString);
+      } else {
+        throw Exception('Failed to load total orders');
+      }
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+
+    return value;
+  }
+
+  Future<double> getTotalCustomers(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    double value = 0;
+
+    try {
+      http.Response response = await http.get(
+        Uri.parse('$uri/admin/total-customers'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        String cleanedString =
+            response.body.replaceAll('"', ''); // Remove the quotes
+        value = double.parse(cleanedString);
+      } else {
+        throw Exception('Failed to load total customers');
+      }
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+
+    return value;
+  }
 }

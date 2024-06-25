@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/admin/statistic/services/statistic_service.dart';
 import 'package:frontend/features/admin/statistic/widgets/category_pie_chart.dart';
 import 'package:frontend/features/admin/statistic/widgets/monthly_revenue_bar_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,6 +24,42 @@ class _StatisticScreenState extends State<StatisticScreen> {
     fontWeight: FontWeight.w700,
     color: Colors.black,
   );
+
+  final _statisticSevice = StatisticService();
+  double totalSales = 0;
+  double totalProducts = 0;
+  double totalOrders = 0;
+  double totalCustomers = 0;
+
+  void _getTotalSales() async {
+    totalSales = await _statisticSevice.getTotalSales(context);
+    setState(() {});
+  }
+
+  void _getTotalProducts() async {
+    totalProducts = await _statisticSevice.getTotalProducts(context);
+    setState(() {});
+  }
+
+  void _getTotalOrders() async {
+    totalOrders = await _statisticSevice.getTotalOrders(context);
+    setState(() {});
+  }
+
+  void _getTotalCustomers() async {
+    totalCustomers = await _statisticSevice.getTotalCustomers(context);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _getTotalSales();
+    _getTotalProducts();
+    _getTotalOrders();
+    _getTotalCustomers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +136,8 @@ class _StatisticScreenState extends State<StatisticScreen> {
                             SizedBox(
                               height: 4,
                             ),
-                            _interRegular14('123,456,789'),
+                            _interRegular14(
+                                '\$' + totalSales.toStringAsFixed(0)),
                             SizedBox(
                               height: 12,
                             ),
@@ -145,7 +183,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                             SizedBox(
                               height: 4,
                             ),
-                            _interRegular14('69'),
+                            _interRegular14(totalProducts.toStringAsFixed(0)),
                             SizedBox(
                               height: 12,
                             ),
@@ -200,7 +238,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                             SizedBox(
                               height: 4,
                             ),
-                            _interRegular14('139'),
+                            _interRegular14(totalOrders.toStringAsFixed(0)),
                             SizedBox(
                               height: 12,
                             ),
@@ -246,7 +284,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
                             SizedBox(
                               height: 4,
                             ),
-                            _interRegular14('302'),
+                            _interRegular14(totalCustomers.toStringAsFixed(0)),
                             SizedBox(
                               height: 12,
                             ),
