@@ -2,7 +2,7 @@ import express from "express";
 import pg from "pg";
 
 import adminValidator from "../../middlewares/admin_validator.js";
-import categoryNameValidator from "../../middlewares/category_name_validator.js";
+import nameValidator from "../../middlewares/name_validator.js";
 import categoryIdValidator from "../../middlewares/category_id_validator.js";
 import imageUrlValidator from "../../middlewares/image_url_validator.js";
 import typeIdValidator from "../../middlewares/type_id_validator.js";
@@ -46,13 +46,13 @@ adminCategoryRouter.get(
   }
 );
 
-// Create new type
+// Add new type
 adminCategoryRouter.post(
   "/admin/add-type",
   adminValidator,
   categoryIdValidator,
   imageUrlValidator,
-  categoryNameValidator,
+  nameValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
@@ -64,7 +64,7 @@ adminCategoryRouter.post(
         [name, category_id]
       );
       if (existingType.rowCount !== 0) {
-        db.end();
+        await db.end();
         return res.status(400).json({ msg: "Type name already existed." });
       }
 
@@ -87,7 +87,7 @@ adminCategoryRouter.patch(
   "/admin/update-type/:type_id",
   adminValidator,
   typeIdValidator,
-  categoryNameValidator,
+  nameValidator,
   imageUrlValidator,
   async (req, res) => {
     try {
@@ -108,7 +108,7 @@ adminCategoryRouter.patch(
         [categoryId.rows[0].category_id, name, type_id]
       );
       if (result.rowCount !== 0) {
-        db.end();
+        await db.end();
         return res
           .status(400)
           .json({ msg: "Type name already exists in the category." });
@@ -152,13 +152,13 @@ adminCategoryRouter.get(
   }
 );
 
-// Create new occasion
+// Add new occasion
 adminCategoryRouter.post(
   "/admin/add-occasion",
   adminValidator,
   categoryIdValidator,
   imageUrlValidator,
-  categoryNameValidator,
+  nameValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
@@ -170,7 +170,7 @@ adminCategoryRouter.post(
         [name, category_id]
       );
       if (existingOccasion.rowCount !== 0) {
-        db.end();
+        await db.end();
         return res.status(400).json({ msg: "Occasion name already existed." });
       }
 
@@ -193,7 +193,7 @@ adminCategoryRouter.patch(
   "/admin/update-occasion/:occasion_id",
   adminValidator,
   occasionIdValidator,
-  categoryNameValidator,
+  nameValidator,
   imageUrlValidator,
   async (req, res) => {
     try {
@@ -214,7 +214,7 @@ adminCategoryRouter.patch(
         [categoryId.rows[0].category_id, name, occasion_id]
       );
       if (result.rowCount !== 0) {
-        db.end();
+        await db.end();
         return res
           .status(400)
           .json({ msg: "Occasion name already exists in the category." });

@@ -12,25 +12,27 @@ function getDatabaseInstance() {
   return db;
 }
 
-// Validate type id
-const typeIdValidator = async (req, res, next) => {
-  console.log("Type id validator middleware:");
-  console.log("- Type id: " + req.params.type_id);
+// Validate order id
+const orderIdValidator = async (req, res, next) => {
+  console.log("Order id validator middleware:");
+  console.log("- Order id: " + req.params.order_id);
 
   const db = getDatabaseInstance();
 
   try {
-    const typeId = req.params.type_id;
+    const orderId = req.params.order_id;
 
-    if (!typeId) {
-      return res.status(400).json({ msg: "Type id is required." });
+    if (!orderId) {
+      return res.status(400).json({ msg: "Order id is required." });
     }
 
-    let result = await db.query("SELECT * FROM types WHERE id = $1", [typeId]);
+    let result = await db.query("SELECT * FROM orders WHERE id = $1", [
+      orderId,
+    ]);
 
     if (result.rowCount === 0) {
       await db.end();
-      return res.status(400).json({ msg: "Type id not exists." });
+      return res.status(400).json({ msg: "Order id not exists." });
     }
 
     await db.end();
@@ -41,4 +43,4 @@ const typeIdValidator = async (req, res, next) => {
   }
 };
 
-export default typeIdValidator;
+export default orderIdValidator;

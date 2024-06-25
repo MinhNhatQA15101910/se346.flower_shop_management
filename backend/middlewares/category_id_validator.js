@@ -12,6 +12,7 @@ function getDatabaseInstance() {
   return db;
 }
 
+// Validate category id
 const categoryIdValidator = async (req, res, next) => {
   console.log("Category id validator middleware:");
   console.log("- Category id: " + req.body.category_id);
@@ -33,7 +34,7 @@ const categoryIdValidator = async (req, res, next) => {
       return res.status(400).json({ msg: "Category id not exists." });
     }
 
-    db.end();
+    await db.end();
 
     next();
   } catch (err) {

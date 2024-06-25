@@ -12,6 +12,7 @@ function getDatabaseInstance() {
   return db;
 }
 
+// Validate occasion id
 const occasionIdValidator = async (req, res, next) => {
   console.log("Occasion id validator middleware:");
   console.log("- Occasion id: " + req.params.occasion_id);
@@ -30,11 +31,11 @@ const occasionIdValidator = async (req, res, next) => {
     ]);
 
     if (result.rowCount === 0) {
-      db.end();
+      await db.end();
       return res.status(400).json({ msg: "Occasion id not exists." });
     }
 
-    db.end();
+    await db.end();
 
     next();
   } catch (err) {
