@@ -74,10 +74,10 @@ class Order {
               .where((os) => os.value == map['status'])
               .firstOrNull ??
           OrderStatus.pending,
-      estimatedReceiveDate: map['estimated_receive_date'] ?? 0,
-      orderDate: map['order_date'] ?? new DateTime.now(),
-      inDeliveryDate: map['in_delivery_date'] ?? new DateTime.now(),
-      receiveDate: map['receive_date'] ?? new DateTime.now(),
+      estimatedReceiveDate: new DateTime.now(),
+      orderDate: new DateTime.now(),
+      inDeliveryDate: new DateTime.now(),
+      receiveDate: new DateTime.now(),
       province: map['province'] ?? '',
       district: map['district'] ?? '',
       ward: map['ward'] ?? '',

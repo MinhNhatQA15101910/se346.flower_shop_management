@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/admin/admin_drawer.dart';
+import 'package:frontend/features/customer/order_management/services/order_management_service.dart';
 import 'package:frontend/features/customer/order_management/widgets/order_detail_card.dart';
+import 'package:frontend/models/order.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 
 class OrderManagementScreen extends StatefulWidget {
+  static const String routeName = "/customer-order-management";
   const OrderManagementScreen({super.key});
 
   @override
@@ -12,6 +15,8 @@ class OrderManagementScreen extends StatefulWidget {
 }
 
 class _OrderManagementScreenState extends State<OrderManagementScreen> {
+  final OrderManagementService orderManagementService =
+      OrderManagementService();
   final List<String> tabbarList = [
     'All',
     'Pending',
@@ -21,6 +26,19 @@ class _OrderManagementScreenState extends State<OrderManagementScreen> {
   ];
 
   final _textController = TextEditingController();
+
+  List<Order>? _orders;
+
+  void _fetchAllOrders() async {
+    _orders = await orderManagementService.getAllOrders(context: context);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchAllOrders();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,13 +112,10 @@ class _OrderManagementScreenState extends State<OrderManagementScreen> {
                   vertical: 12.0,
                 ),
                 child: ListView(
-                  children: [
-                    OrderDetailCard(),
-                    OrderDetailCard(),
-                    OrderDetailCard(),
-                    OrderDetailCard(),
-                    OrderDetailCard(),
-                  ],
+                  children: _orders
+                          ?.map((order) => OrderDetailCard(order: order))
+                          .toList() ??
+                      [],
                 ),
               ),
           ],
