@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String uri = 'http://192.168.2.97:3000';
+String uri = 'http://192.168.1.178:3000';
 
 class GlobalVariables {
   // Base Variables
@@ -67,6 +67,9 @@ class GlobalVariables {
 
   //Create list color for chart
   static const List<Color> chartColors = [
+    Color(0xFF4CAF50),
+    Color(0xFF2196F3),
+    Color(0xFFFFC107),
     Color(0xFFFF5733),
     Color(0xFFC70039),
     Color(0xFF900C3F),
@@ -76,15 +79,11 @@ class GlobalVariables {
     Color(0xFF9C27B0),
     Color(0xFF673AB7),
     Color(0xFF3F51B5),
-    Color(0xFF2196F3),
-    Color(0xFF03A9F4),
     Color(0xFF00BCD4),
     Color(0xFF009688),
-    Color(0xFF4CAF50),
     Color(0xFF8BC34A),
     Color(0xFFCDDC39),
     Color(0xFFFFEB3B),
-    Color(0xFFFFC107),
     Color(0xFFFF9800),
     Color(0xFFFF5722),
     Color(0xFF795548),

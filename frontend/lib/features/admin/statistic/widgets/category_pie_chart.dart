@@ -2,15 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/admin/statistic/models/chart_value.dart';
+import 'package:frontend/features/admin/statistic/services/statistic_service.dart';
 import 'package:frontend/features/admin/statistic/widgets/indicator_chart.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-final List<ChartValue> chartValueList = [
-  ChartValue(name: 'Product 1', value: 40),
-  ChartValue(name: 'Product 2', value: 30),
-  ChartValue(name: 'Product 3', value: 20),
-  ChartValue(name: 'Product 4', value: 10),
-];
 
 class CategoryPieChart extends StatefulWidget {
   const CategoryPieChart({super.key});
@@ -23,15 +17,25 @@ class CategoryPieChartState extends State {
   int touchedIndex = -1;
   String selectedCategory = 'All';
   String selectedCategorychildren = 'All';
+  final _statisticSevice = StatisticService();
+
+  List<ChartValue> _chartValues = [];
+
+  void _fetchAllChartValues() async {
+    _chartValues = await _statisticSevice.fetchAllChartValues(context);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fetchAllChartValues();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 12,
-      ),
+    return GlobalVariables.customContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -73,141 +77,12 @@ class CategoryPieChartState extends State {
                 color: GlobalVariables.lightGrey,
               ),
               Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Radio<String>(
-                      value: 'All',
-                      groupValue: selectedCategory,
-                      onChanged: (String? value) {
-                        setState(() {
-                          selectedCategory = value!;
-                        });
-                      },
-                      activeColor: GlobalVariables.green,
-                      fillColor:
-                          MaterialStateProperty.all(GlobalVariables.green),
-                    ),
-                    _interRegular12('All'),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Radio<String>(
-                      value: 'Combo',
-                      groupValue: selectedCategory,
-                      onChanged: (String? value) {
-                        setState(() {
-                          selectedCategory = value!;
-                        });
-                      },
-                      activeColor: GlobalVariables.green,
-                      fillColor:
-                          MaterialStateProperty.all(GlobalVariables.green),
-                    ),
-                    _interRegular12('Combo'),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Radio<String>(
-                      value: 'Flower',
-                      groupValue: selectedCategory,
-                      onChanged: (String? value) {
-                        setState(() {
-                          selectedCategory = value!;
-                        });
-                      },
-                      activeColor: GlobalVariables.green,
-                      fillColor:
-                          MaterialStateProperty.all(GlobalVariables.green),
-                    ),
-                    _interRegular12('Flower'),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Radio<String>(
-                      value: 'Cake',
-                      groupValue: selectedCategory,
-                      onChanged: (String? value) {
-                        setState(() {
-                          selectedCategory = value!;
-                        });
-                      },
-                      activeColor: GlobalVariables.green,
-                      fillColor:
-                          MaterialStateProperty.all(GlobalVariables.green),
-                    ),
-                    _interRegular12('Cake'),
-                  ],
-                ),
-              ),
-              Container(
                 height: 1,
                 color: GlobalVariables.lightGrey,
               ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 8,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Radio<String>(
-                      value: 'All',
-                      groupValue: selectedCategorychildren,
-                      onChanged: (String? value) {
-                        setState(() {
-                          selectedCategorychildren = value!;
-                        });
-                      },
-                      activeColor: GlobalVariables.green,
-                      fillColor:
-                          MaterialStateProperty.all(GlobalVariables.green),
-                    ),
-                    _interRegular12('All'),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Radio<String>(
-                      value: 'Types',
-                      groupValue: selectedCategorychildren,
-                      onChanged: (String? value) {
-                        setState(() {
-                          selectedCategorychildren = value!;
-                        });
-                      },
-                      activeColor: GlobalVariables.green,
-                      fillColor:
-                          MaterialStateProperty.all(GlobalVariables.green),
-                    ),
-                    _interRegular12('Types'),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Radio<String>(
-                      value: 'Occasions',
-                      groupValue: selectedCategorychildren,
-                      onChanged: (String? value) {
-                        setState(() {
-                          selectedCategorychildren = value!;
-                        });
-                      },
-                      activeColor: GlobalVariables.green,
-                      fillColor:
-                          MaterialStateProperty.all(GlobalVariables.green),
-                    ),
-                    _interRegular12('Occasions'),
-                    SizedBox(
-                      width: 12,
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 40),
           AspectRatio(
             aspectRatio: 1.5,
             child: PieChart(
@@ -236,10 +111,10 @@ class CategoryPieChartState extends State {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 12),
+            padding: const EdgeInsets.only(top: 40),
             child: Wrap(
               alignment: WrapAlignment.start,
-              children: chartValueList
+              children: _chartValues
                   .asMap()
                   .entries
                   .map((entry) => Indicator(
@@ -258,14 +133,14 @@ class CategoryPieChartState extends State {
   List<PieChartSectionData> showingSections() {
     List<PieChartSectionData> sections = [];
 
-    for (int i = 0; i < chartValueList.length; i++) {
+    for (int i = 0; i < _chartValues.length; i++) {
       const shadows = [Shadow(color: Colors.black, blurRadius: 1)];
       sections.add(
         PieChartSectionData(
           color: GlobalVariables.chartColors[i],
-          value: chartValueList[i].value,
-          title: '${chartValueList[i].value}%',
-          radius: touchedIndex == i ? 110 : 100,
+          value: _chartValues[i].value,
+          title: '${_chartValues[i].value}',
+          radius: touchedIndex == i ? 130 : 120,
           titleStyle: GoogleFonts.inter(
             fontSize: touchedIndex == i ? 14 : 12,
             fontWeight: FontWeight.bold,

@@ -67,10 +67,10 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
                 ),
               ),
               IconButton(
-                onPressed: () => _openAddCategoryBottomSheet(),
+                onPressed: () => {},
                 iconSize: 30,
                 icon: const Icon(
-                  Icons.add,
+                  Icons.account_circle_outlined,
                   color: GlobalVariables.darkGreen,
                 ),
               ),

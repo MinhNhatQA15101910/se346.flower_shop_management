@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/admin/category_management/services/category_management_service.dart';
 import 'package:frontend/features/admin/category_management/widgets/add_update_category_btm_sheet.dart';
 import 'package:frontend/models/occasion.dart';
 import 'package:frontend/models/type.dart';
@@ -19,6 +20,21 @@ class CategoryItem extends StatelessWidget {
 
   String capitalize(String s) {
     return "${s[0].toUpperCase()}${s.substring(1).toLowerCase()}";
+  }
+
+  Future<void> _deleteCategory(BuildContext context) async {
+    if (type != null) {
+      await CategoryManagementService().deleteType(
+        typeId: type!.id,
+        context: context,
+      );
+    } else if (occasion != null) {
+      await CategoryManagementService().deleteOccasion(
+        occasionId: occasion!.id,
+        context: context,
+      );
+    }
+    onUpdate();
   }
 
   @override
@@ -126,7 +142,7 @@ class CategoryItem extends StatelessWidget {
                       size: 16,
                     ),
                   ),
-                  onTap: () => {},
+                  onTap: () => _deleteCategory(context),
                 ),
               ],
             ),
