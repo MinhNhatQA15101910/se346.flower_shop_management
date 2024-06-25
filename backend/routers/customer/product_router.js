@@ -4,6 +4,7 @@ import pg from "pg";
 import authValidator from "../../middlewares/auth_validator.js";
 import pageValidator from "../../middlewares/page_validator.js";
 import productIdValidator from "../../middlewares/product_id_validator.js";
+import priceRangeValidator from "../../middlewares/price_range_validator.js";
 
 const productRouter = express.Router();
 
@@ -23,12 +24,14 @@ function getDatabaseInstance() {
 productRouter.get(
   "/customer/products",
   authValidator,
+  priceRangeValidator,
   pageValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
 
-      let { page, type_id, occasion_id, keyword } = req.query;
+      // Basic params
+      let { type_id, occasion_id, keyword } = req.query;
 
       let products;
 
@@ -69,10 +72,25 @@ productRouter.get(
         }
       }
 
-      const totalPages = Math.ceil(products.rowCount / 10);
-      const totalResults = products.rowCount;
+      products = products.rows;
 
-      const results = products.rows.splice((page - 1) * 10, 10);
+      // Filter by price
+      const { min_price, max_price } = req.query;
+      console.log(min_price);
+      console.log(max_price);
+      products = products.filter(
+        (product) =>
+          Number(product.sale_price) > min_price &&
+          Number(product.sale_price) < max_price
+      );
+
+      // Pagination
+      let { page } = req.query;
+
+      const totalPages = Math.ceil(products.length / 10);
+      const totalResults = products.length;
+
+      const results = products.splice((page - 1) * 10, 10);
 
       for (let i = 0; i < results.length; i++) {
         let imageUrlList = await db.query(
