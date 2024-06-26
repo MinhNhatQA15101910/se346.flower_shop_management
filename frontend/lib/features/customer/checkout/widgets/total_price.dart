@@ -3,9 +3,9 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TotalPrice extends StatelessWidget {
-  final int shippingPrice;
-  final int promotionPrice;
-  final int subTotalPrice;
+  final double shippingPrice;
+  final double promotionPrice;
+  final double subTotalPrice;
 
   const TotalPrice({
     required this.shippingPrice,
@@ -28,7 +28,7 @@ class TotalPrice extends StatelessWidget {
                 SizedBox(
                   width: 8,
                 ),
-                _boldSizeText(subTotalPrice.toString() + ' \$')
+                _boldSizeText('\$' + subTotalPrice.toStringAsFixed(2))
               ],
             ),
           ),
@@ -60,7 +60,7 @@ class TotalPrice extends StatelessWidget {
                 SizedBox(
                   width: 8,
                 ),
-                _boldSizeText(shippingPrice.toString() + ' \$')
+                _boldSizeText('\$' + shippingPrice.toStringAsFixed(2))
               ],
             ),
           ),
@@ -78,7 +78,7 @@ class TotalPrice extends StatelessWidget {
                 SizedBox(
                   width: 8,
                 ),
-                _boldGreenSizeText('- ' + promotionPrice.toString() + ' \$')
+                _boldGreenSizeText('- \$' + promotionPrice.toStringAsFixed(2))
               ],
             ),
           ),
@@ -105,9 +105,9 @@ class TotalPrice extends StatelessWidget {
                 SizedBox(
                   width: 8,
                 ),
-                _boldSizeText((subTotalPrice + shippingPrice - promotionPrice)
-                        .toString() +
-                    ' \$')
+                _boldSizeText('\$' +
+                    (subTotalPrice + shippingPrice - promotionPrice)
+                        .toStringAsFixed(2))
               ],
             ),
           ),

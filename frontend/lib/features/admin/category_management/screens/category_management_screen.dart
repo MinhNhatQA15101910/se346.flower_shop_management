@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/common/widgets/loader.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/admin/admin_drawer.dart';
+import 'package:frontend/features/admin/category_management/widgets/add_update_category_btm_sheet.dart';
 import 'package:frontend/features/admin/category_management/widgets/large_category_item.dart';
 import 'package:frontend/features/customer/home/services/home_service.dart';
 import 'package:frontend/models/category.dart';
@@ -20,9 +21,10 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
   List<Category>? _categories;
 
-  void _fetchAllCategories() async {
-    _categories = await _homeService.fetchAllCategories(context);
-    setState(() {});
+  void _fetchAllCategories() {
+    setState(() async {
+      _categories = await _homeService.fetchAllCategories(context);
+    });
   }
 
   @override
@@ -30,6 +32,21 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
     super.initState();
 
     _fetchAllCategories();
+  }
+
+  Future<void> _openAddCategoryBottomSheet() async {
+    final result = await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => AddUpdateCategoryBottomSheet(
+        featureName: 'Add type',
+        categoryParentId: null,
+      ),
+    );
+
+    if (result == true) {
+      _fetchAllCategories();
+    }
   }
 
   @override

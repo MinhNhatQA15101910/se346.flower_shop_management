@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:frontend/common/widgets/loader.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/constants/utils.dart';
@@ -8,7 +9,6 @@ import 'package:frontend/features/admin/category_management/services/category_ma
 import 'package:frontend/models/occasion.dart';
 import 'package:frontend/models/type.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pinput/pinput.dart';
 
 class AddUpdateCategoryBottomSheet extends StatefulWidget {
   const AddUpdateCategoryBottomSheet({
@@ -33,7 +33,7 @@ class _AddUpdateCategoryBottomSheetState
 
   final _categoryNameController = TextEditingController();
 
-  File? _image = null;
+  File? _image;
 
   Type? _type;
   Occasion? _occasion;
@@ -57,13 +57,18 @@ class _AddUpdateCategoryBottomSheetState
         typeId: widget.categoryId!,
         context: context,
       );
+      if (_type != null) {
+        _categoryNameController.text = _type!.name;
+      }
     } else if (widget.featureName == 'Update occasion') {
       _occasion = await _categoryManagementService.getOccasion(
         occasionId: widget.categoryId!,
         context: context,
       );
+      if (_occasion != null) {
+        _categoryNameController.text = _occasion!.name;
+      }
     }
-
     setState(() {});
   }
 
@@ -73,21 +78,78 @@ class _AddUpdateCategoryBottomSheetState
         _isExecuting = true;
       });
 
-      if (widget.featureName == 'Add type') {
-        Future.delayed(Duration(seconds: 2), () async {
+      try {
+        if (widget.featureName == 'Add type') {
+          if (_image == null) {
+            IconSnackBar.show(
+              context,
+              label: 'Please select an image.',
+              snackBarType: SnackBarType.fail,
+            );
+            setState(() {
+              _isExecuting = false;
+            });
+            return;
+          }
           await _categoryManagementService.addType(
             categoryId: widget.categoryParentId!,
             name: _categoryNameController.text,
             image: _image!,
             context: context,
           );
-        });
+        } else if (widget.featureName == 'Add occasion') {
+          if (_image == null) {
+            IconSnackBar.show(
+              context,
+              label: 'Please select an image.',
+              snackBarType: SnackBarType.fail,
+            );
+            setState(() {
+              _isExecuting = false;
+            });
+            return;
+          }
+          await _categoryManagementService.addOccasion(
+            categoryId: widget.categoryParentId!,
+            name: _categoryNameController.text,
+            image: _image!,
+            context: context,
+          );
+        } else if (widget.featureName == 'Update type') {
+          await _categoryManagementService.updateType(
+            typeId: _type!.id,
+            name: _categoryNameController.text,
+            image: _image,
+            imageUrl: _type!.imageUrl,
+            context: context,
+          );
+        } else if (widget.featureName == 'Update occasion') {
+          await _categoryManagementService.updateOccasion(
+            occasionId: _occasion!.id,
+            name: _categoryNameController.text,
+            image: _image,
+            imageUrl: _occasion!.imageUrl,
+            context: context,
+          );
+        }
 
         if (!mounted) return;
 
         setState(() {
           _isExecuting = false;
         });
+
+        Navigator.pop(context, true);
+      } catch (e) {
+        setState(() {
+          _isExecuting = false;
+        });
+
+        IconSnackBar.show(
+          context,
+          label: e.toString(),
+          snackBarType: SnackBarType.fail,
+        );
       }
     }
   }
@@ -95,21 +157,12 @@ class _AddUpdateCategoryBottomSheetState
   @override
   void initState() {
     super.initState();
-
     _fetchCategory();
   }
 
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
-
-    if (_type != null) {
-      _categoryNameController.setText(_type!.name);
-    } else if (_occasion != null) {
-      _categoryNameController.setText(_occasion!.name);
-    } else {
-      _categoryNameController.setText('');
-    }
 
     return Container(
       padding: EdgeInsets.only(

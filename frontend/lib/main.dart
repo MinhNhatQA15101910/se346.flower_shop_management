@@ -4,6 +4,7 @@ import 'package:frontend/features/admin/admin_bottom_bar.dart';
 import 'package:frontend/features/auth/screens/intro_screen.dart';
 import 'package:frontend/features/auth/screens/main_auth_screen.dart';
 import 'package:frontend/features/auth/services/auth_service.dart';
+import 'package:frontend/features/customer/checkout/providers/shipping_info_provider.dart';
 import 'package:frontend/features/customer/customer_bottom_bar.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
@@ -20,6 +21,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ShippingInfoProvider(),
         )
       ],
       child: const MyApp(),

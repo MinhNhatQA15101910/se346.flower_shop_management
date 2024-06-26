@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/features/admin/order_details/widgets/content_container.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
+  static const String routeName = '/admin-order-details';
   const OrderDetailsScreen({Key? key}) : super(key: key);
 
   @override

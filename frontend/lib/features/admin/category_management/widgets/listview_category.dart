@@ -8,10 +8,12 @@ class ListViewCategory extends StatelessWidget {
     super.key,
     this.types,
     this.occasions,
+    required this.onUpdate,
   });
 
   final List<Type>? types;
   final List<Occasion>? occasions;
+  final VoidCallback onUpdate;
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +38,12 @@ class ListViewCategory extends StatelessWidget {
           if (cardName == 'type') {
             return CategoryItem(
               type: types![index],
+              onUpdate: onUpdate,
             );
           } else {
             return CategoryItem(
               occasion: occasions![index],
+              onUpdate: onUpdate,
             );
           }
         },

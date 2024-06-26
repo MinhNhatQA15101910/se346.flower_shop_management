@@ -233,7 +233,9 @@ adminCategoryRouter.patch(
       const db = getDatabaseInstance();
 
       const { occasion_id } = req.params;
-      const { name, image_url } = req.body;
+      const { name, 
+        
+       } = req.body;
 
       // Get category_id from occasion_id
       const categoryId = await db.query(

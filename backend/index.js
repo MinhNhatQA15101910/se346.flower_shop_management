@@ -12,10 +12,13 @@ import adminCategoryRouter from "./routers/admin/category_router.js";
 import adminOrderRouter from "./routers/admin/order_router.js";
 import statisticsRouter from "./routers/admin/statistics_router.js";
 
+import cors from "cors";
+
 const app = express();
 env.config();
 
 app.use(express.json());
+app.use(cors());
 
 // Customer
 app.use(authRouter);

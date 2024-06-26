@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/cart/services/cart_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -7,9 +8,12 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class ProductCartItem extends StatefulWidget {
   final String productName;
   final String imagePath;
-  final int price;
+  final double price;
   final int quantity;
   final int limitQuantity;
+  final int productId;
+  final VoidCallback onRemove;
+  final VoidCallback onQuantityChanged; // Add this line
 
   const ProductCartItem({
     Key? key,
@@ -18,6 +22,9 @@ class ProductCartItem extends StatefulWidget {
     required this.price,
     required this.quantity,
     required this.limitQuantity,
+    required this.productId,
+    required this.onRemove,
+    required this.onQuantityChanged, // Add this line
   }) : super(key: key);
 
   @override
@@ -32,6 +39,8 @@ class _ProductCartItemState extends State<ProductCartItem> {
   int _limitQuantity = 0;
   bool _isIncrementEnabled = true;
   bool _isDecrementEnabled = false;
+  final CartService _cartService = CartService();
+
   _ProductCartItemState(this._quantity, this._limitQuantity);
 
   @override
@@ -47,18 +56,51 @@ class _ProductCartItemState extends State<ProductCartItem> {
     });
   }
 
+  Future<void> _addToCart(int productId) async {
+    final success = await _cartService.addToCart(context, productId);
+    if (success) {
+      setState(() {
+        _quantity++;
+        _updateButtonState();
+        widget.onQuantityChanged();
+      });
+    }
+  }
+
+  Future<void> _removeFromCart(int productId) async {
+    final success = await _cartService.removeFromCart(context, productId);
+    if (success) {
+      setState(() {
+        if (_quantity > 1) {
+          _quantity--;
+        }
+        _updateButtonState();
+        widget.onQuantityChanged();
+      });
+    }
+  }
+
+  Future<void> _deleteFromCart(int productId) async {
+    final success = await _cartService.deleteFromCart(context, productId);
+    if (success) {
+      setState(() {
+        widget.onRemove();
+        widget.onQuantityChanged();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Slidable(
-        // Specify the Slidable behavior
         endActionPane: ActionPane(
           motion: ScrollMotion(),
           extentRatio: 0.2,
           children: [
             SlidableAction(
               onPressed: (BuildContext context) {
-                // Handle action
+                _deleteFromCart(widget.productId);
               },
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(8),
@@ -91,7 +133,7 @@ class _ProductCartItemState extends State<ProductCartItem> {
                     height: 52,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(widget.imagePath),
+                        image: NetworkImage(widget.imagePath),
                         fit: BoxFit.fill,
                       ),
                       borderRadius: BorderRadius.circular(8),
@@ -106,7 +148,7 @@ class _ProductCartItemState extends State<ProductCartItem> {
                       children: [
                         _productText(widget.productName),
                         SizedBox(height: 8),
-                        _priceText(widget.price.toString()),
+                        _priceText('\$' + widget.price.toString()),
                         SizedBox(height: 8),
                         Row(
                           children: [
@@ -115,7 +157,7 @@ class _ProductCartItemState extends State<ProductCartItem> {
                               child: _isDecrementEnabled
                                   ? InkWell(
                                       onTap: () {
-                                        _decrementQuantity();
+                                        _removeFromCart(widget.productId);
                                       },
                                       child: SvgPicture.asset(
                                         'assets/vectors/vector_decrement_button_enable.svg',
@@ -156,8 +198,8 @@ class _ProductCartItemState extends State<ProductCartItem> {
                               color: Colors.transparent,
                               child: _isIncrementEnabled
                                   ? InkWell(
-                                      onTap: () {
-                                        _incrementQuantity();
+                                      onTap: () async {
+                                        await _addToCart(widget.productId);
                                       },
                                       child: SvgPicture.asset(
                                         'assets/vectors/vector_increment_button_enable.svg',
@@ -235,29 +277,5 @@ class _ProductCartItemState extends State<ProductCartItem> {
         ),
       ),
     );
-  }
-
-  bool _incrementQuantity() {
-    if (_quantity < _limitQuantity) {
-      setState(() {
-        _quantity++;
-        _updateButtonState();
-      });
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  bool _decrementQuantity() {
-    if (_quantity > 1) {
-      setState(() {
-        _quantity--;
-        _updateButtonState();
-      });
-      return true;
-    } else {
-      return false;
-    }
   }
 }

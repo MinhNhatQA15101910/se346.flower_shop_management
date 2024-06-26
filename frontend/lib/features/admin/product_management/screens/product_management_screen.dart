@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/common/widgets/loader.dart';
+import 'package:frontend/features/admin/product_management/screens/add_product_screen.dart';
+import 'package:frontend/features/admin/product_management/services/product_management_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/models/product.dart';
 
-//Widget imports
 import 'package:frontend/features/admin/admin_drawer.dart';
 import 'package:frontend/features/admin/product_management/widgets/product_manage_card.dart';
 import 'package:frontend/features/admin/product_management/widgets/admin_product_filter_btm_sheet.dart';
@@ -12,16 +15,73 @@ class ProductManagementScreen extends StatefulWidget {
   const ProductManagementScreen({super.key});
 
   @override
-  State<ProductManagementScreen> createState() => _ProductManagementScreenState();
+  State<ProductManagementScreen> createState() =>
+      _ProductManagementScreenState();
 }
 
 class _ProductManagementScreenState extends State<ProductManagementScreen> {
   final _textController = TextEditingController();
+  final _controller = ScrollController();
+  final _productManagementService = ProductManagementService();
+
+  List<Product> productsList = [];
+  var _currentPage = 1;
+  var _isLoading = false;
+  var _hasProduct = true;
+
+  void _fetchAllProducts() async {
+    if (_isLoading) return;
+    _isLoading = true;
+
+    const limit = 10;
+
+    final newProducts = await _productManagementService.fetchAllProducts(
+      context,
+      _currentPage++,
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+
+      if (newProducts.isEmpty) {
+        _hasProduct = false;
+      } else {
+        productsList.addAll(newProducts);
+        if (newProducts.length < limit) {
+          _hasProduct = false;
+        }
+      }
+    });
+  }
+
+  void _navigateToAddProductScreen() {
+    Navigator.of(context).pushNamed(AddProductScreen.routeName);
+  }
+
+  Future<void> _onRefresh() async {
+    setState(() {
+      _isLoading = false;
+      _hasProduct = true;
+      _currentPage = 1;
+      productsList.clear();
+    });
+
+    _fetchAllProducts();
+  }
 
   @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+
+    _fetchAllProducts();
+
+    _controller.addListener(() {
+      if (_controller.position.maxScrollExtent == _controller.offset) {
+        _fetchAllProducts();
+      }
+    });
   }
 
   @override
@@ -34,7 +94,7 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(width: 10), // To center the title
+              SizedBox(width: 10),
               Text(
                 'FlowerFly',
                 style: GoogleFonts.pacifico(
@@ -135,21 +195,57 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
             child: Container(
               color: GlobalVariables.lightGrey,
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-              child: ListView(
-                children: [
-                  ProductManageCard(),
-                  ProductManageCard(),
-                  ProductManageCard(),
-                  ProductManageCard(),
-                  ProductManageCard(),
-                  ProductManageCard(),
-                  ProductManageCard(),
-                ],
-              ),
+              child: productsList.isEmpty
+                  ? const Loader()
+                  : RefreshIndicator(
+                      onRefresh: _onRefresh,
+                      child: ListView.builder(
+                        controller: _controller,
+                        itemCount: _hasProduct
+                            ? productsList.length + 1
+                            : productsList.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          if (index < productsList.length) {
+                            return ProductManageCard(
+                              product: productsList[index],
+                            );
+                          } else {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 4,
+                              ),
+                              child: _hasProduct
+                                  ? Loader()
+                                  : Center(
+                                      child: Text(
+                                        'No more product to load.',
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 16,
+                                          color: GlobalVariables.green,
+                                        ),
+                                      ),
+                                    ),
+                            );
+                          }
+                        },
+                        physics: const BouncingScrollPhysics(),
+                      ),
+                    ),
             ),
-          )
+          ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _navigateToAddProductScreen,
+        backgroundColor: GlobalVariables.green,
+        child: Icon(Icons.copy),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(28.0),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -187,5 +283,11 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 }
