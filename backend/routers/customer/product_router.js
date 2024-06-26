@@ -6,6 +6,8 @@ import pageValidator from "../../middlewares/query/page_validator.js";
 import productIdValidator from "../../middlewares/params/product_id_validator.js";
 import priceRangeValidator from "../../middlewares/query/price_range_validator.js";
 import sortValidator from "../../middlewares/query/sort_validator.js";
+import productIdFromBodyValidator from "../../middlewares/body/product_id_validator.js";
+import ratingValidator from "../../middlewares/body/rating_validator.js";
 
 const productRouter = express.Router();
 
@@ -266,15 +268,45 @@ productRouter.get(
   }
 );
 
-// productRouter.add("/rate-product", authValidator, async (req, res) => {
-//   try {
-//     const db = getDatabaseInstance();
+productRouter.post(
+  "/customer/rate-product",
+  authValidator,
+  productIdFromBodyValidator,
+  ratingValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
 
-//     const { product_id, rating } = req.params;
+      const { product_id, rating } = req.body;
 
-//   } catch (e) {
-//     res.status(500).json({ error: e.message });
-//   }
-// });
+      // Insert new rating
+      await db.query(
+        "INSERT INTO product_rating (product_id, user_id, rating) VALUES ($1, $2, $3)",
+        [product_id, req.user, rating]
+      );
+
+      // Update rating_avg and total_rating
+      let product = await db.query("SELECT * FROM products WHERE id = $1", [
+        product_id,
+      ]);
+      let ratingAvg = product.rows[0].rating_avg;
+      let totalRating = product.rows[0].total_rating;
+
+      ratingAvg = (totalRating * ratingAvg + rating) / (totalRating + 1);
+      totalRating++;
+
+      product = await db.query(
+        "UPDATE products SET rating_avg = $1, total_rating = $2 WHERE id = $3 RETURNING *",
+        [ratingAvg, totalRating, product_id]
+      );
+
+      await db.end();
+
+      res.json(product.rows[0]);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
 
 export default productRouter;
