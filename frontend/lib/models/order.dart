@@ -98,9 +98,6 @@ class Order {
       isRated: List<bool>.from(
         map['is_rated'],
       ),
-      isRated: List<bool>.from(
-        map['is_rated'],
-      ),
     );
   }
   String toJson() => json.encode(toMap());
