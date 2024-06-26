@@ -21,6 +21,7 @@ class Order {
   final String receiverPhoneNumber;
   final List<Product> products;
   final List<int> quantities;
+  final List<bool> isRated;
 
   const Order({
     required this.id,
@@ -40,6 +41,7 @@ class Order {
     required this.receiverPhoneNumber,
     required this.products,
     required this.quantities,
+    required this.isRated,
   });
 
   Map<String, dynamic> toMap() {
@@ -61,6 +63,7 @@ class Order {
       'receiver_phone_number': receiverPhoneNumber,
       'products': products.map((p) => p.toMap()).toList(),
       'quantities': quantities,
+      'is_rated': isRated,
     };
   }
 
@@ -68,8 +71,8 @@ class Order {
     return Order(
       id: map['id'] ?? 0,
       userId: map['user_id'] ?? 0,
-      productPrice: map['product_price'] ?? 0,
-      shippingPrice: map['shipping_price'] ?? 0,
+      productPrice: double.tryParse(map['product_price']) ?? 0,
+      shippingPrice: double.tryParse(map['shipping_price']) ?? 0,
       status: OrderStatus.values
               .where((os) => os.value == map['status'])
               .firstOrNull ??
@@ -86,15 +89,14 @@ class Order {
       receiverPhoneNumber: map['receiver_phone_number'] ?? '',
       products: List<Product>.from(
         map['products']?.map(
-          (x) => Product.fromMap(
-            x['product'],
-          ),
+          (x) => Product.fromMap(x),
         ),
       ),
       quantities: List<int>.from(
-        map['products']?.map(
-          (x) => x['quantity'],
-        ),
+        map['quantities'],
+      ),
+      isRated: List<bool>.from(
+        map['is_rated'],
       ),
     );
   }

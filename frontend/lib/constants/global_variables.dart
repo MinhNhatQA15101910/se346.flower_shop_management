@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String uri = 'http://192.168.2.115:3000';
+String uri = 'http://10.45.134.83:3000';
 
 class GlobalVariables {
   // Base Variables
@@ -28,6 +28,10 @@ class GlobalVariables {
   static const Color pinputColor = Color(0xFF545454);
   static const Color black = Color(0xFF000000);
   static const Color blackTextColor = Color(0xFF27272A);
+  static const Color blue = Color.fromARGB(255, 0, 0, 255);
+  static const Color red = Color.fromARGB(255, 255, 0, 0);
+  static const Color gray = Color.fromARGB(255, 134, 134, 134);
+  static const Color orange = Color.fromARGB(255, 255, 145, 0);
 
   static int productId = -1;
   static String productName = '';
