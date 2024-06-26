@@ -2,6 +2,7 @@ import express from "express";
 import pg from "pg";
 
 import authValidator from "../../middlewares/headers/auth_validator.js";
+import orderIdValidator from "../../middlewares/params/order_id_validator.js";
 
 const orderRouter = express.Router();
 
@@ -74,8 +75,19 @@ orderRouter.get("/customer/orders", authValidator, async (req, res) => {
         quantities.push(quantitiesResult.rows[j].quantity);
       }
 
+      // Load all isRated from order
+      const ratedResult = await db.query(
+        "SELECT is_rated FROM order_details WHERE order_id = $1 ORDER BY product_id ASC",
+        [orders.rows[i].id]
+      );
+      let is_rated = [];
+      for (let i = 0; i < ratedResult.rowCount; i++) {
+        is_rated.push(ratedResult.rows[i].is_rated);
+      }
+
       orders.rows[i].products = products;
       orders.rows[i].quantities = quantities;
+      orders.rows[i].is_rated = is_rated;
     }
 
     await db.end();
@@ -90,6 +102,7 @@ orderRouter.get("/customer/orders", authValidator, async (req, res) => {
 orderRouter.get(
   "/customer/orders/:order_id",
   authValidator,
+  orderIdValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
@@ -131,9 +144,19 @@ orderRouter.get(
         quantities.push(quantitiesResult.rows[i].quantity);
       }
 
+      // Load all isRated from order
+      const ratedResult = await db.query(
+        "SELECT is_rated FROM order_details WHERE order_id = $1 ORDER BY product_id ASC",
+        [order_id]
+      );
+      let is_rated = [];
+      for (let i = 0; i < ratedResult.rowCount; i++) {
+        is_rated.push(ratedResult.rows[i].is_rated);
+      }
+
       await db.end();
 
-      res.json({ ...order.rows[0], products, quantities });
+      res.json({ ...order.rows[0], products, quantities, is_rated });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }

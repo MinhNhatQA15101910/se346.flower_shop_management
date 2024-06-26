@@ -302,7 +302,7 @@ productRouter.post(
 
       await db.end();
 
-      res.json(product.rows[0]);
+      res.json();
     } catch (e) {
       res.status(500).json({ error: e.message });
     }

@@ -602,6 +602,7 @@ CREATE TABLE order_details (
     product_id INT NOT NULL,
     quantity INT NOT NULL,
     price DECIMAL NOT NULL,
+    is_rated BOOLEAN NOT NULL,
     CONSTRAINT pk_order_details PRIMARY KEY (order_id, product_id),
     CONSTRAINT fk_order_details_1 FOREIGN KEY (order_id) REFERENCES orders(id),
     CONSTRAINT fk_order_details_2 FOREIGN KEY (product_id) REFERENCES products(id)
