@@ -4,12 +4,12 @@ import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import pg from "pg";
 
-import emailValidator from "../middlewares/email_validator.js";
-import usernameValidator from "../middlewares/username_validator.js";
-import passwordValidator from "../middlewares/password_validator.js";
-import pincodeValidator from "../middlewares/pincode_validator.js";
-import newPasswordValidator from "../middlewares/new_password_validator.js";
-import authValidator from "../middlewares/auth_validator.js";
+import emailValidator from "../middlewares/body/email_validator.js";
+import usernameValidator from "../middlewares/body/username_validator.js";
+import passwordValidator from "../middlewares/body/password_validator.js";
+import pincodeValidator from "../middlewares/body/pincode_validator.js";
+import newPasswordValidator from "../middlewares/body/new_password_validator.js";
+import authValidator from "../middlewares/headers/auth_validator.js";
 
 const authRouter = express.Router();
 

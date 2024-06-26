@@ -1,7 +1,7 @@
 import express from "express";
 import pg from "pg";
 
-import adminValidator from "../../middlewares/admin_validator.js";
+import adminValidator from "../../middlewares/headers/admin_validator.js";
 
 const statisticsRouter = express.Router();
 

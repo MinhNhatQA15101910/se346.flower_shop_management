@@ -1,11 +1,13 @@
 import express from "express";
 import pg from "pg";
 
-import authValidator from "../../middlewares/auth_validator.js";
-import pageValidator from "../../middlewares/page_validator.js";
-import productIdValidator from "../../middlewares/product_id_validator.js";
-import priceRangeValidator from "../../middlewares/price_range_validator.js";
-import sortValidator from "../../middlewares/sort_validator.js";
+import authValidator from "../../middlewares/headers/auth_validator.js";
+import pageValidator from "../../middlewares/query/page_validator.js";
+import productIdValidator from "../../middlewares/params/product_id_validator.js";
+import priceRangeValidator from "../../middlewares/query/price_range_validator.js";
+import sortValidator from "../../middlewares/query/sort_validator.js";
+import productIdFromBodyValidator from "../../middlewares/body/product_id_validator.js";
+import ratingValidator from "../../middlewares/body/rating_validator.js";
 
 const productRouter = express.Router();
 
@@ -260,6 +262,47 @@ productRouter.get(
       await db.end();
 
       res.json(product.rows[0]);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
+productRouter.post(
+  "/customer/rate-product",
+  authValidator,
+  productIdFromBodyValidator,
+  ratingValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const { product_id, rating } = req.body;
+
+      // Insert new rating
+      await db.query(
+        "INSERT INTO product_rating (product_id, user_id, rating) VALUES ($1, $2, $3)",
+        [product_id, req.user, rating]
+      );
+
+      // Update rating_avg and total_rating
+      let product = await db.query("SELECT * FROM products WHERE id = $1", [
+        product_id,
+      ]);
+      let ratingAvg = product.rows[0].rating_avg;
+      let totalRating = product.rows[0].total_rating;
+
+      ratingAvg = (totalRating * ratingAvg + rating) / (totalRating + 1);
+      totalRating++;
+
+      product = await db.query(
+        "UPDATE products SET rating_avg = $1, total_rating = $2 WHERE id = $3 RETURNING *",
+        [ratingAvg, totalRating, product_id]
+      );
+
+      await db.end();
+
+      res.json();
     } catch (e) {
       res.status(500).json({ error: e.message });
     }

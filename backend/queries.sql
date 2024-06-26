@@ -184,12 +184,10 @@ CREATE TABLE product_images (
 );
 
 CREATE TABLE product_rating (
+	id SERIAL PRIMARY KEY,
     product_id INT NOT NULL,
     user_id INT NOT NULL,
-    rating DECIMAL NOT NULL,
-    CONSTRAINT pk_product_rating PRIMARY KEY (product_id, user_id),
-    CONSTRAINT fk_product_rating_1 FOREIGN KEY (product_id) REFERENCES products(id),
-    CONSTRAINT fk_product_rating_2 FOREIGN KEY (user_id) REFERENCES users(id)
+    rating DECIMAL NOT NULL
 );
 
 CREATE TABLE product_type (
@@ -604,6 +602,7 @@ CREATE TABLE order_details (
     product_id INT NOT NULL,
     quantity INT NOT NULL,
     price DECIMAL NOT NULL,
+    is_rated BOOLEAN NOT NULL,
     CONSTRAINT pk_order_details PRIMARY KEY (order_id, product_id),
     CONSTRAINT fk_order_details_1 FOREIGN KEY (order_id) REFERENCES orders(id),
     CONSTRAINT fk_order_details_2 FOREIGN KEY (product_id) REFERENCES products(id)
