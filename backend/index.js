@@ -9,11 +9,16 @@ import orderRouter from "./routers/customer/order_router.js";
 
 import adminProductRouter from "./routers/admin/product_router.js";
 import adminCategoryRouter from "./routers/admin/category_router.js";
+import adminOrderRouter from "./routers/admin/order_router.js";
+import statisticsRouter from "./routers/admin/statistics_router.js";
+
+import cors from "cors";
 
 const app = express();
 env.config();
 
 app.use(express.json());
+app.use(cors());
 
 // Customer
 app.use(authRouter);
@@ -25,6 +30,8 @@ app.use(orderRouter);
 // Admin
 app.use(adminProductRouter);
 app.use(adminCategoryRouter);
+app.use(adminOrderRouter);
+app.use(statisticsRouter);
 
 app.get("/", (req, res) => {
   res.render("index.ejs");

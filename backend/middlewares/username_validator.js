@@ -1,3 +1,4 @@
+// Validate username
 const usernameValidator = (req, res, next) => {
   console.log("Username validator middleware:");
   console.log("- Username: " + req.body.username);

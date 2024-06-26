@@ -1,3 +1,4 @@
+// Validate email
 const emailValidator = (req, res, next) => {
   console.log("Email validator middleware:");
   console.log("- Email: " + req.body.email);

@@ -2,6 +2,11 @@ import express from "express";
 import pg from "pg";
 
 import adminValidator from "../../middlewares/admin_validator.js";
+import nameValidator from "../../middlewares/name_validator.js";
+import categoryIdValidator from "../../middlewares/category_id_validator.js";
+import imageUrlValidator from "../../middlewares/image_url_validator.js";
+import typeIdValidator from "../../middlewares/type_id_validator.js";
+import occasionIdValidator from "../../middlewares/occasion_id_validator.js";
 
 const adminCategoryRouter = express.Router();
 
@@ -21,6 +26,7 @@ function getDatabaseInstance() {
 adminCategoryRouter.get(
   "/admin/types/:type_id",
   adminValidator,
+  typeIdValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
@@ -40,15 +46,27 @@ adminCategoryRouter.get(
   }
 );
 
-// Create new type
+// Add new type
 adminCategoryRouter.post(
   "/admin/add-type",
   adminValidator,
+  categoryIdValidator,
+  imageUrlValidator,
+  nameValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
 
       const { category_id, name, image_url } = req.body;
+
+      const existingType = await db.query(
+        "SELECT * FROM types WHERE name = $1 AND category_id = $2",
+        [name, category_id]
+      );
+      if (existingType.rowCount !== 0) {
+        await db.end();
+        return res.status(400).json({ msg: "Type name already existed." });
+      }
 
       const type = await db.query(
         "INSERT INTO types (category_id, name, image_url) VALUES ($1, $2, $3) RETURNING *",
@@ -64,17 +82,40 @@ adminCategoryRouter.post(
   }
 );
 
+// Update type
 adminCategoryRouter.patch(
-  "/admin/update-type",
+  "/admin/update-type/:type_id",
   adminValidator,
+  typeIdValidator,
+  nameValidator,
+  imageUrlValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
 
-      const { type_id, name, image_url } = req.body;
+      const { type_id } = req.params;
+      const { name, image_url } = req.body;
+
+      // Get category_id from type_id
+      const categoryId = await db.query(
+        "SELECT category_id FROM types WHERE id = $1",
+        [type_id]
+      );
+
+      // Validate if type name already exists in the category
+      const result = await db.query(
+        "SELECT * FROM types WHERE category_id = $1 AND name = $2 AND id <> $3",
+        [categoryId.rows[0].category_id, name, type_id]
+      );
+      if (result.rowCount !== 0) {
+        await db.end();
+        return res
+          .status(400)
+          .json({ msg: "Type name already exists in the category." });
+      }
 
       const type = await db.query(
-        "UPDATE types SET name = $1, image_url = $2 WHERE id = $3",
+        "UPDATE types SET name = $1, image_url = $2 WHERE id = $3 RETURNING *",
         [name, image_url, type_id]
       );
 
@@ -87,10 +128,44 @@ adminCategoryRouter.patch(
   }
 );
 
+// Delete type
+adminCategoryRouter.delete(
+  "/admin/delete-type/:type_id",
+  adminValidator,
+  typeIdValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const { type_id } = req.params;
+
+      const existingProducts = await db.query(
+        "SELECT * FROM product_type WHERE type_id = $1",
+        [type_id]
+      );
+      if (existingProducts.rowCount > 0) {
+        await db.end();
+        return res.status(400).json({
+          msg: "Cannot delete type because there are products belong to type.",
+        });
+      }
+
+      await db.query("DELETE FROM types WHERE id = $1", [type_id]);
+
+      await db.end();
+
+      res.json();
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
 // Get occasion by id
 adminCategoryRouter.get(
   "/admin/occasions/:occasion_id",
   adminValidator,
+  occasionIdValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
@@ -110,15 +185,27 @@ adminCategoryRouter.get(
   }
 );
 
-// Create new occasion
+// Add new occasion
 adminCategoryRouter.post(
   "/admin/add-occasion",
   adminValidator,
+  categoryIdValidator,
+  imageUrlValidator,
+  nameValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
 
       const { category_id, name, image_url } = req.body;
+
+      const existingOccasion = await db.query(
+        "SELECT * FROM occasions WHERE name = $1 AND category_id = $2",
+        [name, category_id]
+      );
+      if (existingOccasion.rowCount !== 0) {
+        await db.end();
+        return res.status(400).json({ msg: "Occasion name already existed." });
+      }
 
       const occasion = await db.query(
         "INSERT INTO occasions (category_id, name, image_url) VALUES ($1, $2, $3) RETURNING *",
@@ -134,23 +221,81 @@ adminCategoryRouter.post(
   }
 );
 
+// Update occasion
 adminCategoryRouter.patch(
-  "/admin/update-occasion",
+  "/admin/update-occasion/:occasion_id",
   adminValidator,
+  occasionIdValidator,
+  nameValidator,
+  imageUrlValidator,
   async (req, res) => {
     try {
       const db = getDatabaseInstance();
 
-      const { occasion_id, name, image_url } = req.body;
+      const { occasion_id } = req.params;
+      const { name, 
+        
+       } = req.body;
+
+      // Get category_id from occasion_id
+      const categoryId = await db.query(
+        "SELECT category_id FROM occasions WHERE id = $1",
+        [occasion_id]
+      );
+
+      // Validate if type name already exists in the category
+      const result = await db.query(
+        "SELECT * FROM occasions WHERE category_id = $1 AND name = $2 AND id <> $3",
+        [categoryId.rows[0].category_id, name, occasion_id]
+      );
+      if (result.rowCount !== 0) {
+        await db.end();
+        return res
+          .status(400)
+          .json({ msg: "Occasion name already exists in the category." });
+      }
 
       const occasion = await db.query(
-        "UPDATE occasions SET name = $1, image_url = $2 WHERE id = $3",
+        "UPDATE occasions SET name = $1, image_url = $2 WHERE id = $3 RETURNING *",
         [name, image_url, occasion_id]
       );
 
       await db.end();
 
       res.json(occasion.rows[0]);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
+
+// Delete occasion
+adminCategoryRouter.delete(
+  "/admin/delete-occasion/:occasion_id",
+  adminValidator,
+  occasionIdValidator,
+  async (req, res) => {
+    try {
+      const db = getDatabaseInstance();
+
+      const { occasion_id } = req.params;
+
+      const existingProducts = await db.query(
+        "SELECT * FROM product_occasion WHERE occasion_id = $1",
+        [occasion_id]
+      );
+      if (existingProducts.rowCount > 0) {
+        await db.end();
+        return res.status(400).json({
+          msg: "Cannot delete occasion because there are products belong to occasion.",
+        });
+      }
+
+      await db.query("DELETE FROM occasions WHERE id = $1", [occasion_id]);
+
+      await db.end();
+
+      res.json();
     } catch (e) {
       res.status(500).json({ error: e.message });
     }

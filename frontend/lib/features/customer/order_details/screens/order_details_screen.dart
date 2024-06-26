@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/widgets/separator.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/customer/order_details/widgets/product_information_card.dart';
+import 'package:frontend/features/customer/rating/screens/rating_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:frontend/features/customer/order_details/widgets/content_container.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
+  static const String routeName = '/customer-order-details';
   const OrderDetailsScreen({Key? key}) : super(key: key);
 
   @override
@@ -15,6 +18,23 @@ class OrderDetailsScreen extends StatefulWidget {
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   String currentStatus = 'Pending';
+
+  List<Map<String, dynamic>> products = [
+    {
+      'name': 'Sample Product 1',
+      'imageUrl':
+          'https://imgs.search.brave.com/p4vjYGLZq07IPi_BDIsHQxBihhRCteK-49mUjTnmL84/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9idXJz/dC5zaG9waWZ5Y2Ru/LmNvbS9waG90b3Mv/ZG9nLXBhd3MuanBn/P3dpZHRoPTEwMDAm/Zm9ybWF0PXBqcGcm/ZXhpZj0wJmlwdGM9/MA',
+      'productPrice': '29.99',
+      'productQuantity': 2,
+    },
+    {
+      'name': 'Sample Product 2',
+      'imageUrl':
+          'https://media.gettyimages.com/id/609759172/photo/wet-dog.jpg?s=612x612&w=0&k=20&c=KzYsjqM7FWT7U-5gk_jKTNKGmm_qYn8Y_XUpmgOxUJ4=',
+      'productPrice': '19.99',
+      'productQuantity': 1,
+    },
+  ];
 
   final deliverState = {
     'Pending': GlobalVariables.darkYellow,
@@ -34,6 +54,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     color: Colors.black,
   );
 
+  void _goBack(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -42,7 +66,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           centerTitle: false,
           leading: IconButton(
             icon: Icon(Icons.chevron_left),
-            onPressed: () {},
+            onPressed: (() {
+              _goBack(context);
+            }),
           ),
           title: Text(
             'Order detail',
@@ -65,7 +91,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Order detail Form
                   ContentContainer(
                     title: "Order detail",
                     child: Container(
@@ -103,7 +128,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       ),
                     ),
                   ),
-                  // Shipping Info Form
                   ContentContainer(
                     title: "Shipping info",
                     child: Container(
@@ -113,7 +137,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         color: GlobalVariables.defaultColor,
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SvgPicture.asset(
                             'assets/vectors/vector_location.svg',
@@ -122,29 +146,34 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               BlendMode.srcIn,
                             ),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text("Shipping address", style: titleStyle),
-                              Text(
+                          SizedBox(width: 16.0),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text("Shipping address", style: titleStyle),
+                                Text(
                                   "288 Erie Street South Unit D, Leamington, Ontario",
-                                  style: contentStyle),
-                              Text(
-                                "Nick • 0969696969",
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w400,
-                                  color: GlobalVariables.darkGrey,
-                                  fontSize: GlobalVariables.fontSize_12,
+                                  style: contentStyle,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                            ],
-                          )
+                                Text(
+                                  "Nick • 0969696969",
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w400,
+                                    color: GlobalVariables.darkGrey,
+                                    fontSize: GlobalVariables.fontSize_12,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  // Estimated time of Delivery Form
                   ContentContainer(
                     title: "Estimated time of delivery",
                     child: Container(
@@ -159,7 +188,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       ),
                     ),
                   ),
-                  // Products Information Form
                   ContentContainer(
                     title: "Products information",
                     child: Container(
@@ -170,11 +198,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: [],
+                        children: [
+                          ProductInformationCard(
+                              func: () => {
+                                    Navigator.of(context)
+                                        .pushNamed(RatingScreen.routeName)
+                                  })
+                        ],
                       ),
                     ),
                   ),
-                  // Payment Info Form
                   ContentContainer(
                     title: "Payment infomation",
                     child: Container(
@@ -192,15 +225,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 ],
               ),
             ),
-          ),
-        ),
-        bottomNavigationBar: Container(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: GlobalVariables.darkGreen,
-            ),
-            child: Text("????"),
-            onPressed: () {},
           ),
         ),
       ),

@@ -25,12 +25,14 @@ VALUES ('cakes', 'https://res.cloudinary.com/dauyd6npv/image/upload/v1713588992/
 CREATE TABLE types (
     id SERIAL PRIMARY KEY,
     category_id INT,
-    name VARCHAR(20) NOT NULL UNIQUE,
+    name VARCHAR(20) NOT NULL,
     image_url VARCHAR(200) NOT NULL,
     
     CONSTRAINT fk_types_categories_category_id
     FOREIGN KEY (category_id)
-    REFERENCES categories(id)
+    REFERENCES categories(id),
+    CONSTRAINT uq_category_id_name
+    UNIQUE (category_id, name)
 );
 
 INSERT INTO types (category_id, name, image_url)
@@ -98,7 +100,9 @@ CREATE TABLE occasions (
     
     CONSTRAINT fk_types_categories_category_id
     FOREIGN KEY (category_id)
-    REFERENCES categories(id)
+    REFERENCES categories(id),
+    CONSTRAINT uq_occasions_category_id_name
+    UNIQUE (category_id, name)
 );
 
 INSERT INTO occasions (category_id, name, image_url)
@@ -599,6 +603,7 @@ CREATE TABLE order_details (
     order_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity INT NOT NULL,
+    price DECIMAL NOT NULL,
     CONSTRAINT pk_order_details PRIMARY KEY (order_id, product_id),
     CONSTRAINT fk_order_details_1 FOREIGN KEY (order_id) REFERENCES orders(id),
     CONSTRAINT fk_order_details_2 FOREIGN KEY (product_id) REFERENCES products(id)

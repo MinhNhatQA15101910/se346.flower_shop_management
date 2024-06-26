@@ -8,15 +8,25 @@ class ListViewCategory extends StatelessWidget {
     super.key,
     this.types,
     this.occasions,
+    required this.onUpdate,
   });
 
   final List<Type>? types;
   final List<Occasion>? occasions;
+  final VoidCallback onUpdate;
 
   @override
   Widget build(BuildContext context) {
-    final length = types != null ? types!.length : occasions!.length;
-    final cardName = types != null ? 'type' : 'occasion';
+    final length = types != null
+        ? types!.length
+        : occasions != null
+            ? occasions!.length
+            : 0;
+    final cardName = types != null
+        ? 'type'
+        : occasions != null
+            ? 'occasion'
+            : "";
 
     return Container(
       margin: const EdgeInsets.only(top: 12),
@@ -28,10 +38,12 @@ class ListViewCategory extends StatelessWidget {
           if (cardName == 'type') {
             return CategoryItem(
               type: types![index],
+              onUpdate: onUpdate,
             );
           } else {
             return CategoryItem(
               occasion: occasions![index],
+              onUpdate: onUpdate,
             );
           }
         },

@@ -5,12 +5,10 @@ import 'package:frontend/features/customer/checkout/widgets/address_info_btm_she
 
 class ShippingInfoItem extends StatelessWidget {
   final String address;
-  final String name;
-  final String phoneNumber;
+  final String receiver;
   const ShippingInfoItem({
     required this.address,
-    required this.name,
-    required this.phoneNumber,
+    required this.receiver,
     super.key,
   });
 
@@ -43,7 +41,7 @@ class ShippingInfoItem extends StatelessWidget {
                   SizedBox(
                     height: 4,
                   ),
-                  _detailText(name + ' • ' + phoneNumber),
+                  _detailText(receiver),
                 ],
               ),
             ),

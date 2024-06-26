@@ -77,6 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
       1,
     );
 
+    if (!mounted) return;
+
     setState(() {
       _recommendedProducts = newProducts;
     });
@@ -179,96 +181,118 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               // Deals of the day
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Deals of the Day',
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: GlobalVariables.blackTextColor,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: _navigateToDealsOfDayScreen,
-                        child: Text(
-                          'View more >',
+              Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: 12,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Deals of the Day',
                           style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: GlobalVariables.blackTextColor,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  _dealsOfDayProducts == null
-                      ? const Loader()
-                      : SizedBox(
-                          height: 200,
-                          child: GridView.builder(
-                            padding: const EdgeInsets.all(0),
-                            itemCount: _dealsOfDayProducts!.length,
-                            scrollDirection: Axis.horizontal,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 1,
-                              mainAxisSpacing: 20,
-                              childAspectRatio: 4 / 3,
+                        SizedBox(
+                          height: 12,
+                        ),
+                        GestureDetector(
+                          onTap: _navigateToDealsOfDayScreen,
+                          child: Text(
+                            'View more >',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: GlobalVariables.green,
                             ),
-                            itemBuilder: (context, index) {
-                              return SingleProductCard(
-                                product: _dealsOfDayProducts![index],
-                              );
-                            },
-                            physics: const BouncingScrollPhysics(),
                           ),
                         ),
-                ],
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    _dealsOfDayProducts == null
+                        ? const Loader()
+                        : SizedBox(
+                            height: 200,
+                            child: GridView.builder(
+                              padding: const EdgeInsets.all(0),
+                              itemCount: _dealsOfDayProducts!.length,
+                              scrollDirection: Axis.horizontal,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 1,
+                                mainAxisSpacing: 20,
+                                childAspectRatio: 4 / 3,
+                              ),
+                              itemBuilder: (context, index) {
+                                return SingleProductCard(
+                                  product: _dealsOfDayProducts![index],
+                                );
+                              },
+                              physics: const BouncingScrollPhysics(),
+                            ),
+                          ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 24),
+              Container(
+                height: 12,
+                color: GlobalVariables.defaultColor,
+              ),
 
               // Categories
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Categories',
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: GlobalVariables.blackTextColor,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: widget.changeToCategoryScreen,
-                        child: Text(
-                          'View more >',
+              Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: 12,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Categories',
                           style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: GlobalVariables.green,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: GlobalVariables.blackTextColor,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  _comboTypes == null
-                      ? const Loader()
-                      : GridViewCategory(
-                          types: _comboTypes,
+                        GestureDetector(
+                          onTap: widget.changeToCategoryScreen,
+                          child: Text(
+                            'View more >',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: GlobalVariables.green,
+                            ),
+                          ),
                         ),
-                ],
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    _comboTypes == null
+                        ? const Loader()
+                        : GridViewCategory(
+                            types: _comboTypes,
+                          ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 24),
+              Container(
+                height: 12,
+                color: GlobalVariables.defaultColor,
+              ),
+              SizedBox(
+                height: 12,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

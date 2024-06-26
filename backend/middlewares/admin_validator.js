@@ -13,6 +13,7 @@ function getDatabaseInstance() {
   return db;
 }
 
+// Validate admin
 const adminValidator = async (req, res, next) => {
   const db = getDatabaseInstance();
 

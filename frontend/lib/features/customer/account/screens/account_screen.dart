@@ -4,6 +4,8 @@ import 'package:frontend/features/auth/screens/main_auth_screen.dart';
 import 'package:frontend/features/auth/widgets/pinput_form.dart';
 import 'package:frontend/features/customer/account/services/account_service.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
+import 'package:frontend/features/customer/order_details/screens/order_details_screen.dart';
+import 'package:frontend/features/customer/order_management/screens/order_management_screen.dart';
 import 'package:frontend/providers/auth_provider.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -67,6 +69,10 @@ class AccountScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _goToOrderMangementScreen(BuildContext context) {
+    Navigator.of(context).pushNamed(OrderManagementScreen.routeName);
   }
 
   @override
@@ -267,7 +273,7 @@ class AccountScreen extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        //onTap: do sth,
+                        onTap: () => _goToOrderMangementScreen(context),
                         child: Text(
                           'View more >',
                           style: GoogleFonts.inter(

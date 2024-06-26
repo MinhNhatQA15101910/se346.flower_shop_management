@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 class ProductItem extends StatelessWidget {
   final String productName;
   final int quantity;
-  final int price;
+  final double price;
   final String imagePath;
 
   const ProductItem({
@@ -33,7 +33,7 @@ class ProductItem extends StatelessWidget {
                 height: 40,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(imagePath),
+                    image: NetworkImage(imagePath),
                     fit: BoxFit.fill,
                   ),
                   borderRadius: BorderRadius.circular(8),
@@ -51,7 +51,7 @@ class ProductItem extends StatelessWidget {
                       height: 4,
                     ),
                     _detailText(
-                        quantity.toString() + ' x ' + price.toString() + ' \$'),
+                        quantity.toString() + ' x \$' + price.toString()),
                   ],
                 ),
               ),

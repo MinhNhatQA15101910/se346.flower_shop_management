@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/features/admin/category_management/services/category_management_service.dart';
 import 'package:frontend/features/admin/category_management/widgets/add_update_category_btm_sheet.dart';
 import 'package:frontend/models/occasion.dart';
 import 'package:frontend/models/type.dart';
@@ -8,15 +9,32 @@ import 'package:google_fonts/google_fonts.dart';
 class CategoryItem extends StatelessWidget {
   final Type? type;
   final Occasion? occasion;
+  final VoidCallback onUpdate;
 
   const CategoryItem({
     super.key,
     this.type,
     this.occasion,
+    required this.onUpdate,
   });
 
   String capitalize(String s) {
     return "${s[0].toUpperCase()}${s.substring(1).toLowerCase()}";
+  }
+
+  Future<void> _deleteCategory(BuildContext context) async {
+    if (type != null) {
+      await CategoryManagementService().deleteType(
+        typeId: type!.id,
+        context: context,
+      );
+    } else if (occasion != null) {
+      await CategoryManagementService().deleteOccasion(
+        occasionId: occasion!.id,
+        context: context,
+      );
+    }
+    onUpdate();
   }
 
   @override
@@ -81,8 +99,8 @@ class CategoryItem extends StatelessWidget {
                       size: 16,
                     ),
                   ),
-                  onTap: () => {
-                    showModalBottomSheet<dynamic>(
+                  onTap: () async {
+                    final result = await showModalBottomSheet(
                       context: context,
                       useRootNavigator: true,
                       isScrollControlled: true,
@@ -103,7 +121,10 @@ class CategoryItem extends StatelessWidget {
                           ),
                         );
                       },
-                    ),
+                    );
+                    if (result == true) {
+                      onUpdate();
+                    }
                   },
                 ),
                 SizedBox(width: 8),
@@ -121,7 +142,7 @@ class CategoryItem extends StatelessWidget {
                       size: 16,
                     ),
                   ),
-                  onTap: () => {},
+                  onTap: () => _deleteCategory(context),
                 ),
               ],
             ),

@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
+import 'package:frontend/common/widgets/loader.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/constants/utils.dart';
 import 'package:frontend/features/admin/category_management/services/category_management_service.dart';
 import 'package:frontend/models/occasion.dart';
 import 'package:frontend/models/type.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pinput/pinput.dart';
 
 class AddUpdateCategoryBottomSheet extends StatefulWidget {
   const AddUpdateCategoryBottomSheet({
@@ -32,10 +33,14 @@ class _AddUpdateCategoryBottomSheetState
 
   final _categoryNameController = TextEditingController();
 
-  File? _image = null;
+  File? _image;
 
   Type? _type;
   Occasion? _occasion;
+
+  final _formKey = GlobalKey<FormState>();
+
+  bool _isExecuting = false;
 
   void _selectImages() async {
     var res = await pickOneImage();
@@ -52,45 +57,112 @@ class _AddUpdateCategoryBottomSheetState
         typeId: widget.categoryId!,
         context: context,
       );
+      if (_type != null) {
+        _categoryNameController.text = _type!.name;
+      }
     } else if (widget.featureName == 'Update occasion') {
       _occasion = await _categoryManagementService.getOccasion(
         occasionId: widget.categoryId!,
         context: context,
       );
+      if (_occasion != null) {
+        _categoryNameController.text = _occasion!.name;
+      }
     }
-
     setState(() {});
   }
 
   void _executeFeature() async {
-    if (widget.featureName == 'Add type') {
-      _categoryManagementService.addType(
-        categoryId: widget.categoryParentId!,
-        name: _categoryNameController.text,
-        image: _image!,
-        context: context,
-      );
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isExecuting = true;
+      });
+
+      try {
+        if (widget.featureName == 'Add type') {
+          if (_image == null) {
+            IconSnackBar.show(
+              context,
+              label: 'Please select an image.',
+              snackBarType: SnackBarType.fail,
+            );
+            setState(() {
+              _isExecuting = false;
+            });
+            return;
+          }
+          await _categoryManagementService.addType(
+            categoryId: widget.categoryParentId!,
+            name: _categoryNameController.text,
+            image: _image!,
+            context: context,
+          );
+        } else if (widget.featureName == 'Add occasion') {
+          if (_image == null) {
+            IconSnackBar.show(
+              context,
+              label: 'Please select an image.',
+              snackBarType: SnackBarType.fail,
+            );
+            setState(() {
+              _isExecuting = false;
+            });
+            return;
+          }
+          await _categoryManagementService.addOccasion(
+            categoryId: widget.categoryParentId!,
+            name: _categoryNameController.text,
+            image: _image!,
+            context: context,
+          );
+        } else if (widget.featureName == 'Update type') {
+          await _categoryManagementService.updateType(
+            typeId: _type!.id,
+            name: _categoryNameController.text,
+            image: _image,
+            imageUrl: _type!.imageUrl,
+            context: context,
+          );
+        } else if (widget.featureName == 'Update occasion') {
+          await _categoryManagementService.updateOccasion(
+            occasionId: _occasion!.id,
+            name: _categoryNameController.text,
+            image: _image,
+            imageUrl: _occasion!.imageUrl,
+            context: context,
+          );
+        }
+
+        if (!mounted) return;
+
+        setState(() {
+          _isExecuting = false;
+        });
+
+        Navigator.pop(context, true);
+      } catch (e) {
+        setState(() {
+          _isExecuting = false;
+        });
+
+        IconSnackBar.show(
+          context,
+          label: e.toString(),
+          snackBarType: SnackBarType.fail,
+        );
+      }
     }
   }
 
   @override
   void initState() {
     super.initState();
-
     _fetchCategory();
   }
 
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
-
-    if (_type != null) {
-      _categoryNameController.setText(_type!.name);
-    } else if (_occasion != null) {
-      _categoryNameController.setText(_occasion!.name);
-    } else {
-      _categoryNameController.setText('');
-    }
 
     return Container(
       padding: EdgeInsets.only(
@@ -223,16 +295,18 @@ class _AddUpdateCategoryBottomSheetState
                   SizedBox(width: 8),
                   Expanded(
                     child: Container(
-                      child: GlobalVariables.customButton(
-                        onTap: _executeFeature,
-                        buttonText: widget.featureName == 'Add type' ||
-                                widget.featureName == 'Add occasion'
-                            ? 'Add'
-                            : 'Update',
-                        borderColor: GlobalVariables.green,
-                        fillColor: GlobalVariables.green,
-                        textColor: Colors.white,
-                      ),
+                      child: _isExecuting
+                          ? const Loader()
+                          : GlobalVariables.customButton(
+                              onTap: _executeFeature,
+                              buttonText: widget.featureName == 'Add type' ||
+                                      widget.featureName == 'Add occasion'
+                                  ? 'Add'
+                                  : 'Update',
+                              borderColor: GlobalVariables.green,
+                              fillColor: GlobalVariables.green,
+                              textColor: Colors.white,
+                            ),
                     ),
                   ),
                 ],
@@ -278,7 +352,10 @@ class _AddUpdateCategoryBottomSheetState
     );
   }
 
-  Widget _customTextField(TextInputType inputText, String hint) {
+  Widget _customTextField(
+    TextInputType inputText,
+    String hint,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 16,
@@ -287,22 +364,35 @@ class _AddUpdateCategoryBottomSheetState
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: GlobalVariables.darkGrey),
       ),
-      child: TextFormField(
-        controller: _categoryNameController,
-        cursorColor: GlobalVariables.darkGrey,
-        keyboardType: inputText,
-        style: TextStyle(
-          color: GlobalVariables.darkGrey,
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-        ),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          hintText: hint,
+      child: Form(
+        key: _formKey,
+        child: TextFormField(
+          controller: _categoryNameController,
+          cursorColor: GlobalVariables.darkGrey,
+          keyboardType: inputText,
+          style: GoogleFonts.inter(
+            color: GlobalVariables.blackTextColor,
+            fontSize: 16,
+          ),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            hintText: hint,
+            hintStyle: GoogleFonts.inter(
+              color: GlobalVariables.darkGrey,
+              fontSize: 16,
+            ),
+          ),
+          validator: (name) {
+            if (name == null || name.isEmpty) {
+              return 'Please enter type/occasion name.';
+            }
+
+            return null;
+          },
         ),
       ),
     );
