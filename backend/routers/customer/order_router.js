@@ -1,7 +1,7 @@
 import express from "express";
 import pg from "pg";
 
-import authValidator from "../../middlewares/auth_validator.js";
+import authValidator from "../../middlewares/headers/auth_validator.js";
 
 const orderRouter = express.Router();
 

@@ -1,18 +1,18 @@
 import express from "express";
 import pg from "pg";
 
-import adminValidator from "../../middlewares/admin_validator.js";
-import nameValidator from "../../middlewares/name_validator.js";
-import priceValidator from "../../middlewares/price_validator.js";
-import salePercentageValidator from "../../middlewares/sale_percentage_validator.js";
-import detailDescriptionValidator from "../../middlewares/detail_description_validator.js";
-import sizeValidator from "../../middlewares/size_validator.js";
-import weightValidator from "../../middlewares/weight_validator.js";
-import stockValidator from "../../middlewares/stock_validator.js";
-import typeIdsValidator from "../../middlewares/type_ids_validator.js";
-import occasionIdsValidator from "../../middlewares/occasion_ids_validator.js";
-import imageUrlsValidator from "../../middlewares/image_urls_validator.js";
-import productIdValidator from "../../middlewares/product_id_validator.js";
+import adminValidator from "../../middlewares/headers/admin_validator.js";
+import nameValidator from "../../middlewares/body/name_validator.js";
+import priceValidator from "../../middlewares/body/price_validator.js";
+import salePercentageValidator from "../../middlewares/body/sale_percentage_validator.js";
+import detailDescriptionValidator from "../../middlewares/body/detail_description_validator.js";
+import sizeValidator from "../../middlewares/body/size_validator.js";
+import weightValidator from "../../middlewares/body/weight_validator.js";
+import stockValidator from "../../middlewares/body/stock_validator.js";
+import typeIdsValidator from "../../middlewares/body/type_ids_validator.js";
+import occasionIdsValidator from "../../middlewares/body/occasion_ids_validator.js";
+import imageUrlsValidator from "../../middlewares/body/image_urls_validator.js";
+import productIdValidator from "../../middlewares/params/product_id_validator.js";
 
 const adminProductRouter = express.Router();
 

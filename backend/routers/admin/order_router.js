@@ -1,8 +1,8 @@
 import express from "express";
 import pg from "pg";
 
-import adminValidator from "../../middlewares/admin_validator.js";
-import orderIdValidator from "../../middlewares/order_id_validator.js";
+import adminValidator from "../../middlewares/headers/admin_validator.js";
+import orderIdValidator from "../../middlewares/params/order_id_validator.js";
 
 const adminOrderRouter = express.Router();
 

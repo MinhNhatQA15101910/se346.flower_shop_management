@@ -1,11 +1,11 @@
 import express from "express";
 import pg from "pg";
 
-import authValidator from "../../middlewares/auth_validator.js";
-import pageValidator from "../../middlewares/page_validator.js";
-import productIdValidator from "../../middlewares/product_id_validator.js";
-import priceRangeValidator from "../../middlewares/price_range_validator.js";
-import sortValidator from "../../middlewares/sort_validator.js";
+import authValidator from "../../middlewares/headers/auth_validator.js";
+import pageValidator from "../../middlewares/query/page_validator.js";
+import productIdValidator from "../../middlewares/params/product_id_validator.js";
+import priceRangeValidator from "../../middlewares/query/price_range_validator.js";
+import sortValidator from "../../middlewares/query/sort_validator.js";
 
 const productRouter = express.Router();
 
@@ -265,5 +265,16 @@ productRouter.get(
     }
   }
 );
+
+// productRouter.add("/rate-product", authValidator, async (req, res) => {
+//   try {
+//     const db = getDatabaseInstance();
+
+//     const { product_id, rating } = req.params;
+
+//   } catch (e) {
+//     res.status(500).json({ error: e.message });
+//   }
+// });
 
 export default productRouter;

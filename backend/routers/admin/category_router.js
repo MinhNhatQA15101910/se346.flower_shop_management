@@ -1,12 +1,12 @@
 import express from "express";
 import pg from "pg";
 
-import adminValidator from "../../middlewares/admin_validator.js";
-import nameValidator from "../../middlewares/name_validator.js";
-import categoryIdValidator from "../../middlewares/category_id_validator.js";
-import imageUrlValidator from "../../middlewares/image_url_validator.js";
-import typeIdValidator from "../../middlewares/type_id_validator.js";
-import occasionIdValidator from "../../middlewares/occasion_id_validator.js";
+import adminValidator from "../../middlewares/headers/admin_validator.js";
+import nameValidator from "../../middlewares/body/name_validator.js";
+import categoryIdValidator from "../../middlewares/body/category_id_validator.js";
+import imageUrlValidator from "../../middlewares/body/image_url_validator.js";
+import typeIdValidator from "../../middlewares/params/type_id_validator.js";
+import occasionIdValidator from "../../middlewares/params/occasion_id_validator.js";
 
 const adminCategoryRouter = express.Router();
 
@@ -233,9 +233,7 @@ adminCategoryRouter.patch(
       const db = getDatabaseInstance();
 
       const { occasion_id } = req.params;
-      const { name, 
-        
-       } = req.body;
+      const { name } = req.body;
 
       // Get category_id from occasion_id
       const categoryId = await db.query(
