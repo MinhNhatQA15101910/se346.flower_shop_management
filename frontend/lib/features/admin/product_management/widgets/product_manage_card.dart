@@ -22,8 +22,6 @@ class ProductManageCard extends StatelessWidget {
     );
     onUpdate();
   }
-  });
-  final Product product;
 
   void navigateToAddProductScreen(BuildContext context) {
     Navigator.of(context)
