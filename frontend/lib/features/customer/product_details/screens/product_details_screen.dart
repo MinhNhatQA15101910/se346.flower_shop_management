@@ -149,19 +149,30 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      GlobalVariables.productId = _product.id;
-                      GlobalVariables.productName = _product.name;
-                      GlobalVariables.productURL = _product.imageUrls.first;
-                      GlobalVariables.productPrice = _product.salePrice;
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        GlobalVariables.productId = _product.id;
+                        GlobalVariables.productName = _product.name;
+                        GlobalVariables.productURL = _product.imageUrls.first;
+                        GlobalVariables.productPrice = _product.salePrice;
 
-                      _navigateToRatingScreen();
-                    },
-                    child: Container(
-                      color: GlobalVariables.green,
-                      height: 12,
-                      width: 12,
+                        _navigateToRatingScreen();
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: GlobalVariables.green,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Rate',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                      ),
                     ),
                   )
                 ],
