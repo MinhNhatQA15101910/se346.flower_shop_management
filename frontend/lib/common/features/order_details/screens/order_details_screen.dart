@@ -257,20 +257,18 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: widget.order.products
-                            .asMap()
-                            .entries
-                            .map(
-                              (product) => ProductInformationCard(
-                                product: product.value,
-                                quantity: widget.order.quantities[product.key],
-                                func: () => {
-                                  Navigator.of(context)
-                                      .pushNamed(RatingScreen.routeName)
-                                },
-                              ),
-                            )
-                            .toList(),
+                        children: widget.order.products.asMap().entries.map(
+                          (product) {
+                            return ProductInformationCard(
+                              product: product.value,
+                              quantity: widget.order.quantities[product.key],
+                              func: () => {
+                                Navigator.of(context)
+                                    .pushNamed(RatingScreen.routeName)
+                              },
+                            );
+                          },
+                        ).toList(),
                       ),
                     ),
                   ),
