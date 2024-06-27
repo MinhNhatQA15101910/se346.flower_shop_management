@@ -4,11 +4,13 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/order_details/widgets/product_information_card.dart';
 import 'package:frontend/features/customer/rating/screens/rating_screen.dart';
 import 'package:frontend/models/order.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:frontend/features/customer/order_details/widgets/content_container.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   static const String routeName = '/customer-order-details';
@@ -61,6 +63,36 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool _isAdmin = Provider.of<UserProvider>(
+          context,
+          listen: false,
+        ).user.role ==
+        "admin";
+
+    String currentStatus = widget.order.status.value;
+    String _getNextStatus(String currentStatus) {
+      // Function to return the next status based on currentStatus
+      switch (currentStatus) {
+        case "Pending":
+          return "In delivery";
+        case "In delivery":
+          return "Delivered";
+        default:
+          return ""; // Handle other cases as needed
+      }
+    }
+
+    void _changeStatus() {
+      setState(() {
+        if (currentStatus == "Pending") {
+          currentStatus = "In delivery";
+        } else if (currentStatus == "In delivery") {
+          currentStatus = "Delivered";
+        }
+        // Handle other status transitions as needed
+      });
+    }
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -99,6 +131,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         children: [
@@ -142,6 +175,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -194,6 +228,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -213,38 +248,145 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Row(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ProductInformationCard(
-                              func: () => {
-                                    Navigator.of(context)
-                                        .pushNamed(RatingScreen.routeName)
-                                  })
-                        ],
+                        children: widget.order.products
+                            .asMap()
+                            .entries
+                            .map((product) => ProductInformationCard(
+                                product: product.value,
+                                productQuantity:
+                                    widget.order.quantities[product.key],
+                                func: () => {
+                                      Navigator.of(context)
+                                          .pushNamed(RatingScreen.routeName)
+                                    }))
+                            .toList(),
                       ),
                     ),
                   ),
                   ContentContainer(
                     title: "Payment infomation",
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 12.0, horizontal: 16.0),
-                      decoration: BoxDecoration(
-                        color: GlobalVariables.defaultColor,
+                    child: Column(children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 16.0),
+                        decoration: BoxDecoration(
+                          color: GlobalVariables.defaultColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Image.asset(
+                              'assets/images/googleWallet.png',
+                              width: 45,
+                              height: 45,
+                              fit: BoxFit.cover,
+                            ),
+                            Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/vectors/vector-google.svg',
+                                  width: 30,
+                                  height: 30,
+                                ),
+                                SizedBox(width: 2),
+                                Text(
+                                  "oogle Pay",
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [],
+                      SizedBox(
+                        height: 10,
                       ),
-                    ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 16.0),
+                        decoration: BoxDecoration(
+                            color: GlobalVariables.defaultColor,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Price", style: titleStyle),
+                                Text(
+                                    '${widget.order.productPrice.toString()} \$',
+                                    style: contentStyle),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Shipping Price", style: titleStyle),
+                                Text('${widget.order.shippingPrice} \$',
+                                    style: contentStyle),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Total Price (VAT Included)",
+                                    style: titleStyle),
+                                Text(
+                                    '${widget.order.productPrice * 110 / 100 + widget.order.shippingPrice} \$',
+                                    style: contentStyle),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                          ],
+                        ),
+                      ),
+                    ]),
                   ),
                 ],
               ),
             ),
           ),
         ),
+        bottomNavigationBar: _isAdmin && currentStatus != "Delivered"
+            ? BottomAppBar(
+                child: Container(
+                  height: 60, // Adjust the height as needed
+                  width:
+                      double.infinity, // Make the button span the entire width
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: ElevatedButton(
+                    onPressed: () => _changeStatus(),
+                    style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        backgroundColor: GlobalVariables.green),
+                    child: Text(
+                      'Move to \"${_getNextStatus(currentStatus)}\"',
+                      style: TextStyle(
+                          fontSize: 18, color: GlobalVariables.pureWhite),
+                    ),
+                  ),
+                ),
+              )
+            : BottomAppBar(
+                child: Container(
+                  child: Column(
+                    children: [Text("OK")],
+                  ),
+                ),
+              ),
       ),
     );
   }

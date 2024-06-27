@@ -21,7 +21,7 @@ class Order {
   final String receiverPhoneNumber;
   final List<Product> products;
   final List<int> quantities;
-  final List<bool> isRated;
+  // final List<bool> isRated;
 
   const Order({
     required this.id,
@@ -41,7 +41,7 @@ class Order {
     required this.receiverPhoneNumber,
     required this.products,
     required this.quantities,
-    required this.isRated,
+    // required this.isRated,
   });
 
   Map<String, dynamic> toMap() {
@@ -63,7 +63,7 @@ class Order {
       'receiver_phone_number': receiverPhoneNumber,
       'products': products.map((p) => p.toMap()).toList(),
       'quantities': quantities,
-      'is_rated': isRated,
+      // 'is_rated': isRated,
     };
   }
 
@@ -95,9 +95,9 @@ class Order {
       quantities: List<int>.from(
         map['quantities'],
       ),
-      isRated: List<bool>.from(
-        map['is_rated'],
-      ),
+      // isRated: List<bool>.from(
+      //   map['is_rated']
+      // ),
     );
   }
   String toJson() => json.encode(toMap());
