@@ -32,8 +32,10 @@ class _SearchScreenState extends State<SearchScreen> {
   double _minPrice = 1;
   double _maxPrice = 99999;
   var _currentPage = 1;
+  var _currentPage2 = 1;
   var _hasProduct = true;
   var _isLoading = false;
+  var _isSearching = false;
 
   void _navigateToCartScreen() {
     Navigator.of(context).pushNamed(CartScreen.routeName);
@@ -70,6 +72,8 @@ class _SearchScreenState extends State<SearchScreen> {
     if (_isLoading) return;
     _isLoading = true;
 
+    _isSearching = true;
+
     const limit = 10;
 
     final _sortResults = await _searchService.fetchResults(
@@ -78,17 +82,18 @@ class _SearchScreenState extends State<SearchScreen> {
       _sortOption,
       _minPrice.toInt().toString(),
       _maxPrice.toInt().toString(),
-      _currentPage++,
+      _currentPage2++,
     );
 
     if (!mounted) return;
-    _productList.clear();
     setState(() {
       _isLoading = false;
       if (_sortResults.isEmpty) {
         _hasProduct = false;
+        _productList.clear();
       } else {
-        _productList = _sortResults;
+        //_productList.clear();
+        _productList.addAll(_sortResults);
         if (_sortResults.length < limit) {
           _hasProduct = false;
         }
@@ -101,10 +106,18 @@ class _SearchScreenState extends State<SearchScreen> {
       _isLoading = false;
       _hasProduct = true;
       _currentPage = 1;
+      _currentPage2 = 1;
+      _sortOption = SortOption.id;
+      _minPrice = 0;
+      _maxPrice = 99999;
       _productList.clear();
     });
 
-    _fetchAllRecommendedProducts();
+    if (_isSearching) {
+      _fetchResults();
+    } else {
+      _fetchAllRecommendedProducts();
+    }
   }
 
   @override
@@ -115,7 +128,11 @@ class _SearchScreenState extends State<SearchScreen> {
 
     _controller.addListener(() {
       if (_controller.position.maxScrollExtent == _controller.offset) {
-        _fetchAllRecommendedProducts();
+        if (_isSearching) {
+          _fetchResults();
+        } else {
+          _fetchAllRecommendedProducts();
+        }
       }
     });
   }
@@ -154,10 +171,10 @@ class _SearchScreenState extends State<SearchScreen> {
             TextField(
               controller: _textController,
               onSubmitted: (value) {
-                if (value.isEmpty) return;
                 setState(() {
                   keyword = value;
-                  _currentPage = 1;
+                  _currentPage2 = 1;
+                  _productList.clear();
                   _fetchResults();
                 });
               },
@@ -179,6 +196,12 @@ class _SearchScreenState extends State<SearchScreen> {
                   enableFeedback: false,
                   onPressed: () {
                     _textController.clear();
+                    setState(() {
+                      keyword = '';
+                      _currentPage = 1;
+                      _productList.clear();
+                      _fetchAllRecommendedProducts();
+                    });
                   },
                   icon: const Icon(Icons.clear),
                 ),
@@ -285,7 +308,8 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       if (_selectedSortOption != null) {
         _sortOption = _selectedSortOption;
-        _currentPage = 1;
+        _currentPage2 = 1;
+        _productList.clear();
         _fetchResults();
       }
     });
@@ -305,7 +329,8 @@ class _SearchScreenState extends State<SearchScreen> {
       setState(() {
         _minPrice = result['minPrice'];
         _maxPrice = result['maxPrice'];
-        _currentPage = 1;
+        _currentPage2 = 1;
+        _productList.clear();
         _fetchResults();
       });
     }

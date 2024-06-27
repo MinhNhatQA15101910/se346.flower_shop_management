@@ -6,6 +6,9 @@ import 'package:flutter/widgets.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:frontend/constants/sort_options.dart';
+import 'package:frontend/models/occasion.dart';
+import 'package:frontend/models/type.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -26,6 +29,56 @@ class ProductManagementService {
     try {
       http.Response res = await http.get(
         Uri.parse('$uri/customer/products?page=$page'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: res,
+        context: context,
+        onSuccess: () {
+          for (var object in jsonDecode(res.body)['results']) {
+            productList.add(
+              Product.fromJson(
+                jsonEncode(object),
+              ),
+            );
+          }
+        },
+      );
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+
+    return productList;
+  }
+
+  Future<List<Product>> fetchResults(
+    BuildContext context,
+    String keyword,
+    SortOption sortOption,
+    String minPrice,
+    String maxPrice,
+    int page,
+  ) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    List<Product> productList = [];
+    try {
+      final url =
+          '$uri/customer/products?keyword=${keyword}&sort=${sortOption.type}&order=${sortOption.order}&min_price=${minPrice}&max_price=${maxPrice}&page=${page}';
+      print('url: $url');
+      http.Response res = await http.get(
+        Uri.parse(
+            '$uri/customer/products?keyword=${keyword}&sort=${sortOption.type}&order=${sortOption.order}&min_price=${minPrice}&max_price=${maxPrice}&page=${page}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,
@@ -97,6 +150,90 @@ class ProductManagementService {
     required BuildContext context,
   }) async {
     return await _fetchNames(context: context, endpoint: 'categories');
+  }
+
+  Future<List<Type>> fetchAllTypes(
+    BuildContext context,
+    int categoryId,
+  ) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    List<Type> typeList = [];
+    try {
+      http.Response res = await http.get(
+        Uri.parse('$uri/customer/types?category_id=$categoryId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: res,
+        context: context,
+        onSuccess: () {
+          for (var object in jsonDecode(res.body)) {
+            typeList.add(
+              Type.fromJson(
+                jsonEncode(object),
+              ),
+            );
+          }
+        },
+      );
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+
+    return typeList;
+  }
+
+  Future<List<Occasion>> fetchAllOccasions(
+    BuildContext context,
+    int categoryId,
+  ) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    List<Occasion> occasionList = [];
+    try {
+      http.Response res = await http.get(
+        Uri.parse('$uri/customer/occasions?category_id=$categoryId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: res,
+        context: context,
+        onSuccess: () {
+          for (var object in jsonDecode(res.body)) {
+            occasionList.add(
+              Occasion.fromJson(
+                jsonEncode(object),
+              ),
+            );
+          }
+        },
+      );
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+
+    return occasionList;
   }
 
   Future<List<String>> getOccasionNames({
@@ -262,6 +399,44 @@ class ProductManagementService {
           IconSnackBar.show(
             context,
             label: 'Product updated successfully',
+            snackBarType: SnackBarType.success,
+          );
+        },
+      );
+    } catch (error) {
+      IconSnackBar.show(
+        context,
+        label: error.toString(),
+        snackBarType: SnackBarType.fail,
+      );
+    }
+  }
+
+  Future<void> deleteProduct({
+    required BuildContext context,
+    required int productId,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+
+    try {
+      http.Response response = await http.delete(
+        Uri.parse('$uri/admin/delete-product/$productId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandler(
+        response: response,
+        context: context,
+        onSuccess: () {
+          IconSnackBar.show(
+            context,
+            label: 'Product deleted successfully',
             snackBarType: SnackBarType.success,
           );
         },
