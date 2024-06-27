@@ -142,7 +142,27 @@ class CategoryItem extends StatelessWidget {
                       size: 16,
                     ),
                   ),
-                  onTap: () => _deleteCategory(context),
+                  onTap: () {
+                    AlertDialog(
+                      title: const Text('Log out confirm'),
+                      content: const Text('Are you sure to log out the app?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            _deleteCategory(context);
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Yes'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('No'),
+                        )
+                      ],
+                    );
+                  },
                 ),
               ],
             ),

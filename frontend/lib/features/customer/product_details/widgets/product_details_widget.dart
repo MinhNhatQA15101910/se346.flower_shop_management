@@ -72,57 +72,73 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget> {
               Text(
                 widget.product.name,
                 style: GoogleFonts.inter(
-                    fontSize: 20, fontWeight: FontWeight.w500),
+                    fontSize: 18, fontWeight: FontWeight.w400),
+              ),
+              SizedBox(
+                height: 4,
               ),
               Row(
                 children: [
                   RatingBar.builder(
                     direction: Axis.horizontal,
                     allowHalfRating: true,
+                    ignoreGestures: true,
+                    initialRating: widget.product.ratingAvg,
                     itemCount: 5,
-                    itemSize: 20,
+                    itemSize: 16,
                     unratedColor: GlobalVariables.lightGreen,
                     itemBuilder: (context, _) => const Icon(
                       Icons.star,
-                      color: GlobalVariables.green,
+                      color: Colors.yellow,
                     ),
-                    onRatingUpdate: (rating) {},
+                    onRatingUpdate: (rating) {
+                      print(rating);
+                    },
                   ),
+                  const SizedBox(width: 4),
                   Text(
                     '(${widget.product.totalRating})',
                     style: GoogleFonts.inter(
                       color: GlobalVariables.darkGrey,
+                      fontSize: 10,
                     ),
                   ),
                 ],
               ),
+              SizedBox(
+                height: 4,
+              ),
               Text(
                 '\$ ${widget.product.salePrice.toString()}',
                 style: GoogleFonts.inter(
-                    fontSize: 20, fontWeight: FontWeight.w600),
+                    fontSize: 16, fontWeight: FontWeight.w700),
+              ),
+              SizedBox(
+                height: 4,
               ),
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                     decoration: BoxDecoration(
                       color: GlobalVariables.green,
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(100),
                     ),
                     child: Text(
                       '-${widget.product.salePercentage}%',
                       style: GoogleFonts.inter(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
                         color: Colors.white,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Text(
                     '\$ ${widget.product.price.toString()}',
                     style: GoogleFonts.inter(
-                      fontSize: 16,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
                       decoration: TextDecoration.lineThrough,
                       color: GlobalVariables.darkGrey,
                     ),

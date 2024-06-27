@@ -46,7 +46,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
   List<String> _types = [];
 
   final _addProdKey = GlobalKey<FormState>();
-  var _isLoading = false;
 
   @override
   void initState() {
@@ -546,7 +545,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
   void _handleAddProduct() {
     if (_addProdKey.currentState!.validate()) {
       setState(() {
-        _isLoading = true;
         _productManagementService.addProduct(
           context: context,
           name: _productNameController.text,
@@ -566,9 +564,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
 
     Future.delayed(Duration(seconds: 2), () async {
-      setState(() {
-        _isLoading = true;
-      });
+      setState(() {});
     });
     Navigator.pop(context);
   }

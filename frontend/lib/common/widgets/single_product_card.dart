@@ -100,7 +100,7 @@ class SingleProductCard extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     color: GlobalVariables.green,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(100),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Center(

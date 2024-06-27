@@ -25,14 +25,15 @@ class _CategoryExpandState extends State<CategoryExpand> {
 
   List<Object>? _objectList;
 
-  void _fetchObjectList() async {
+  Future<void> _fetchObjectList() async {
+    List<Object>? objectList;
     if (widget.titleText == 'Types') {
-      _objectList = await _categoryService.fetchAllTypes(
+      objectList = await _categoryService.fetchAllTypes(
         context,
         widget.categoryId,
       );
     } else {
-      _objectList = await _categoryService.fetchAllOccasions(
+      objectList = await _categoryService.fetchAllOccasions(
         context,
         widget.categoryId,
       );
@@ -40,7 +41,9 @@ class _CategoryExpandState extends State<CategoryExpand> {
 
     if (!mounted) return;
 
-    setState(() {});
+    setState(() {
+      _objectList = objectList;
+    });
   }
 
   Future<void> _displayAddCategoryBtmSheet() async {

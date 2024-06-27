@@ -27,15 +27,15 @@ class OrderStatusWidget extends StatelessWidget {
   Color getStatusColor(String status) {
     switch (status) {
       case 'Pending':
-        return GlobalVariables.orange;
+        return GlobalVariables.darkYellow;
       case 'In Delivery':
-        return GlobalVariables.blue;
+        return GlobalVariables.darkBlue;
       case 'Delivered':
         return GlobalVariables.green;
       case 'Cancelled':
-        return GlobalVariables.red;
+        return GlobalVariables.darkRed;
       default:
-        return GlobalVariables.gray;
+        return GlobalVariables.darkGrey;
     }
   }
 }
