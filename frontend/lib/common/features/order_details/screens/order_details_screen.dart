@@ -43,9 +43,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       case 'Delivered':
         return GlobalVariables.green;
       case 'In Delivery':
-        return GlobalVariables.blue;
+        return GlobalVariables.darkBlue;
       case 'Pending':
-        return GlobalVariables.orange;
+        return GlobalVariables.darkYellow;
       default:
         return Colors.black;
     }
