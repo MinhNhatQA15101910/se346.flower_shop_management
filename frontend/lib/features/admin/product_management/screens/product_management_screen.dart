@@ -219,51 +219,70 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
               ],
             ),
           ),
-          Expanded(
-            child: Container(
-              color: GlobalVariables.lightGrey,
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-              child: _productsList.isEmpty && _searchResults.isEmpty
-                  ? const Loader()
-                  : RefreshIndicator(
-                      onRefresh: _onRefresh,
-                      child: ListView.builder(
-                        controller: _controller,
-                        itemCount: _hasProduct
-                            ? _productsList.length + 1
-                            : _productsList.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          if (index < _productsList.length) {
-                            return ProductManageCard(
-                              product: _productsList[index],
-                              onUpdate: _onRefresh,
-                            );
-                          } else {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 4,
-                              ),
-                              child: _hasProduct
-                                  ? Loader()
-                                  : Center(
-                                      child: Text(
-                                        'No more product to load.',
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.inter(
-                                          fontSize: 16,
-                                          color: GlobalVariables.green,
-                                        ),
-                                      ),
-                                    ),
-                            );
-                          }
-                        },
-                        physics: const BouncingScrollPhysics(),
+          _searchResults.isEmpty && _productsList.isEmpty
+              ? const Center(
+                  child: Column(
+                  children: [
+                    Image(
+                      width: 200,
+                      height: 200,
+                      image: AssetImage('assets/images/img_no_result.png'),
+                    ),
+                    Text(
+                      'No products found!',
+                      style: TextStyle(
+                        color: GlobalVariables.darkGrey,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-            ),
-          ),
+                  ],
+                ))
+              : Expanded(
+                  child: Container(
+                    color: GlobalVariables.lightGrey,
+                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                    child: _productsList.isEmpty && _searchResults.isEmpty
+                        ? const Loader()
+                        : RefreshIndicator(
+                            onRefresh: _onRefresh,
+                            child: ListView.builder(
+                              controller: _controller,
+                              itemCount: _hasProduct
+                                  ? _productsList.length + 1
+                                  : _productsList.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                if (index < _productsList.length) {
+                                  return ProductManageCard(
+                                    product: _productsList[index],
+                                    onUpdate: _onRefresh,
+                                  );
+                                } else {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 4,
+                                    ),
+                                    child: _hasProduct
+                                        ? Loader()
+                                        : Center(
+                                            child: Text(
+                                              'No more product to load.',
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.inter(
+                                                fontSize: 16,
+                                                color: GlobalVariables.green,
+                                              ),
+                                            ),
+                                          ),
+                                  );
+                                }
+                              },
+                              physics: const BouncingScrollPhysics(),
+                            ),
+                          ),
+                  ),
+                ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
