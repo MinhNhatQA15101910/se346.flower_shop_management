@@ -21,10 +21,9 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> {
 
   List<Category>? _categories;
 
-  void _fetchAllCategories() {
-    setState(() async {
-      _categories = await _homeService.fetchAllCategories(context);
-    });
+  void _fetchAllCategories() async {
+    _categories = await _homeService.fetchAllCategories(context);
+    setState(() {});
   }
 
   @override

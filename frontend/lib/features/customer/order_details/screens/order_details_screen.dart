@@ -4,11 +4,13 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/order_details/widgets/product_information_card.dart';
 import 'package:frontend/features/customer/rating/screens/rating_screen.dart';
 import 'package:frontend/models/order.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:frontend/features/customer/order_details/widgets/content_container.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   static const String routeName = '/customer-order-details';
@@ -61,6 +63,36 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool _isAdmin = Provider.of<UserProvider>(
+          context,
+          listen: false,
+        ).user.role ==
+        "admin";
+
+    String currentStatus = widget.order.status.value;
+    String _getNextStatus(String currentStatus) {
+      // Function to return the next status based on currentStatus
+      switch (currentStatus) {
+        case "Pending":
+          return "In delivery";
+        case "In delivery":
+          return "Delivered";
+        default:
+          return ""; // Handle other cases as needed
+      }
+    }
+
+    void _changeStatus() {
+      setState(() {
+        if (currentStatus == "Pending") {
+          currentStatus = "In delivery";
+        } else if (currentStatus == "In delivery") {
+          currentStatus = "Delivered";
+        }
+        // Handle other status transitions as needed
+      });
+    }
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -99,6 +131,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         children: [
@@ -142,6 +175,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -194,6 +228,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -213,6 +248,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -239,6 +275,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             vertical: 12.0, horizontal: 16.0),
                         decoration: BoxDecoration(
                           color: GlobalVariables.defaultColor,
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -320,6 +357,36 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             ),
           ),
         ),
+        bottomNavigationBar: _isAdmin && currentStatus != "Delivered"
+            ? BottomAppBar(
+                child: Container(
+                  height: 60, // Adjust the height as needed
+                  width:
+                      double.infinity, // Make the button span the entire width
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: ElevatedButton(
+                    onPressed: () => _changeStatus(),
+                    style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        backgroundColor: GlobalVariables.green),
+                    child: Text(
+                      'Move to \"${_getNextStatus(currentStatus)}\"',
+                      style: TextStyle(
+                          fontSize: 18, color: GlobalVariables.pureWhite),
+                    ),
+                  ),
+                ),
+              )
+            : BottomAppBar(
+                child: Container(
+                  child: Column(
+                    children: [Text("OK")],
+                  ),
+                ),
+              ),
       ),
     );
   }

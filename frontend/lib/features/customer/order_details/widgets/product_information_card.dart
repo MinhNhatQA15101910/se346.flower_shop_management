@@ -77,7 +77,7 @@ class _ProductInformationCardState extends State<ProductInformationCard> {
                     onPressed: widget.func,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: GlobalVariables.darkGreen,
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: EdgeInsets.symmetric(horizontal: 24),
                       textStyle: TextStyle(fontSize: 12),
                     ),
                     child: Text(
