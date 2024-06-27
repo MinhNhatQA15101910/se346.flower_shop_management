@@ -3,13 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/constants/sort_options.dart';
 
-List<Widget> sortOptionsList = [
-  Text('Default'),
-  Text('Top selling'),
-  Text('Name: A to Z'),
-  Text('Name: Z to A'),
-  Text('Price: Low to High'),
-  Text('Price: High to Low'),
+const List<SortOption> sortOptions = [
+  SortOption.id,
+  SortOption.topSelling,
+  SortOption.nameAtoZ,
+  SortOption.nameZtoA,
+  SortOption.priceHighToLow,
+  SortOption.priceLowToHigh,
 ];
 
 class SortBtmSheet extends StatefulWidget {
@@ -25,11 +25,11 @@ class _SortBtmSheetState extends State<SortBtmSheet> {
   @override
   void initState() {
     super.initState();
-    _selectedSortOption = List.generate(sortOptionsList.length, (_) => false);
+    _selectedSortOption = List.generate(sortOptions.length, (_) => false);
   }
 
   void _confirmSelection() {
-    SortOption selectedOption = SortOption.topSelling; // Example logic
+    SortOption selectedOption = SortOption.id;
     for (int i = 0; i < _selectedSortOption.length; i++) {
       if (_selectedSortOption[i]) {
         selectedOption = SortOption.values[i];
@@ -78,11 +78,11 @@ class _SortBtmSheetState extends State<SortBtmSheet> {
               ),
               ListView.builder(
                 shrinkWrap: true,
-                itemCount: sortOptionsList.length,
+                itemCount: sortOptions.length,
                 itemBuilder: (context, index) {
                   return _buildSortOption(
                     index,
-                    sortOptionsList,
+                    sortOptions,
                     _selectedSortOption,
                   );
                 },
@@ -97,7 +97,7 @@ class _SortBtmSheetState extends State<SortBtmSheet> {
                       onPressed: () {
                         setState(() {
                           _selectedSortOption = List.generate(
-                            sortOptionsList.length,
+                            sortOptions.length,
                             (_) => false,
                           );
                         });
@@ -152,11 +152,11 @@ class _SortBtmSheetState extends State<SortBtmSheet> {
 
   Widget _buildSortOption(
     int index,
-    List<Widget> selectedList,
+    List<SortOption> selectedList,
     List<bool> selectedListState,
   ) {
     return ListTile(
-      title: selectedList[index],
+      title: Text(selectedList[index].value),
       onTap: () {
         setState(() {
           for (int i = 0; i < selectedListState.length; i++) {

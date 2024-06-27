@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/admin/product_management/services/product_management_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/models/product.dart';
 
 class ProductManageCard extends StatelessWidget {
+  final Product product;
+  final VoidCallback onUpdate;
+
   const ProductManageCard({
     super.key,
     required this.product,
+    required this.onUpdate,
   });
-  final Product product;
+
+  Future<void> _deleteProduct(BuildContext context, int productId) async {
+    await ProductManagementService().deleteProduct(
+      productId: productId,
+      context: context,
+    );
+    onUpdate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +118,9 @@ class ProductManageCard extends StatelessWidget {
               ),
               SizedBox(height: 12),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  _deleteProduct(context, product.id);
+                },
                 child: Container(
                   width: 24,
                   height: 24,

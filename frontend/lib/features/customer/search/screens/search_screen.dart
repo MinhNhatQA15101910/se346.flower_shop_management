@@ -86,13 +86,14 @@ class _SearchScreenState extends State<SearchScreen> {
     );
 
     if (!mounted) return;
-    _productList.clear();
     setState(() {
       _isLoading = false;
       if (_sortResults.isEmpty) {
         _hasProduct = false;
+        _productList.clear();
       } else {
-        _productList = _sortResults;
+        //_productList.clear();
+        _productList.addAll(_sortResults);
         if (_sortResults.length < limit) {
           _hasProduct = false;
         }
@@ -170,10 +171,10 @@ class _SearchScreenState extends State<SearchScreen> {
             TextField(
               controller: _textController,
               onSubmitted: (value) {
-                if (value.isEmpty) return;
                 setState(() {
                   keyword = value;
                   _currentPage2 = 1;
+                  _productList.clear();
                   _fetchResults();
                 });
               },
@@ -195,6 +196,12 @@ class _SearchScreenState extends State<SearchScreen> {
                   enableFeedback: false,
                   onPressed: () {
                     _textController.clear();
+                    setState(() {
+                      keyword = '';
+                      _currentPage = 1;
+                      _productList.clear();
+                      _fetchAllRecommendedProducts();
+                    });
                   },
                   icon: const Icon(Icons.clear),
                 ),
@@ -301,7 +308,8 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       if (_selectedSortOption != null) {
         _sortOption = _selectedSortOption;
-        _currentPage = 1;
+        _currentPage2 = 1;
+        _productList.clear();
         _fetchResults();
       }
     });
@@ -321,7 +329,8 @@ class _SearchScreenState extends State<SearchScreen> {
       setState(() {
         _minPrice = result['minPrice'];
         _maxPrice = result['maxPrice'];
-        _currentPage = 1;
+        _currentPage2 = 1;
+        _productList.clear();
         _fetchResults();
       });
     }

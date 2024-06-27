@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/admin/product_management/widgets/admin_product_sort_btm_sheet.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/constants/filter_options.dart';
@@ -151,7 +150,7 @@ class _FilterBtmSheetState extends State<FilterBtmSheet> {
                           onChanged: (value) => {
                             setState(() {
                               _selectedPriceRange = List.generate(
-                                sortOptionsList.length,
+                                filterOptionsList.length,
                                 (_) => false,
                               );
                               print("TextField Value: $value");
@@ -204,7 +203,7 @@ class _FilterBtmSheetState extends State<FilterBtmSheet> {
                           onChanged: (value) => {
                             setState(() {
                               _selectedPriceRange = List.generate(
-                                sortOptionsList.length,
+                                filterOptionsList.length,
                                 (_) => false,
                               );
                               _maxPrice = double.parse(value);

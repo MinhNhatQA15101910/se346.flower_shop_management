@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/widgets/loader.dart';
+import 'package:frontend/constants/sort_options.dart';
 import 'package:frontend/features/admin/product_management/screens/add_product_screen.dart';
 import 'package:frontend/features/admin/product_management/services/product_management_service.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,10 +25,18 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
   final _controller = ScrollController();
   final _productManagementService = ProductManagementService();
 
-  List<Product> productsList = [];
+  List<Product> _productsList = [];
+  List<Product> _searchResults = [];
+
+  String _keyword = '';
+  SortOption _sortOption = SortOption.id;
+  double _minPrice = 1;
+  double _maxPrice = 99999;
   var _currentPage = 1;
+  var _currentPage2 = 1;
   var _isLoading = false;
   var _hasProduct = true;
+  var _isSearching = false;
 
   void _fetchAllProducts() async {
     if (_isLoading) return;
@@ -48,8 +57,41 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
       if (newProducts.isEmpty) {
         _hasProduct = false;
       } else {
-        productsList.addAll(newProducts);
+        _productsList.addAll(newProducts);
         if (newProducts.length < limit) {
+          _hasProduct = false;
+        }
+      }
+    });
+  }
+
+  void _fetchResults() async {
+    if (_isLoading) return;
+    _isLoading = true;
+
+    _isSearching = true;
+
+    const limit = 10;
+
+    final _sortResults = await _productManagementService.fetchResults(
+      context,
+      _keyword,
+      _sortOption,
+      _minPrice.toInt().toString(),
+      _maxPrice.toInt().toString(),
+      _currentPage2++,
+    );
+
+    if (!mounted) return;
+    setState(() {
+      _isLoading = false;
+      if (_sortResults.isEmpty) {
+        _hasProduct = false;
+        _productsList.clear();
+      } else {
+        //_productList.clear();
+        _productsList.addAll(_sortResults);
+        if (_sortResults.length < limit) {
           _hasProduct = false;
         }
       }
@@ -65,10 +107,14 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
       _isLoading = false;
       _hasProduct = true;
       _currentPage = 1;
-      productsList.clear();
+      _productsList.clear();
     });
 
-    _fetchAllProducts();
+    if (_isSearching) {
+      _fetchResults();
+    } else {
+      _fetchAllProducts();
+    }
   }
 
   @override
@@ -79,7 +125,11 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
 
     _controller.addListener(() {
       if (_controller.position.maxScrollExtent == _controller.offset) {
-        _fetchAllProducts();
+        if (_isSearching) {
+          _fetchResults();
+        } else {
+          _fetchAllProducts();
+        }
       }
     });
   }
@@ -130,18 +180,7 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                   children: [
                     ElevatedButton(
                       onPressed: () => {
-                        showModalBottomSheet<dynamic>(
-                            context: context,
-                            isScrollControlled: true,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                topRight: Radius.circular(8),
-                              ),
-                            ),
-                            builder: (BuildContext context) {
-                              return AdminProductFilterBtmSheet();
-                            })
+                        _openFilterBottomSheet(),
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
@@ -159,18 +198,7 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () => {
-                        showModalBottomSheet<dynamic>(
-                            context: context,
-                            isScrollControlled: true,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                topRight: Radius.circular(8),
-                              ),
-                            ),
-                            builder: (BuildContext context) {
-                              return const AdminProductSortBtmSheet();
-                            })
+                        _openSortBottomSheet(),
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
@@ -195,20 +223,21 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
             child: Container(
               color: GlobalVariables.lightGrey,
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-              child: productsList.isEmpty
+              child: _productsList.isEmpty && _searchResults.isEmpty
                   ? const Loader()
                   : RefreshIndicator(
                       onRefresh: _onRefresh,
                       child: ListView.builder(
                         controller: _controller,
                         itemCount: _hasProduct
-                            ? productsList.length + 1
-                            : productsList.length,
+                            ? _productsList.length + 1
+                            : _productsList.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          if (index < productsList.length) {
+                          if (index < _productsList.length) {
                             return ProductManageCard(
-                              product: productsList[index],
+                              product: _productsList[index],
+                              onUpdate: _onRefresh,
                             );
                           } else {
                             return Padding(
@@ -252,6 +281,14 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
   Widget _buildTextField(String hintText) {
     return TextField(
       controller: _textController,
+      onSubmitted: (value) {
+        setState(() {
+          _keyword = value;
+          _currentPage2 = 1;
+          _productsList.clear();
+          _fetchResults();
+        });
+      },
       style: GoogleFonts.inter(
         color: GlobalVariables.darkGrey,
         fontSize: 16,
@@ -270,6 +307,12 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
           enableFeedback: false,
           onPressed: () {
             _textController.clear();
+            setState(() {
+              _keyword = '';
+              _currentPage = 1;
+              _productsList.clear();
+              _fetchAllProducts();
+            });
           },
           icon: const Icon(Icons.clear),
         ),
@@ -283,6 +326,47 @@ class _ProductManagementScreenState extends State<ProductManagementScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _openSortBottomSheet() async {
+    SortOption? _selectedSortOption = await showModalBottomSheet<SortOption>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return AdminProductSortBtmSheet(); // Your custom bottom sheet widget
+      },
+    );
+
+    setState(() {
+      if (_selectedSortOption != null) {
+        _sortOption = _selectedSortOption;
+        _currentPage2 = 1;
+        _productsList.clear();
+        _fetchResults();
+      }
+    });
+  }
+
+  Future<void> _openFilterBottomSheet() async {
+    final result = await showModalBottomSheet<dynamic>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return AdminProductFilterBtmSheet();
+      },
+    );
+
+    if (result != null) {
+      setState(() {
+        _minPrice = result['minPrice'];
+        _maxPrice = result['maxPrice'];
+        _currentPage2 = 1;
+        _productsList.clear();
+        _fetchResults();
+      });
+    }
   }
 
   @override
