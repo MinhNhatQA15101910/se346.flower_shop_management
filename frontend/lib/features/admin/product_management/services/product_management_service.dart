@@ -9,7 +9,6 @@ import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:frontend/constants/size.dart';
 import 'package:frontend/models/product.dart';
 
 import 'package:frontend/constants/error_handling.dart';
@@ -195,19 +194,17 @@ class ProductManagementService {
     required BuildContext context,
     required String productId,
     String? name,
-    double? price,
-    double? salePrice,
-    double? salePercentage,
+    String? price,
+    String? salePercentage,
     String? detailDescription,
-    Size? size,
-    double? weight,
+    String? size,
+    String? weight,
     String? color,
     String? material,
-    int? stock,
-    int? sold,
-    double? ratingAvg,
-    int? totalRating,
-    List<String>? imageUrls,
+    String? stock,
+    List<File>? imageUrls,
+    String? type_ids,
+    String? occasion_ids,
   }) async {
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -220,10 +217,10 @@ class ProductManagementService {
       List<String> uploadedImageUrls = [];
 
       if (imageUrls != null) {
-        for (String imageUrl in imageUrls) {
+        for (File imageUrl in imageUrls) {
           CloudinaryResponse cloudinaryResponse = await cloudinary.uploadFile(
             CloudinaryFile.fromFile(
-              imageUrl,
+              imageUrl.path,
               folder: name ?? 'default_folder',
             ),
           );
@@ -235,7 +232,6 @@ class ProductManagementService {
 
       if (name != null) updateFields['name'] = name;
       if (price != null) updateFields['price'] = price;
-      if (salePrice != null) updateFields['sale_price'] = salePrice;
       if (salePercentage != null)
         updateFields['sale_percentage'] = salePercentage;
       if (detailDescription != null)
@@ -245,11 +241,10 @@ class ProductManagementService {
       if (color != null) updateFields['color'] = color;
       if (material != null) updateFields['material'] = material;
       if (stock != null) updateFields['stock'] = stock;
-      if (sold != null) updateFields['sold'] = sold;
-      if (ratingAvg != null) updateFields['rating_avg'] = ratingAvg;
-      if (totalRating != null) updateFields['total_rating'] = totalRating;
       if (uploadedImageUrls.isNotEmpty)
         updateFields['image_urls'] = uploadedImageUrls;
+      if (type_ids != null) updateFields['type_ids'] = type_ids;
+      if (occasion_ids != null) updateFields['occasion_ids'] = occasion_ids;
 
       http.Response response = await http.put(
         Uri.parse('$uri/admin/update-product/$productId'),

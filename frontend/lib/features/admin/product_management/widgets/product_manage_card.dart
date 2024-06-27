@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/admin/product_management/screens/add_product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/models/product.dart';
@@ -9,6 +10,11 @@ class ProductManageCard extends StatelessWidget {
     required this.product,
   });
   final Product product;
+
+  void navigateToAddProductScreen(BuildContext context) {
+    Navigator.of(context)
+        .pushNamed(AddProductScreen.routeName, arguments: product);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +43,7 @@ class ProductManageCard extends StatelessWidget {
               ),
               SizedBox(width: 8),
               Container(
-                width: 200,
+                width: 180,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -89,7 +95,9 @@ class ProductManageCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  navigateToAddProductScreen(context);
+                },
                 child: Container(
                   width: 24,
                   height: 24,
