@@ -154,7 +154,7 @@ class ProductManagementService {
             "price": price,
             "sale_percentage": salePercentage,
             "detail_description": detailDescription,
-            "size": size,
+            "size": size.isNotEmpty ? size : 'Small',
             "weight": weight,
             "color": color,
             "material": material,

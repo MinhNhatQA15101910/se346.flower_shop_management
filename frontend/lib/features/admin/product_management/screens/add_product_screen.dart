@@ -98,19 +98,24 @@ class _AddProductScreenState extends State<AddProductScreen> {
       _selectedImagesList.clear();
 
       // Add images to the list
-      for (String imageUrl in _product!.imageUrls) {
-        // Assuming you are using a URL to load images from the network
-        _selectedImagesList.add(
-            File(imageUrl)); // Update this line to properly handle image URLs
-      }
-
-      setState(() {});
+      setState(() {
+        _selectedImagesList.addAll(
+          _product!.imageUrls.map((url) => File(url)).toList(),
+        );
+      });
     }
   }
 
   void _addProduct() async {
     _getTypeIndex();
     _getOccasionIndex();
+    String sizeText = '';
+    if (_productSizeController.text == "Size.small") sizeText = 'Small';
+    if (_productSizeController.text == "Size.medium") sizeText = 'Medium';
+    if (_productSizeController.text == "Size.large")
+      sizeText = 'Large';
+    else
+      sizeText = 'Extra_large';
     try {
       await _productManagementService.addProduct(
         context: context,
@@ -118,7 +123,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         price: _productPriceController.text,
         salePercentage: _productSalePercentController.text,
         detailDescription: _productDescriptionController.text,
-        size: _productSizeController.text,
+        size: sizeText,
         weight: _productWeightController.text,
         color: _productColorController.text,
         material: _productMaterialController.text,
@@ -147,7 +152,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       });
 
       Future.delayed(Duration(seconds: 2), () {
-        Navigator.pop(context);
+        Navigator.pop(context, true); // Pass 'true' to indicate success
       });
     } catch (e) {
       // Handle error
@@ -164,7 +169,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
     if (_productSizeController.text == "Size.large") sizeText = 'Large';
     if (_productSizeController.text == "Size.extra_large")
       sizeText = 'Extra_large';
+
     try {
+      bool shouldUpdateImages = _selectedImagesList.isNotEmpty;
+
       await _productManagementService.updateProduct(
         context: context,
         productId: _product!.id.toString(),
@@ -172,12 +180,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
         price: _productPriceController.text,
         salePercentage: _productSalePercentController.text,
         detailDescription: _productDescriptionController.text,
-        size: sizeText,
+        size: sizeText.isNotEmpty ? sizeText : "Small",
         weight: _productWeightController.text,
         color: _productColorController.text,
         material: _productMaterialController.text,
         stock: _productQuantityController.text,
-        imageUrls: _selectedImagesList,
+        imageUrls: shouldUpdateImages ? _selectedImagesList : null,
         type_ids: typeIndex.toString(),
         occasion_ids: occasionIndex.toString(),
       );
@@ -270,10 +278,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                           'assets/images/placeholderImage.png',
                                           fit: BoxFit.fill,
                                         )
-                                      : Image.file(
-                                          _selectedImagesList[0],
-                                          fit: BoxFit.fill,
-                                        ),
+                                      : _selectedImagesList.first.path
+                                              .contains('http')
+                                          ? Image.network(
+                                              _selectedImagesList.first.path,
+                                              fit: BoxFit.fill,
+                                            )
+                                          : Image.file(
+                                              _selectedImagesList.first,
+                                              fit: BoxFit.fill,
+                                            ),
                                 ),
                               ),
                               _selectedImagesList.isNotEmpty
@@ -327,6 +341,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               scrollDirection: Axis.horizontal,
                               itemCount: _selectedImagesList.length,
                               itemBuilder: (context, index) {
+                                final image = _selectedImagesList[index];
                                 return Stack(
                                   fit: StackFit.loose,
                                   alignment: AlignmentDirectional.topEnd,
@@ -339,10 +354,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
-                                        child: Image.file(
-                                          _selectedImagesList[index],
-                                          fit: BoxFit.cover,
-                                        ),
+                                        child: image.path.contains('http')
+                                            ? Image.network(
+                                                image.path,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.file(
+                                                image,
+                                                fit: BoxFit.cover,
+                                              ),
                                       ),
                                     ),
                                     IconButton(
