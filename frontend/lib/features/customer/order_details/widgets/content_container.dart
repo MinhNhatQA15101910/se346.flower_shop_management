@@ -21,6 +21,9 @@ class _ContentContainerState extends State<ContentContainer> {
   Widget build(BuildContext context) {
     return Container(
       width: GlobalVariables.screenWidth,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+      ),
       padding: EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

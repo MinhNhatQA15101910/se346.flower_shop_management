@@ -214,31 +214,106 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
                       ),
-                      child: Row(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ProductInformationCard(
-                              func: () => {
-                                    Navigator.of(context)
-                                        .pushNamed(RatingScreen.routeName)
-                                  })
-                        ],
+                        children: widget.order.products
+                            .asMap()
+                            .entries
+                            .map((product) => ProductInformationCard(
+                                product: product.value,
+                                productQuantity:
+                                    widget.order.quantities[product.key],
+                                func: () => {
+                                      Navigator.of(context)
+                                          .pushNamed(RatingScreen.routeName)
+                                    }))
+                            .toList(),
                       ),
                     ),
                   ),
                   ContentContainer(
                     title: "Payment infomation",
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 12.0, horizontal: 16.0),
-                      decoration: BoxDecoration(
-                        color: GlobalVariables.defaultColor,
+                    child: Column(children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 16.0),
+                        decoration: BoxDecoration(
+                          color: GlobalVariables.defaultColor,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Image.asset(
+                              'assets/images/googleWallet.png',
+                              width: 45,
+                              height: 45,
+                              fit: BoxFit.cover,
+                            ),
+                            Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/vectors/vector-google.svg',
+                                  width: 30,
+                                  height: 30,
+                                ),
+                                SizedBox(width: 2),
+                                Text(
+                                  "oogle Pay",
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [],
+                      SizedBox(
+                        height: 10,
                       ),
-                    ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 16.0),
+                        decoration: BoxDecoration(
+                            color: GlobalVariables.defaultColor,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Price", style: titleStyle),
+                                Text(
+                                    '${widget.order.productPrice.toString()} \$',
+                                    style: contentStyle),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Shipping Price", style: titleStyle),
+                                Text('${widget.order.shippingPrice} \$',
+                                    style: contentStyle),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Total Price (VAT Included)",
+                                    style: titleStyle),
+                                Text(
+                                    '${widget.order.productPrice * 110 / 100 + widget.order.shippingPrice} \$',
+                                    style: contentStyle),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                          ],
+                        ),
+                      ),
+                    ]),
                   ),
                 ],
               ),
