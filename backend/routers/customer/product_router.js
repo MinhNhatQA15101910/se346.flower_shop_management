@@ -144,6 +144,7 @@ productRouter.get(
   }
 );
 
+// Get deals of day products
 productRouter.get("/customer/deals-of-day", authValidator, async (req, res) => {
   try {
     const db = getDatabaseInstance();
@@ -186,6 +187,7 @@ productRouter.get("/customer/deals-of-day", authValidator, async (req, res) => {
   }
 });
 
+// Get recommended products
 productRouter.get(
   "/customer/recommended-products",
   authValidator,
@@ -233,6 +235,7 @@ productRouter.get(
   }
 );
 
+// Get product by id
 productRouter.get(
   "/customer/products/:product_id",
   authValidator,
