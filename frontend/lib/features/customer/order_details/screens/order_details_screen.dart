@@ -3,45 +3,29 @@ import 'package:frontend/common/widgets/separator.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/features/customer/order_details/widgets/product_information_card.dart';
 import 'package:frontend/features/customer/rating/screens/rating_screen.dart';
+import 'package:frontend/models/order.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:frontend/features/customer/order_details/widgets/content_container.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   static const String routeName = '/customer-order-details';
-  const OrderDetailsScreen({Key? key}) : super(key: key);
+  const OrderDetailsScreen({
+    super.key,
+    required this.order,
+  });
+
+  final Order order;
 
   @override
   State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
 }
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
-  String currentStatus = 'Pending';
-
-  List<Map<String, dynamic>> products = [
-    {
-      'name': 'Sample Product 1',
-      'imageUrl':
-          'https://imgs.search.brave.com/p4vjYGLZq07IPi_BDIsHQxBihhRCteK-49mUjTnmL84/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9idXJz/dC5zaG9waWZ5Y2Ru/LmNvbS9waG90b3Mv/ZG9nLXBhd3MuanBn/P3dpZHRoPTEwMDAm/Zm9ybWF0PXBqcGcm/ZXhpZj0wJmlwdGM9/MA',
-      'productPrice': '29.99',
-      'productQuantity': 2,
-    },
-    {
-      'name': 'Sample Product 2',
-      'imageUrl':
-          'https://media.gettyimages.com/id/609759172/photo/wet-dog.jpg?s=612x612&w=0&k=20&c=KzYsjqM7FWT7U-5gk_jKTNKGmm_qYn8Y_XUpmgOxUJ4=',
-      'productPrice': '19.99',
-      'productQuantity': 1,
-    },
-  ];
-
-  final deliverState = {
-    'Pending': GlobalVariables.darkYellow,
-    'Indelivery': Colors.blue,
-    'Delivered': Colors.green,
-    'Cancelled': Colors.red,
-  };
   final titleStyle = GoogleFonts.inter(
     fontSize: GlobalVariables.fontSize_14,
     fontWeight: FontWeight.w500,
@@ -58,8 +42,57 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     Navigator.of(context).pop();
   }
 
+  Color getStatusColor(String status) {
+    switch (status) {
+      case 'Delivered':
+        return GlobalVariables.green;
+      case 'In Delivery':
+        return GlobalVariables.blue;
+      case 'Pending':
+        return GlobalVariables.orange;
+      default:
+        return Colors.black;
+    }
+  }
+
+  String getDayOfWeek(String orderDate) {
+    DateTime dateTime = DateTime.parse(orderDate);
+    DateFormat dateFormat = DateFormat('EEEE');
+    return dateFormat.format(dateTime);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bool _isAdmin = Provider.of<UserProvider>(
+          context,
+          listen: false,
+        ).user.role ==
+        "admin";
+
+    String currentStatus = widget.order.status.value;
+    String _getNextStatus(String currentStatus) {
+      // Function to return the next status based on currentStatus
+      switch (currentStatus) {
+        case "Pending":
+          return "In delivery";
+        case "In delivery":
+          return "Delivered";
+        default:
+          return ""; // Handle other cases as needed
+      }
+    }
+
+    void _changeStatus() {
+      setState(() {
+        if (currentStatus == "Pending") {
+          currentStatus = "In delivery";
+        } else if (currentStatus == "In delivery") {
+          currentStatus = "Delivered";
+        }
+        // Handle other status transitions as needed
+      });
+    }
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -98,6 +131,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         children: [
@@ -105,7 +139,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Order ID", style: titleStyle),
-                              Text("0000000000", style: contentStyle),
+                              Text(widget.order.id.toString(),
+                                  style: contentStyle),
                             ],
                           ),
                           Separator(color: GlobalVariables.darkGrey),
@@ -113,7 +148,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Order date", style: titleStyle),
-                              Text("16:24 21/05/2021", style: contentStyle),
+                              Text(
+                                  '${DateFormat('kk:mm - yyyy-MM-dd').format(widget.order.orderDate!)}',
+                                  style: contentStyle),
                             ],
                           ),
                           Separator(color: GlobalVariables.darkGrey),
@@ -121,7 +158,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Order status", style: titleStyle),
-                              Text(currentStatus, style: contentStyle)
+                              Text(widget.order.status.value,
+                                  style: contentStyle.copyWith(
+                                      color: getStatusColor(
+                                          widget.order.status.value)))
                             ],
                           ),
                         ],
@@ -135,17 +175,24 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
-                            'assets/vectors/vector_location.svg',
-                            colorFilter: ColorFilter.mode(
-                              GlobalVariables.green,
-                              BlendMode.srcIn,
-                            ),
-                          ),
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/vectors/vector_location.svg',
+                                  colorFilter: ColorFilter.mode(
+                                    GlobalVariables.green,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                              ]),
                           SizedBox(width: 16.0),
                           Expanded(
                             child: Column(
@@ -154,12 +201,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               children: [
                                 Text("Shipping address", style: titleStyle),
                                 Text(
-                                  "288 Erie Street South Unit D, Leamington, Ontario",
+                                  widget.order.detailAddress,
                                   style: contentStyle,
-                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                 ),
                                 Text(
-                                  "Nick • 0969696969",
+                                  "${widget.order.receiverName} • ${widget.order.receiverPhoneNumber}",
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w400,
                                     color: GlobalVariables.darkGrey,
@@ -181,10 +228,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: [Text("Monday, "), Text("13/11/2024")],
+                        children: [
+                          Text(
+                              "${getDayOfWeek(widget.order.estimatedReceiveDate.toString())}, "),
+                          Text(
+                              '${DateFormat('kk:mm - yyyy-MM-dd').format(widget.order.estimatedReceiveDate)}')
+                        ],
                       ),
                     ),
                   ),
@@ -195,38 +248,145 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           vertical: 12.0, horizontal: 16.0),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Row(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ProductInformationCard(
-                              func: () => {
-                                    Navigator.of(context)
-                                        .pushNamed(RatingScreen.routeName)
-                                  })
-                        ],
+                        children: widget.order.products
+                            .asMap()
+                            .entries
+                            .map((product) => ProductInformationCard(
+                                product: product.value,
+                                productQuantity:
+                                    widget.order.quantities[product.key],
+                                func: () => {
+                                      Navigator.of(context)
+                                          .pushNamed(RatingScreen.routeName)
+                                    }))
+                            .toList(),
                       ),
                     ),
                   ),
                   ContentContainer(
                     title: "Payment infomation",
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 12.0, horizontal: 16.0),
-                      decoration: BoxDecoration(
-                        color: GlobalVariables.defaultColor,
+                    child: Column(children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 16.0),
+                        decoration: BoxDecoration(
+                          color: GlobalVariables.defaultColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Image.asset(
+                              'assets/images/googleWallet.png',
+                              width: 45,
+                              height: 45,
+                              fit: BoxFit.cover,
+                            ),
+                            Row(
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/vectors/vector-google.svg',
+                                  width: 30,
+                                  height: 30,
+                                ),
+                                SizedBox(width: 2),
+                                Text(
+                                  "oogle Pay",
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [],
+                      SizedBox(
+                        height: 10,
                       ),
-                    ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 16.0),
+                        decoration: BoxDecoration(
+                            color: GlobalVariables.defaultColor,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Price", style: titleStyle),
+                                Text(
+                                    '${widget.order.productPrice.toString()} \$',
+                                    style: contentStyle),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Shipping Price", style: titleStyle),
+                                Text('${widget.order.shippingPrice} \$',
+                                    style: contentStyle),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Total Price (VAT Included)",
+                                    style: titleStyle),
+                                Text(
+                                    '${widget.order.productPrice * 110 / 100 + widget.order.shippingPrice} \$',
+                                    style: contentStyle),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                          ],
+                        ),
+                      ),
+                    ]),
                   ),
                 ],
               ),
             ),
           ),
         ),
+        bottomNavigationBar: _isAdmin && currentStatus != "Delivered"
+            ? BottomAppBar(
+                child: Container(
+                  height: 60, // Adjust the height as needed
+                  width:
+                      double.infinity, // Make the button span the entire width
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: ElevatedButton(
+                    onPressed: () => _changeStatus(),
+                    style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        backgroundColor: GlobalVariables.green),
+                    child: Text(
+                      'Move to \"${_getNextStatus(currentStatus)}\"',
+                      style: TextStyle(
+                          fontSize: 18, color: GlobalVariables.pureWhite),
+                    ),
+                  ),
+                ),
+              )
+            : BottomAppBar(
+                child: Container(
+                  child: Column(
+                    children: [Text("OK")],
+                  ),
+                ),
+              ),
       ),
     );
   }

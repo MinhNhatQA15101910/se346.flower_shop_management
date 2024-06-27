@@ -14,6 +14,7 @@ import 'package:frontend/features/customer/checkout/screens/checkout_screen.dart
 import 'package:frontend/features/customer/rating/screens/rating_screen.dart';
 import 'package:frontend/features/customer/recommended_products/screens/recommended_products_screen.dart';
 import 'package:frontend/models/occasion.dart';
+import 'package:frontend/models/order.dart';
 import 'package:frontend/models/type.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -86,9 +87,12 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         builder: (_) => const AddProductScreen(),
       );
     case OrderDetailsScreen.routeName:
+      var order = routeSettings.arguments;
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) => const OrderDetailsScreen(),
+        builder: (_) => OrderDetailsScreen(
+          order: order as Order,
+        ),
       );
     case OrderManagementScreen.routeName:
       return MaterialPageRoute(

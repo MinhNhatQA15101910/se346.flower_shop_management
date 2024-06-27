@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/common/widgets/loader.dart';
 import 'package:frontend/features/admin/admin_drawer.dart';
 import 'package:frontend/features/customer/order_management/services/order_management_service.dart';
 import 'package:frontend/features/customer/order_management/widgets/order_detail_card.dart';
@@ -22,15 +23,18 @@ class _OrderManagementScreenState extends State<OrderManagementScreen> {
     'Pending',
     'In Delivery',
     'Delivered',
-    'Cancelled'
   ];
 
   final _textController = TextEditingController();
+  static bool _isLoading = true;
 
   List<Order>? _orders;
 
   void _fetchAllOrders() async {
     _orders = await orderManagementService.getAllOrders(context: context);
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -43,7 +47,7 @@ class _OrderManagementScreenState extends State<OrderManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: tabbarList.length,
       child: Scaffold(
         appBar: AppBar(
           title: Column(
@@ -111,12 +115,17 @@ class _OrderManagementScreenState extends State<OrderManagementScreen> {
                   horizontal: 16.0,
                   vertical: 12.0,
                 ),
-                child: ListView(
-                  children: _orders
-                          ?.map((order) => OrderDetailCard(order: order))
-                          .toList() ??
-                      [],
-                ),
+                child: _isLoading
+                    ? Loader()
+                    : ListView(
+                        children: _orders
+                                ?.where((order) =>
+                                    tabbarList[i] == 'All' ||
+                                    order.status.value == tabbarList[i])
+                                .map((order) => OrderDetailCard(order: order))
+                                .toList() ??
+                            [],
+                      ),
               ),
           ],
         ),

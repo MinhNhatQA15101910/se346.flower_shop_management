@@ -71,8 +71,8 @@ class Order {
     return Order(
       id: map['id'] ?? 0,
       userId: map['user_id'] ?? 0,
-      productPrice: map['product_price'] ?? 0,
-      shippingPrice: map['shipping_price'] ?? 0,
+      productPrice: double.tryParse(map['product_price']) ?? 0,
+      shippingPrice: double.tryParse(map['shipping_price']) ?? 0,
       status: OrderStatus.values
               .where((os) => os.value == map['status'])
               .firstOrNull ??
@@ -89,15 +89,11 @@ class Order {
       receiverPhoneNumber: map['receiver_phone_number'] ?? '',
       products: List<Product>.from(
         map['products']?.map(
-          (x) => Product.fromMap(
-            x['product'],
-          ),
+          (x) => Product.fromMap(x),
         ),
       ),
       quantities: List<int>.from(
-        map['products']?.map(
-          (x) => x['quantity'],
-        ),
+        map['quantities'],
       ),
       isRated: List<bool>.from(
         map['is_rated'],
