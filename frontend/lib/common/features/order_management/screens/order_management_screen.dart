@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/widgets/loader.dart';
 import 'package:frontend/features/admin/admin_drawer.dart';
-import 'package:frontend/features/customer/order_management/services/order_management_service.dart';
-import 'package:frontend/features/customer/order_management/widgets/order_detail_card.dart';
+import 'package:frontend/common/features/order_management/services/order_management_service.dart';
+import 'package:frontend/common/features/order_management/widgets/order_detail_card.dart';
 import 'package:frontend/models/order.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
+import 'package:provider/provider.dart';
 
 class OrderManagementScreen extends StatefulWidget {
-  static const String routeName = "/customer-order-management";
+  static const String routeName = "/order-management";
   const OrderManagementScreen({super.key});
 
   @override
@@ -31,7 +33,9 @@ class _OrderManagementScreenState extends State<OrderManagementScreen> {
   List<Order>? _orders;
 
   void _fetchAllOrders() async {
-    _orders = await orderManagementService.getAllOrders(context: context);
+    _orders = await orderManagementService.getAllOrders(
+      context: context,
+    );
     setState(() {
       _isLoading = false;
     });
@@ -46,6 +50,8 @@ class _OrderManagementScreenState extends State<OrderManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.watch<UserProvider>();
+
     return DefaultTabController(
       length: tabbarList.length,
       child: Scaffold(
@@ -73,13 +79,6 @@ class _OrderManagementScreenState extends State<OrderManagementScreen> {
                         ),
                         hintText: 'Enter the product keyword to search',
                         prefixIcon: const Icon(Icons.search),
-                        // suffixIcon: IconButton(
-                        //   enableFeedback: false,
-                        //   onPressed: () {
-                        //     _textController.clear();
-                        //   },
-                        //   icon: const Icon(Icons.clear),
-                        // ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: GlobalVariables.lightGrey),
@@ -106,7 +105,7 @@ class _OrderManagementScreenState extends State<OrderManagementScreen> {
           ),
           bottom: _buildTabbar(tabbarList),
         ),
-        drawer: AdminDrawer(),
+        drawer: userProvider.user.role == 'admin' ? AdminDrawer() : null,
         body: TabBarView(
           children: [
             for (int i = 0; i < tabbarList.length; i++)
