@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/widgets/separator.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:frontend/features/customer/order_details/widgets/product_information_card.dart';
+import 'package:frontend/common/features/order_details/widgets/product_information_card.dart';
 import 'package:frontend/features/customer/rating/screens/rating_screen.dart';
 import 'package:frontend/models/order.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:frontend/features/customer/order_details/widgets/content_container.dart';
+import 'package:frontend/common/features/order_details/widgets/content_container.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
-  static const String routeName = '/customer-order-details';
+  static const String routeName = '/order-details';
   const OrderDetailsScreen({
     super.key,
     required this.order,
@@ -26,23 +26,19 @@ class OrderDetailsScreen extends StatefulWidget {
 }
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
-  final titleStyle = GoogleFonts.inter(
+  final _titleStyle = GoogleFonts.inter(
     fontSize: GlobalVariables.fontSize_14,
     fontWeight: FontWeight.w500,
     color: Colors.black,
   );
 
-  final contentStyle = GoogleFonts.inter(
+  final _contentStyle = GoogleFonts.inter(
     fontSize: GlobalVariables.fontSize_14,
     fontWeight: FontWeight.w700,
     color: Colors.black,
   );
 
-  void _goBack(BuildContext context) {
-    Navigator.of(context).pop();
-  }
-
-  Color getStatusColor(String status) {
+  Color _getStatusColor(String status) {
     switch (status) {
       case 'Delivered':
         return GlobalVariables.green;
@@ -63,22 +59,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bool _isAdmin = Provider.of<UserProvider>(
-          context,
-          listen: false,
-        ).user.role ==
-        "admin";
+    final userProvider = context.watch<UserProvider>();
 
     String currentStatus = widget.order.status.value;
     String _getNextStatus(String currentStatus) {
-      // Function to return the next status based on currentStatus
       switch (currentStatus) {
         case "Pending":
           return "In delivery";
         case "In delivery":
           return "Delivered";
         default:
-          return ""; // Handle other cases as needed
+          return "";
       }
     }
 
@@ -97,12 +88,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: false,
-          leading: IconButton(
-            icon: Icon(Icons.chevron_left),
-            onPressed: (() {
-              _goBack(context);
-            }),
-          ),
           title: Text(
             'Order detail',
             style: GoogleFonts.inter(
@@ -138,30 +123,43 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Order ID", style: titleStyle),
-                              Text(widget.order.id.toString(),
-                                  style: contentStyle),
-                            ],
-                          ),
-                          Separator(color: GlobalVariables.darkGrey),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Order date", style: titleStyle),
                               Text(
-                                  '${DateFormat('kk:mm - yyyy-MM-dd').format(widget.order.orderDate!)}',
-                                  style: contentStyle),
+                                "Order ID",
+                                style: _titleStyle,
+                              ),
+                              Text(
+                                widget.order.id.toString(),
+                                style: _contentStyle,
+                              ),
                             ],
                           ),
                           Separator(color: GlobalVariables.darkGrey),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Order status", style: titleStyle),
-                              Text(widget.order.status.value,
-                                  style: contentStyle.copyWith(
-                                      color: getStatusColor(
-                                          widget.order.status.value)))
+                              Text("Order date", style: _titleStyle),
+                              Text(
+                                '${DateFormat('kk:mm - yyyy-MM-dd').format(widget.order.orderDate!)}',
+                                style: _contentStyle,
+                              ),
+                            ],
+                          ),
+                          Separator(color: GlobalVariables.darkGrey),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Order status",
+                                style: _titleStyle,
+                              ),
+                              Text(
+                                widget.order.status.value,
+                                style: _contentStyle.copyWith(
+                                  color: _getStatusColor(
+                                    widget.order.status.value,
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                         ],
@@ -172,7 +170,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     title: "Shipping info",
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                          vertical: 12.0, horizontal: 16.0),
+                        vertical: 12.0,
+                        horizontal: 16.0,
+                      ),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
                         borderRadius: BorderRadius.circular(12),
@@ -199,10 +199,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text("Shipping address", style: titleStyle),
+                                Text(
+                                  "Shipping address",
+                                  style: _titleStyle,
+                                ),
                                 Text(
                                   widget.order.detailAddress,
-                                  style: contentStyle,
+                                  style: _contentStyle,
                                   maxLines: 2,
                                 ),
                                 Text(
@@ -245,7 +248,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     title: "Products information",
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                          vertical: 12.0, horizontal: 16.0),
+                        vertical: 12.0,
+                        horizontal: 16.0,
+                      ),
                       decoration: BoxDecoration(
                         color: GlobalVariables.defaultColor,
                         borderRadius: BorderRadius.circular(12),
@@ -255,20 +260,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         children: widget.order.products
                             .asMap()
                             .entries
-                            .map((product) => ProductInformationCard(
+                            .map(
+                              (product) => ProductInformationCard(
                                 product: product.value,
-                                productQuantity:
-                                    widget.order.quantities[product.key],
+                                quantity: widget.order.quantities[product.key],
                                 func: () => {
-                                      Navigator.of(context)
-                                          .pushNamed(RatingScreen.routeName)
-                                    }))
+                                  Navigator.of(context)
+                                      .pushNamed(RatingScreen.routeName)
+                                },
+                              ),
+                            )
                             .toList(),
                       ),
                     ),
                   ),
                   ContentContainer(
-                    title: "Payment infomation",
+                    title: "Payment information",
                     child: Column(children: [
                       Container(
                         padding: EdgeInsets.symmetric(
@@ -320,30 +327,42 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Price", style: titleStyle),
                                 Text(
-                                    '${widget.order.productPrice.toString()} \$',
-                                    style: contentStyle),
+                                  "Price",
+                                  style: _titleStyle,
+                                ),
+                                Text(
+                                  '${widget.order.productPrice.toString()} \$',
+                                  style: _contentStyle,
+                                ),
                               ],
                             ),
                             SizedBox(height: 5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Shipping Price", style: titleStyle),
-                                Text('${widget.order.shippingPrice} \$',
-                                    style: contentStyle),
+                                Text(
+                                  "Shipping Price",
+                                  style: _titleStyle,
+                                ),
+                                Text(
+                                  '${widget.order.shippingPrice} \$',
+                                  style: _contentStyle,
+                                ),
                               ],
                             ),
                             SizedBox(height: 5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Total Price (VAT Included)",
-                                    style: titleStyle),
                                 Text(
-                                    '${widget.order.productPrice * 110 / 100 + widget.order.shippingPrice} \$',
-                                    style: contentStyle),
+                                  "Total Price (VAT Included)",
+                                  style: _titleStyle,
+                                ),
+                                Text(
+                                  '${widget.order.productPrice * 110 / 100 + widget.order.shippingPrice} \$',
+                                  style: _contentStyle,
+                                ),
                               ],
                             ),
                             SizedBox(height: 5),
@@ -357,7 +376,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: _isAdmin && currentStatus != "Delivered"
+        bottomNavigationBar: userProvider.user.role == "admin" &&
+                currentStatus != "Delivered"
             ? BottomAppBar(
                 child: Container(
                   height: 60, // Adjust the height as needed
@@ -365,28 +385,25 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       double.infinity, // Make the button span the entire width
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: ElevatedButton(
-                    onPressed: () => _changeStatus(),
+                    onPressed: _changeStatus,
                     style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        backgroundColor: GlobalVariables.green),
+                      padding: EdgeInsets.all(16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      backgroundColor: GlobalVariables.green,
+                    ),
                     child: Text(
                       'Move to \"${_getNextStatus(currentStatus)}\"',
                       style: TextStyle(
-                          fontSize: 18, color: GlobalVariables.pureWhite),
+                        fontSize: 18,
+                        color: GlobalVariables.pureWhite,
+                      ),
                     ),
                   ),
                 ),
               )
-            : BottomAppBar(
-                child: Container(
-                  child: Column(
-                    children: [Text("OK")],
-                  ),
-                ),
-              ),
+            : null,
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:frontend/constants/error_handling.dart';
 import 'package:frontend/constants/global_variables.dart';
@@ -21,13 +21,24 @@ class OrderManagementService {
     List<Order> orders = [];
 
     try {
-      http.Response response = await http.get(
-        Uri.parse('$uri/customer/orders'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userProvider.user.token,
-        },
-      );
+      late http.Response response;
+      if (userProvider.user.role == 'admin') {
+        response = await http.get(
+          Uri.parse('$uri/customer/orders'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': userProvider.user.token,
+          },
+        );
+      } else {
+        response = await http.get(
+          Uri.parse('$uri/customer/orders?user_id=${userProvider.user.id}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': userProvider.user.token,
+          },
+        );
+      }
 
       httpErrorHandler(
         response: response,

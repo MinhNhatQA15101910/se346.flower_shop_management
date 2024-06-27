@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/constants/global_variables.dart';
-import 'package:frontend/features/customer/order_details/screens/order_details_screen.dart';
-import 'package:frontend/features/customer/order_management/widgets/order_status.dart';
+import 'package:frontend/common/features/order_details/screens/order_details_screen.dart';
+import 'package:frontend/common/features/order_management/widgets/order_status.dart';
 import 'package:frontend/models/order.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:intl/intl.dart';
