@@ -152,18 +152,4 @@ class CategoryPieChartState extends State {
     }
     return sections;
   }
-
-  Widget _interRegular12(String text) {
-    return Text(
-      text,
-      textAlign: TextAlign.start,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: GoogleFonts.inter(
-        color: Colors.black,
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
-      ),
-    );
-  }
 }

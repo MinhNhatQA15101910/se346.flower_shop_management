@@ -3,6 +3,7 @@ import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:frontend/features/customer/checkout/screens/checkout_screen.dart';
 import 'package:frontend/features/customer/product_details/services/product_details_services.dart';
+import 'package:frontend/features/customer/rating/screens/rating_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/constants/global_variables.dart';
 import 'package:frontend/common/widgets/loader.dart';
@@ -25,7 +26,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final _recommendProductsScrollController = ScrollController();
 
   bool _isReadMore = false;
-  DateTime _selectedDate = DateTime.now();
   List<Product>? _recommendedProducts;
   late Product _product;
 
@@ -38,6 +38,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       CheckoutScreen.routeName,
       arguments: false,
     );
+  }
+
+  void _navigateToRatingScreen() {
+    Navigator.of(context).pushNamed(RatingScreen.routeName);
   }
 
   void _fetchRecommendedProductsInFirstPage() async {
@@ -97,141 +101,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ProductDetailsWidget(product: _product),
-            SizedBox(height: 10),
-            //Delivery info Container
-            Container(
-              width: GlobalVariables.screenWidth,
-              padding: EdgeInsets.all(16),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    'Delivery info',
-                    style: GoogleFonts.inter(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: GlobalVariables.green,
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: GlobalVariables.lightGrey,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 5,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Delivery address',
-                                style: GoogleFonts.inter(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Text(
-                                '288 Erie Street South Unit D, Leamington, Ontario',
-                                style: GoogleFonts.inter(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: GlobalVariables.green,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10),
-            //Delivery Time Container
-            Container(
-              width: GlobalVariables.screenWidth,
-              padding: EdgeInsets.all(16),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    'Delivery time',
-                    style: GoogleFonts.inter(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: GlobalVariables.green,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: _showDatePicker,
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: GlobalVariables.lightGrey,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 5,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${_selectedDate.year.toString()}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Icon(
-                              Icons.calendar_today_rounded,
-                              color: GlobalVariables.green,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10),
+
+            SizedBox(height: 8),
             // Product detail Container
             Container(
               width: GlobalVariables.screenWidth,
@@ -244,8 +115,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Text(
                     'Product details',
                     style: GoogleFonts.inter(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                       color: GlobalVariables.green,
                     ),
                   ),
@@ -260,7 +131,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     _product.detailDescription,
                     maxLines: _isReadMore ? null : 3,
                     style: GoogleFonts.inter(
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w400,
                       color: Colors.black,
                     ),
@@ -274,16 +145,35 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       child: Text(
                         _isReadMore ? 'Read less' : 'Read more',
                         style: GoogleFonts.inter(
-                            color: GlobalVariables.green, fontSize: 16),
+                            color: GlobalVariables.green, fontSize: 14),
                       ),
                     ),
                   ),
+                  GestureDetector(
+                    onTap: () {
+                      GlobalVariables.productId = _product.id;
+                      GlobalVariables.productName = _product.name;
+                      GlobalVariables.productURL = _product.imageUrls.first;
+                      GlobalVariables.productPrice = _product.salePrice;
+
+                      _navigateToRatingScreen();
+                    },
+                    child: Container(
+                      color: GlobalVariables.green,
+                      height: 12,
+                      width: 12,
+                    ),
+                  )
                 ],
               ),
             ),
             Container(
+              height: 8,
+              color: GlobalVariables.lightGrey,
+            ),
+            Container(
               width: GlobalVariables.screenWidth,
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               color: Colors.white,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,12 +182,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Text(
                     'Recommended products',
                     style: GoogleFonts.inter(
-                      fontSize: 20,
+                      fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: GlobalVariables.green,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 8),
                   _recommendedProducts == null
                       ? const Loader()
                       : GridView.builder(
@@ -307,8 +197,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 8,
                             childAspectRatio: 3 / 4,
                           ),
                           itemBuilder: (context, index) {
@@ -374,7 +264,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Widget _buildProductDetail(String title, String value) {
     return Container(
-      height: 50,
+      padding: EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -389,7 +279,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           Text(
             title,
             style: GoogleFonts.inter(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
               color: Colors.black,
             ),
@@ -397,24 +287,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           Text(
             value,
             style: GoogleFonts.inter(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
               color: Colors.black,
             ),
           ),
         ],
       ),
     );
-  }
-
-  void _showDatePicker() {
-    showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2050),
-    ).then((value) => setState(() {
-          _selectedDate = value!;
-        }));
   }
 }

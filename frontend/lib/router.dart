@@ -7,13 +7,14 @@ import 'package:frontend/features/auth/screens/main_auth_screen.dart';
 import 'package:frontend/features/auth/screens/welcome_screen.dart';
 import 'package:frontend/features/customer/cart/screens/cart_screen.dart';
 import 'package:frontend/features/customer/deals_of_day/screens/deals_of_day_screen.dart';
-import 'package:frontend/features/customer/order_details/screens/order_details_screen.dart';
-import 'package:frontend/features/customer/order_management/screens/order_management_screen.dart';
+import 'package:frontend/common/features/order_details/screens/order_details_screen.dart';
+import 'package:frontend/common/features/order_management/screens/order_management_screen.dart';
 import 'package:frontend/features/customer/product_details/screens/product_details_screen.dart';
 import 'package:frontend/features/customer/checkout/screens/checkout_screen.dart';
 import 'package:frontend/features/customer/rating/screens/rating_screen.dart';
 import 'package:frontend/features/customer/recommended_products/screens/recommended_products_screen.dart';
 import 'package:frontend/models/occasion.dart';
+import 'package:frontend/models/order.dart';
 import 'package:frontend/models/type.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -86,9 +87,12 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         builder: (_) => const AddProductScreen(),
       );
     case OrderDetailsScreen.routeName:
+      var order = routeSettings.arguments;
       return MaterialPageRoute(
         settings: routeSettings,
-        builder: (_) => const OrderDetailsScreen(),
+        builder: (_) => OrderDetailsScreen(
+          order: order as Order,
+        ),
       );
     case OrderManagementScreen.routeName:
       return MaterialPageRoute(
